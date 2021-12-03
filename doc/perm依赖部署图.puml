@@ -1,0 +1,29 @@
+@startuml
+skinparam handwritten true
+skinparam backgroundColor #EEEBDC
+skinparam actorStyle hollow
+skinparam componentStyle rectangle
+
+
+
+left to right direction
+
+
+package common {
+    [perm-client] -> [perm-interface]
+    [perm-interface] -> [perm-biz]
+}
+
+node application-api {
+    [perm-biz] -> [perm-api]
+}
+
+node application-server {
+    [perm-biz] -> [perm-server]
+}
+
+node application-task {
+    [perm-biz] -> [perm-task]
+}
+
+@enduml

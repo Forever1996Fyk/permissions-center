@@ -21,16 +21,20 @@
             <groupId>com.ah.cloud</groupId>
             <artifactId>perm-biz</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
+            <groupId>com.ah.cloud</groupId>
+            <artifactId>perm-api</artifactId>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>junit</groupId>-->
+<!--            <artifactId>junit</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
-        <finalName>ofc-server</finalName>
+        <finalName>perm-server</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

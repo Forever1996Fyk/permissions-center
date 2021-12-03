@@ -48,13 +48,39 @@
         <orika-version>1.5.2</orika-version>
         <commons.io.version>2.5</commons.io.version>
         <pingyin.version>2.5.0</pingyin.version>
+        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
 
         <!-- template engine -->
-        <velocity.version>1.7</velocity.version>
+        <freemarker.version>2.3.28</freemarker.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.ah.cloud</groupId>
+                <artifactId>perm-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ah.cloud</groupId>
+                <artifactId>perm-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ah.cloud</groupId>
+                <artifactId>perm-biz</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ah.cloud</groupId>
+                <artifactId>perm-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ah.cloud</groupId>
+                <artifactId>perm-task</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- Spring Boot -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -124,11 +150,16 @@
                 <artifactId>jackson-core</artifactId>
                 <version>${jackson.version}</version>
             </dependency>
-            <!-- orika core工具对实体（Bean）进行深度拷贝 -->
+            <!-- mapstruct工具对实体（Bean）进行深度拷贝 -->
             <dependency>
-                <groupId>ma.glasnost.orika</groupId>
-                <artifactId>orika-core</artifactId>
-                <version>${orika-version}</version>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${org.mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${org.mapstruct.version}</version>
             </dependency>
             <!-- Commons End -->
 
@@ -148,6 +179,11 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-generator</artifactId>
                 <version>${mybatis.plus.generator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>${freemarker.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

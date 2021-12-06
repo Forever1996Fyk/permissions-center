@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <modules>
-        <module>perm-client</module>
-        <module>perm-api</module>
-        <module>perm-server</module>
-        <module>perm-biz</module>
-        <module>perm-task</module>
+        <module>permissions-client</module>
+        <module>permissions-api</module>
+        <module>permissions-server</module>
+        <module>permissions-biz</module>
+        <module>permissions-task</module>
     </modules>
 
     <parent>
@@ -53,27 +53,27 @@
         <dependencies>
             <dependency>
                 <groupId>com.ah.cloud</groupId>
-                <artifactId>perm-client</artifactId>
+                <artifactId>permissions-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.ah.cloud</groupId>
-                <artifactId>perm-api</artifactId>
+                <artifactId>permissions-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.ah.cloud</groupId>
-                <artifactId>perm-biz</artifactId>
+                <artifactId>permissions-biz</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.ah.cloud</groupId>
-                <artifactId>perm-server</artifactId>
+                <artifactId>permissions-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.ah.cloud</groupId>
-                <artifactId>perm-task</artifactId>
+                <artifactId>permissions-task</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

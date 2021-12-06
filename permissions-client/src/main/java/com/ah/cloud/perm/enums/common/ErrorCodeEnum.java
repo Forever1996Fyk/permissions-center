@@ -19,11 +19,11 @@ public enum ErrorCodeEnum implements ErrorCode {
     /**
      * 服务不可用
      */
-    UNKNOW_ERROR(20000,"unknow error."),
+    UNKNOWN_ERROR(20000,"unknown error."),
     /**
      * 授权权限不足
      */
-    UNKNOW_PERMISSION(20001,"unknow permission."),
+    UNKNOWN_PERMISSION(20001,"unknown permission."),
     /**
      * 缺少必选参数
      */
@@ -43,7 +43,7 @@ public enum ErrorCodeEnum implements ErrorCode {
     /**
      * 调用频次超限
      */
-    CALL_LIMTIED(40005,"call limited.")
+    CALL_LIMITED(40005,"call limited.")
     ;
 
     private int code;

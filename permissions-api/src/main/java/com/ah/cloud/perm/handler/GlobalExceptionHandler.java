@@ -71,8 +71,8 @@ public class GlobalExceptionHandler {
     public ResponseErrorResult handleException(Exception e) {
         log.error(e.getMessage(), e);
         ResponseErrorResult response = new ResponseErrorResult();
-        response.setCode(ErrorCodeEnum.UNKNOW_ERROR.getCode());
-        response.setMsg(ErrorCodeEnum.UNKNOW_ERROR.getMsg());
+        response.setCode(ErrorCodeEnum.UNKNOWN_ERROR.getCode());
+        response.setMsg(ErrorCodeEnum.UNKNOWN_ERROR.getMsg());
         response.setSubCode(e.getClass().getName());
         response.setSubMsg(e.getMessage());
         return response;

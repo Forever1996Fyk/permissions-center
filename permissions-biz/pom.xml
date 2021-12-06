@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>perm-biz</artifactId>
+    <artifactId>permissions-biz</artifactId>
 
     <dependencies>
         <!-- Spring Boot -->
@@ -89,7 +89,7 @@
 
         <dependency>
             <groupId>com.ah.cloud</groupId>
-            <artifactId>perm-client</artifactId>
+            <artifactId>permissions-client</artifactId>
         </dependency>
     </dependencies>
 

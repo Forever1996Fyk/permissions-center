@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>perm-server</artifactId>
+    <artifactId>permissions-server</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -19,11 +19,11 @@
     <dependencies>
         <dependency>
             <groupId>com.ah.cloud</groupId>
-            <artifactId>perm-biz</artifactId>
+            <artifactId>permissions-biz</artifactId>
         </dependency>
         <dependency>
             <groupId>com.ah.cloud</groupId>
-            <artifactId>perm-api</artifactId>
+            <artifactId>permissions-api</artifactId>
         </dependency>
     </dependencies>
 

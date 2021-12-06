@@ -1,7 +1,7 @@
-package com.ah.cloud.perm.handler;
+package com.ah.cloud.perm.handle;
 
 import com.ah.cloud.perm.enums.common.ErrorCodeEnum;
-import com.ah.cloud.perm.exception.CustomException;
+import com.ah.cloud.perm.biz.infrastructure.exception.CustomException;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

@@ -1,5 +1,6 @@
-package com.ah.cloud.perm.exception;
+package com.ah.cloud.perm.biz.infrastructure.exception;
 
+import com.ah.cloud.perm.exception.ErrorCode;
 import lombok.Data;
 
 /**

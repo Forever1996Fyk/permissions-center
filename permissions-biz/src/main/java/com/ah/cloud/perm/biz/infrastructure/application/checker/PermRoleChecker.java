@@ -1,7 +1,7 @@
 package com.ah.cloud.perm.biz.infrastructure.application.checker;
 
 import com.ah.cloud.perm.biz.domain.role.form.PermRoleAddForm;
-import com.ah.cloud.perm.exception.CustomException;
+import com.ah.cloud.perm.biz.infrastructure.exception.CustomException;
 import com.ah.cloud.perm.enums.common.ErrorCodeEnum;
 import org.springframework.stereotype.Component;
 

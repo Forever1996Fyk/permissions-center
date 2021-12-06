@@ -1,8 +1,7 @@
-package com.ah.cloud.permissions.biz.domain.role.query;
+package com.ah.cloud.permissions.domain.common;
 
-import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
+import com.ah.cloud.permissions.constant.PageConstants;
 import lombok.Data;
-import lombok.Setter;
 
 import java.util.Objects;
 
@@ -26,10 +25,10 @@ public class PageQuery {
     private Integer pageSize;
 
     public Integer getPageNum() {
-        return Objects.isNull(pageNum) ? PermissionsConstants.DEFAULT_PAGE_NUM : pageNum;
+        return Objects.isNull(pageNum) ? PageConstants.DEFAULT_PAGE_NUM : pageNum;
     }
 
     public Integer getPageSize() {
-        return Objects.isNull(pageSize) ? PermissionsConstants.DEFAULT_PAGE_SIZE : pageSize;
+        return Objects.isNull(pageSize) ? PageConstants.DEFAULT_PAGE_SIZE : pageSize;
     }
 }

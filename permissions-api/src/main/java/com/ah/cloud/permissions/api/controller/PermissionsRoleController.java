@@ -3,6 +3,7 @@ package com.ah.cloud.permissions.api.controller;
 import com.ah.cloud.permissions.biz.domain.role.form.PermissionsRoleAddForm;
 import com.ah.cloud.permissions.biz.domain.role.form.PermissionsRoleUpdateForm;
 import com.ah.cloud.permissions.biz.domain.role.query.PermissionsRoleQuery;
+import com.ah.cloud.permissions.biz.domain.role.vo.PermissionsRoleVO;
 import com.ah.cloud.permissions.biz.infrastructure.application.manager.PermissionsRoleManager;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.PermissionsRole;
 import com.ah.cloud.permissions.domain.common.PageResult;
@@ -33,7 +34,7 @@ public class PermissionsRoleController {
      * @return
      */
     @PostMapping("/add")
-    public ResponseResult addPermissionsRole(@Valid @RequestBody PermissionsRoleAddForm form) {
+    public ResponseResult add(@Valid @RequestBody PermissionsRoleAddForm form) {
         permissionsRoleManager.addPermissionsRole(form);
         return ResponseResult.ok();
     }
@@ -44,8 +45,8 @@ public class PermissionsRoleController {
      * @param form
      * @return
      */
-    @PutMapping("/update")
-    public ResponseResult updatePermissionsRoleById(@Valid @RequestBody PermissionsRoleUpdateForm form) {
+    @PostMapping("/update")
+    public ResponseResult update(@Valid @RequestBody PermissionsRoleUpdateForm form) {
         permissionsRoleManager.updatePermissionsRole(form);
         return ResponseResult.ok();
     }
@@ -56,9 +57,21 @@ public class PermissionsRoleController {
      * @param id
      * @return
      */
-    @DeleteMapping("/delete/{id}")
-    public ResponseResult deletePermissionsRoleById(@PathVariable(value = "id") Long id) {
+    @PostMapping("/delete/{id}")
+    public ResponseResult delete(@PathVariable(value = "id") Long id) {
         permissionsRoleManager.deletePermissionsRole(id);
+        return ResponseResult.ok();
+    }
+
+    /**
+     * 根据id查询权限角色信息
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/find/{id}")
+    public ResponseResult find(@PathVariable(value = "id") Long id) {
+        PermissionsRoleVO permissionsRoleVO = permissionsRoleManager.findPermissionsRoleById(id);
         return ResponseResult.ok();
     }
 
@@ -69,7 +82,7 @@ public class PermissionsRoleController {
      * @return
      */
     @GetMapping("/page")
-    public ResponseResult pagePermissionsRoles(PermissionsRoleQuery query) {
+    public ResponseResult page(PermissionsRoleQuery query) {
         return ResponseResult.ok(permissionsRoleManager.pagePermissionsRoles(query));
     }
 }

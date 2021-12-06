@@ -1,9 +1,6 @@
 package com.ah.cloud.permissions.biz.domain.role.form;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -15,9 +12,6 @@ import javax.validation.constraints.NotNull;
  * @create: 2021-12-03 15:37
  **/
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class PermissionsRoleUpdateForm {
 
     /**

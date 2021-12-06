@@ -32,6 +32,15 @@ public class PermissionsRoleHelper {
 
     /**
      * 数据转换
+     * @param permissionsRole
+     * @return
+     */
+    public PermissionsRoleVO convert2VO(PermissionsRole permissionsRole) {
+        return PermissionsRoleConvert.INSTANCE.convert(permissionsRole);
+    }
+
+    /**
+     * 数据转换
      * @param form
      * @return
      */

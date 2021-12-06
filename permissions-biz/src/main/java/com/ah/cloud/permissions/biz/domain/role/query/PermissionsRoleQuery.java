@@ -1,5 +1,6 @@
 package com.ah.cloud.permissions.biz.domain.role.query;
 
+import com.ah.cloud.permissions.domain.common.PageQuery;
 import lombok.*;
 
 /**
@@ -9,9 +10,6 @@ import lombok.*;
  * @create: 2021-12-06 16:37
  **/
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
 public class PermissionsRoleQuery extends PageQuery {
 
     /**

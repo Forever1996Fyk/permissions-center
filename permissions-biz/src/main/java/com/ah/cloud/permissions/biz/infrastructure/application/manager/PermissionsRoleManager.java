@@ -81,6 +81,18 @@ public class PermissionsRoleManager {
     }
 
     /**
+     * 根据id查询权限角色
+     * @param id
+     * @return
+     */
+    public PermissionsRoleVO findPermissionsRoleById(Long id) {
+        PermissionsRole permissionsRole = permissionsRoleService.getById(id);
+        PermissionsRoleVO permissionsRoleVO = permissionsRoleHelper.convert2VO(permissionsRole);
+        fillProperties(permissionsRoleVO);
+        return permissionsRoleVO;
+    }
+
+    /**
      * 分页查询角色列表
      *
      * @param query
@@ -112,7 +124,10 @@ public class PermissionsRoleManager {
      * @param permissionsRoleVOS
      */
     private void fillListProperties(List<PermissionsRoleVO> permissionsRoleVOS) {
-        permissionsRoleVOS.stream().forEach(permissionsRoleVO -> permissionsRoleVO.setRoleTypeName(""));
+        permissionsRoleVOS.stream().forEach(this::fillProperties);
     }
 
+    private void fillProperties(PermissionsRoleVO permissionsRoleVO) {
+        permissionsRoleVO.setRoleTypeName("");
+    }
 }

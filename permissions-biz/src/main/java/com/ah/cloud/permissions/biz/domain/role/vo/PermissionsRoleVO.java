@@ -1,10 +1,9 @@
 package com.ah.cloud.permissions.biz.domain.role.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.Version;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -16,9 +15,7 @@ import java.util.Date;
  **/
 @Data
 @Builder
-@ToString
 @NoArgsConstructor
-@AllArgsConstructor
 public class PermissionsRoleVO {
     /**
      * 主键id

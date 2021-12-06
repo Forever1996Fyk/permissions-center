@@ -1,6 +1,6 @@
 package com.ah.cloud.perm.biz.infrastructure.application.helper;
 
-import com.ah.cloud.perm.biz.domain.role.request.PermRoleRequest;
+import com.ah.cloud.perm.biz.domain.role.form.PermRoleAddForm;
 import com.ah.cloud.perm.biz.infrastructure.repository.bean.PermRole;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -19,16 +19,16 @@ public class PermRoleHelper {
     public interface PermRoleConvert {
         PermRoleConvert INSTANCE = Mappers.getMapper(PermRoleConvert.class);
 
-        PermRole convert(PermRoleRequest request);
+        PermRole convert(PermRoleAddForm request);
     }
 
     /**
      * 数据转换
-     * @param request
+     * @param form
      * @return
      */
-    public PermRole convert2Entity(PermRoleRequest request) {
-        PermRole permRole = PermRoleConvert.INSTANCE.convert(request);
+    public PermRole convert2Entity(PermRoleAddForm form) {
+        PermRole permRole = PermRoleConvert.INSTANCE.convert(form);
         return permRole;
     }
 }

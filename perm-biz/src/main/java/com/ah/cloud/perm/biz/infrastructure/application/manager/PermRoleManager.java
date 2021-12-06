@@ -32,6 +32,8 @@ public class PermRoleManager {
     public void addPermRole(PermRoleRequest request) {
         permRoleChecker.checkRoleType(request);
         PermRole permRole = permRoleHelper.convert2Entity(request);
+        permRole.setCreator("system");
+        permRole.setModifier("system");
         permRoleService.save(permRole);
     }
 }

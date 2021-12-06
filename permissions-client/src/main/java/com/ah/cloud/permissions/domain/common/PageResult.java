@@ -25,7 +25,12 @@ public class PageResult<T> {
     /**
      * 查询总数
      */
-    private int total;
+    private long total;
+
+    /**
+     * 总页数
+     */
+    private int pages;
 
     /**
      * 分页数据

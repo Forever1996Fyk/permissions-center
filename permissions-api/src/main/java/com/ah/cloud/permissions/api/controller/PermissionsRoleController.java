@@ -1,16 +1,15 @@
 package com.ah.cloud.permissions.api.controller;
 
 import com.ah.cloud.permissions.biz.domain.role.form.PermissionsRoleAddForm;
+import com.ah.cloud.permissions.biz.domain.role.form.PermissionsRoleUpdateForm;
+import com.ah.cloud.permissions.biz.domain.role.query.PermissionsRoleQuery;
 import com.ah.cloud.permissions.biz.infrastructure.application.manager.PermissionsRoleManager;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.PermissionsRole;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -21,7 +20,7 @@ import javax.validation.Valid;
  * @create: 2021-12-03 15:54
  **/
 @RestController
-@RequestMapping("/perm/role")
+@RequestMapping("/permissions/role")
 public class PermissionsRoleController {
 
     @Autowired
@@ -39,7 +38,38 @@ public class PermissionsRoleController {
         return ResponseResult.ok();
     }
 
-    public ResponseResult pagePermissionsRoles() {
-        return ResponseResult.ok(new PageResult<PermissionsRole>());
+    /**
+     * 编辑权限角色
+     *
+     * @param form
+     * @return
+     */
+    @PutMapping("/update")
+    public ResponseResult updatePermissionsRoleById(@Valid @RequestBody PermissionsRoleUpdateForm form) {
+        permissionsRoleManager.updatePermissionsRole(form);
+        return ResponseResult.ok();
+    }
+
+    /**
+     * 根据id删除角色
+     *
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/delete/{id}")
+    public ResponseResult deletePermissionsRoleById(@PathVariable(value = "id") Long id) {
+        permissionsRoleManager.deletePermissionsRole(id);
+        return ResponseResult.ok();
+    }
+
+    /**
+     * 分页查询角色列表
+     *
+     * @param query
+     * @return
+     */
+    @GetMapping("/page")
+    public ResponseResult pagePermissionsRoles(PermissionsRoleQuery query) {
+        return ResponseResult.ok(permissionsRoleManager.pagePermissionsRoles(query));
     }
 }

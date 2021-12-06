@@ -4,6 +4,7 @@ import com.ah.cloud.permissions.biz.domain.role.form.PermissionsRoleAddForm;
 import com.ah.cloud.permissions.biz.infrastructure.application.checker.PermissionsRoleChecker;
 import com.ah.cloud.permissions.biz.infrastructure.application.helper.PermissionsRoleHelper;
 import com.ah.cloud.permissions.biz.infrastructure.application.service.PermissionsRoleService;
+import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.PermissionsRole;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,8 @@ public class PermissionsRoleManager {
     public void addPermissionsRole(PermissionsRoleAddForm form) {
         permissionsRoleChecker.checkRoleType(form);
         PermissionsRole permissionsRole = permissionsRoleHelper.convert2Entity(form);
-        permissionsRole.setCreator("system");
-        permissionsRole.setModifier("system");
+        permissionsRole.setCreator(PermissionsConstants.OPERATOR_SYSTEM);
+        permissionsRole.setModifier(PermissionsConstants.OPERATOR_SYSTEM);
         permissionsRoleService.save(permissionsRole);
     }
 }

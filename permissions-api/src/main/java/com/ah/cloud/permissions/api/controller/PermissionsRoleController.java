@@ -2,7 +2,10 @@ package com.ah.cloud.permissions.api.controller;
 
 import com.ah.cloud.permissions.biz.domain.role.form.PermissionsRoleAddForm;
 import com.ah.cloud.permissions.biz.infrastructure.application.manager.PermissionsRoleManager;
+import com.ah.cloud.permissions.biz.infrastructure.repository.bean.PermissionsRole;
+import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +25,7 @@ import javax.validation.Valid;
 public class PermissionsRoleController {
 
     @Autowired
-    private PermissionsRoleManager PermissionsRoleManager;
+    private PermissionsRoleManager permissionsRoleManager;
 
     /**
      * 添加权限角色
@@ -32,7 +35,11 @@ public class PermissionsRoleController {
      */
     @PostMapping("/add")
     public ResponseResult addPermissionsRole(@Valid @RequestBody PermissionsRoleAddForm form) {
-        PermissionsRoleManager.addPermissionsRole(form);
+        permissionsRoleManager.addPermissionsRole(form);
         return ResponseResult.ok();
+    }
+
+    public ResponseResult pagePermissionsRoles() {
+        return ResponseResult.ok(new PageResult<PermissionsRole>());
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  **/
 @MapperScan(basePackages = {"com.ah.cloud.perm.biz.infrastructure.repository.dao"} )
 @SpringBootApplication(scanBasePackages = {"com.ah.cloud"})
-@EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 public class PermApiApplication {
 
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package com.ah.cloud.perm.biz.domain.role.request;
+package com.ah.cloud.perm.biz.domain.role.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PermRoleRequest {
+public class PermRoleAddForm {
 
     /**
      * 角色编码

@@ -1,6 +1,6 @@
 package com.ah.cloud.perm.biz.infrastructure.application.manager;
 
-import com.ah.cloud.perm.biz.domain.role.request.PermRoleRequest;
+import com.ah.cloud.perm.biz.domain.role.form.PermRoleAddForm;
 import com.ah.cloud.perm.biz.infrastructure.application.checker.PermRoleChecker;
 import com.ah.cloud.perm.biz.infrastructure.application.helper.PermRoleHelper;
 import com.ah.cloud.perm.biz.infrastructure.application.service.PermRoleService;
@@ -18,20 +18,23 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class PermRoleManager {
+
     @Autowired
     private PermRoleHelper permRoleHelper;
+
     @Autowired
     private PermRoleService permRoleService;
+
     @Autowired
     private PermRoleChecker permRoleChecker;
 
     /**
      * 添加权限角色
-     * @param request
+     * @param form
      */
-    public void addPermRole(PermRoleRequest request) {
-        permRoleChecker.checkRoleType(request);
-        PermRole permRole = permRoleHelper.convert2Entity(request);
+    public void addPermRole(PermRoleAddForm form) {
+        permRoleChecker.checkRoleType(form);
+        PermRole permRole = permRoleHelper.convert2Entity(form);
         permRoleService.save(permRole);
     }
 }

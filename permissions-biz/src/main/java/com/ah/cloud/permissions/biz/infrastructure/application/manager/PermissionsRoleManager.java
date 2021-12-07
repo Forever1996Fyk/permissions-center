@@ -88,7 +88,6 @@ public class PermissionsRoleManager {
     public PermissionsRoleVO findPermissionsRoleById(Long id) {
         PermissionsRole permissionsRole = permissionsRoleService.getById(id);
         PermissionsRoleVO permissionsRoleVO = permissionsRoleHelper.convert2VO(permissionsRole);
-        fillProperties(permissionsRoleVO);
         return permissionsRoleVO;
     }
 
@@ -114,20 +113,6 @@ public class PermissionsRoleManager {
                                                 DeletedEnum.NO.value)
                         ));
         PageResult<PermissionsRoleVO> result = permissionsRoleHelper.convert2PageResult(pageInfo);
-        fillListProperties(result.getRows());
         return result;
-    }
-
-    /**
-     * 填充集合属性
-     *
-     * @param permissionsRoleVOS
-     */
-    private void fillListProperties(List<PermissionsRoleVO> permissionsRoleVOS) {
-        permissionsRoleVOS.stream().forEach(this::fillProperties);
-    }
-
-    private void fillProperties(PermissionsRoleVO permissionsRoleVO) {
-        permissionsRoleVO.setRoleTypeName("");
     }
 }

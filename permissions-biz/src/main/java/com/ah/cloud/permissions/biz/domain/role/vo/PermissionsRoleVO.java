@@ -28,11 +28,6 @@ public class PermissionsRoleVO {
     private Integer roleType;
 
     /**
-     * 角色类型名称
-     */
-    private String roleTypeName;
-
-    /**
      * 角色编码
      */
     private String roleCode;

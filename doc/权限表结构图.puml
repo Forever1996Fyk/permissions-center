@@ -1,0 +1,187 @@
+@startuml
+skinparam handwritten true
+skinparam backgroundColor #EEEBDC
+skinparam actorStyle hollow
+
+class permissions_role{
+    - **id**    bigint    **主键id**
+    ..
+     **基础信息**
+        - **role_code**    varchar[16]    **角色编码**
+        - **role_name**    varchar[32]    **角色名称**
+        - **remark**    varchar[200]    **备注**
+    --
+    **基础行信息**
+        - **creator**   varchar[64]    **行记录创建者**
+        - **modifier**    varchar[64]    **行记录最近修改者**
+        - **created_time**    timestamps    **行记录创建时间**
+        - **modified_time**    timestamps    **行记录最近修改时间**
+        - **version**    tinyint unsigned    **版本号**
+        - **extension**    varchar[2048]    **拓展字段**
+        - **deleted**    bigint    **是否删除**
+}
+
+class permissions_menu {
+    - **id**    bigint    **主键id**
+    ..
+     **基础信息**
+        - **parent_id**    bigint    **父菜单id**
+        - **menu_code**    varchar[16]    **菜单编码**
+        - **menu_name**    varchar[32]    **菜单名称**
+        - **menu_sort**    tinyint[1]    **菜单序号**
+        - **component**    varchar[255]    **组件路径**
+        - **url**          varchar[100]    **菜单url**
+        - **target**       varchar[32]    **打开方式**
+        - **menu_type**    tinyint[1]    **菜单类型(1: 页面, 2: 按钮)**
+        - **icon**         varchar[100]    **菜单图标**
+    --
+    **基础行信息**
+        - **creator**   varchar[64]    **行记录创建者**
+        - **modifier**    varchar[64]    **行记录最近修改者**
+        - **created_time**    timestamps    **行记录创建时间**
+        - **modified_time**    timestamps    **行记录最近修改时间**
+        - **version**    tinyint unsigned    **版本号**
+        - **extension**    varchar[2048]    **拓展字段**
+        - **deleted**    bigint    **是否删除**
+}
+
+class permissions_user {
+    - **id**    bigint    **主键id**
+    ..
+     **基础信息**
+        - **account**    varchar[100]    **登录账号**
+        - **nick_name**    varchar[32]    **昵称**
+        - **password**    varchar[255]    **登录密码**
+        - **phone**          varchar[11]    **手机号**
+        - **email**       varchar[50]    **用户邮箱**
+        - **sex**    tinyint[1]    **用户性别(1 男, 2女)**
+        - **avatar**         varchar[255]    **用户头像路径**
+        - **status**         tinyint[1]    **账号状态(1正常, 2停用)**
+    --
+    **基础行信息**
+        - **creator**   varchar[64]    **行记录创建者**
+        - **modifier**    varchar[64]    **行记录最近修改者**
+        - **created_time**    timestamps    **行记录创建时间**
+        - **modified_time**    timestamps    **行记录最近修改时间**
+        - **version**    tinyint unsigned    **版本号**
+        - **extension**    varchar[2048]    **拓展字段**
+        - **deleted**    bigint    **是否删除**
+    **索引设计**
+        - unique_index  unique_phone(phone, deleted)    手机号唯一索引
+        - unique_index  unique_email(email, deleted)    邮箱唯一索引
+        - unique_index  unique_account(account, deleted)    账号唯一索引
+}
+
+class permissions_api {
+    - **id**    bigint    **主键id**
+    ..
+     **基础信息**
+        - **api_code**    varchar[16]    **接口编码**
+        - **api_name**    varchar[50]    **接口名称**
+        - **api_type**    tinyint[2]    **接口类型**
+        - **api_desc**    varchar[32]    **接口描述**
+        - **api_url**     varchar[100]    **请求路径**
+        - **status**      tinyint[1]    **账号状态(1启用, 2停用)**
+        - **is_auth**     tinyint[1]    **是否认证**
+        - **is_open**     tinyint[1]    **是否公开**
+    --
+    **基础行信息**
+        - **creator**   varchar[64]    **行记录创建者**
+        - **modifier**    varchar[64]    **行记录最近修改者**
+        - **created_time**    timestamps    **行记录创建时间**
+        - **modified_time**    timestamps    **行记录最近修改时间**
+        - **version**    tinyint unsigned    **版本号**
+        - **extension**    varchar[2048]    **拓展字段**
+        - **deleted**    bigint    **是否删除**
+}
+
+class permissions_user_role {
+    - **id**    bigint    **主键id**
+    ..
+    **基础信息**
+        - **user_id** bigint  **用户id**
+        - **role_id** bigint **角色id**
+    **基础行信息**
+        - **creator**   varchar[64]    **行记录创建者**
+        - **modifier**    varchar[64]    **行记录最近修改者**
+        - **created_time**    timestamps    **行记录创建时间**
+        - **modified_time**    timestamps    **行记录最近修改时间**
+        - **version**    tinyint unsigned    **版本号**
+        - **extension**    varchar[2048]    **拓展字段**
+        - **deleted**    bigint    **是否删除**
+}
+
+class permissions_user_api {
+    - **id**    bigint    **主键id**
+    ..
+    **基础信息**
+        - **user_id** bigint  **用户id**
+        - **api_id**  bigint  **权限id**
+    **基础行信息**
+        - **creator**   varchar[64]    **行记录创建者**
+        - **modifier**    varchar[64]    **行记录最近修改者**
+        - **created_time**    timestamps    **行记录创建时间**
+        - **modified_time**    timestamps    **行记录最近修改时间**
+        - **version**    tinyint unsigned    **版本号**
+        - **extension**    varchar[2048]    **拓展字段**
+        - **deleted**    bigint    **是否删除**
+}
+
+class permissions_user_menu {
+    - **id**    bigint    **主键id**
+    ..
+    **基础信息**
+        - **role_id** bigint  **用户id**
+        - **menu_id**  bigint  **菜单id**
+    **基础行信息**
+        - **creator**   varchar[64]    **行记录创建者**
+        - **modifier**    varchar[64]    **行记录最近修改者**
+        - **created_time**    timestamps    **行记录创建时间**
+        - **modified_time**    timestamps    **行记录最近修改时间**
+        - **version**    tinyint unsigned    **版本号**
+        - **extension**    varchar[2048]    **拓展字段**
+        - **deleted**    bigint    **是否删除**
+}
+
+class permissions_role_api {
+    - **id**    bigint    **主键id**
+    ..
+    **基础信息**
+        - **role_id** bigint  **角色id**
+        - **api_id**  bigint  **权限id**
+    **基础行信息**
+        - **creator**   varchar[64]    **行记录创建者**
+        - **modifier**    varchar[64]    **行记录最近修改者**
+        - **created_time**    timestamps    **行记录创建时间**
+        - **modified_time**    timestamps    **行记录最近修改时间**
+        - **version**    tinyint unsigned    **版本号**
+        - **extension**    varchar[2048]    **拓展字段**
+        - **deleted**    bigint    **是否删除**
+}
+
+class permissions_role_menu {
+    - **id**    bigint    **主键id**
+    ..
+    **基础信息**
+        - **role_id** bigint  **角色id**
+        - **menu_id**  bigint  **菜单id**
+    **基础行信息**
+        - **creator**   varchar[64]    **行记录创建者**
+        - **modifier**    varchar[64]    **行记录最近修改者**
+        - **created_time**    timestamps    **行记录创建时间**
+        - **modified_time**    timestamps    **行记录最近修改时间**
+        - **version**    tinyint unsigned    **版本号**
+        - **extension**    varchar[2048]    **拓展字段**
+        - **deleted**    bigint    **是否删除**
+}
+
+permissions_user --> permissions_api : 1:n
+
+permissions_user --> permissions_menu : 1:n
+
+permissions_user --> permissions_role : n:n
+
+permissions_role --> permissions_menu : 1:n
+
+permissions_role --> permissions_api : 1:n
+@enduml

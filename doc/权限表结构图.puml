@@ -3,7 +3,7 @@ skinparam handwritten true
 skinparam backgroundColor #EEEBDC
 skinparam actorStyle hollow
 
-class permissions_role{
+class sys_role{
     - **id**    bigint    **主键id**
     ..
      **基础信息**
@@ -21,17 +21,17 @@ class permissions_role{
         - **deleted**    bigint    **是否删除**
 }
 
-class permissions_menu {
+class sys_menu {
     - **id**    bigint    **主键id**
     ..
      **基础信息**
         - **parent_id**    bigint    **父菜单id**
         - **menu_code**    varchar[16]    **菜单编码**
         - **menu_name**    varchar[32]    **菜单名称**
-        - **menu_sort**    tinyint[1]    **菜单序号**
+        - **menu_order**    tinyint[1]    **菜单序号**
         - **component**    varchar[255]    **组件路径**
         - **url**          varchar[100]    **菜单url**
-        - **target**       varchar[32]    **打开方式**
+        - **open_type**       varchar[32]    **打开方式**
         - **menu_type**    tinyint[1]    **菜单类型(1: 页面, 2: 按钮)**
         - **icon**         varchar[100]    **菜单图标**
     --
@@ -45,7 +45,7 @@ class permissions_menu {
         - **deleted**    bigint    **是否删除**
 }
 
-class permissions_user {
+class sys_user {
     - **id**    bigint    **主键id**
     ..
      **基础信息**
@@ -72,7 +72,7 @@ class permissions_user {
         - unique_index  unique_account(account, deleted)    账号唯一索引
 }
 
-class permissions_api {
+class sys_api {
     - **id**    bigint    **主键id**
     ..
      **基础信息**
@@ -95,7 +95,7 @@ class permissions_api {
         - **deleted**    bigint    **是否删除**
 }
 
-class permissions_user_role {
+class sys_user_role {
     - **id**    bigint    **主键id**
     ..
     **基础信息**
@@ -111,7 +111,7 @@ class permissions_user_role {
         - **deleted**    bigint    **是否删除**
 }
 
-class permissions_user_api {
+class sys_user_api {
     - **id**    bigint    **主键id**
     ..
     **基础信息**
@@ -127,7 +127,7 @@ class permissions_user_api {
         - **deleted**    bigint    **是否删除**
 }
 
-class permissions_user_menu {
+class sys_user_menu {
     - **id**    bigint    **主键id**
     ..
     **基础信息**
@@ -143,7 +143,7 @@ class permissions_user_menu {
         - **deleted**    bigint    **是否删除**
 }
 
-class permissions_role_api {
+class sys_role_api {
     - **id**    bigint    **主键id**
     ..
     **基础信息**
@@ -159,7 +159,7 @@ class permissions_role_api {
         - **deleted**    bigint    **是否删除**
 }
 
-class permissions_role_menu {
+class sys_role_menu {
     - **id**    bigint    **主键id**
     ..
     **基础信息**
@@ -175,13 +175,13 @@ class permissions_role_menu {
         - **deleted**    bigint    **是否删除**
 }
 
-permissions_user --> permissions_api : 1:n
+sys_user --> sys_api : n:n
 
-permissions_user --> permissions_menu : 1:n
+sys_user --> sys_menu : n:n
 
-permissions_user --> permissions_role : n:n
+sys_user --> sys_role : n:n
 
-permissions_role --> permissions_menu : 1:n
+sys_role --> sys_menu : n:n
 
-permissions_role --> permissions_api : 1:n
+sys_role --> sys_api : n:n
 @enduml

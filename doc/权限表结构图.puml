@@ -28,12 +28,11 @@ class sys_menu {
         - **parent_id**    bigint    **父菜单id**
         - **menu_code**    varchar[16]    **菜单编码**
         - **menu_name**    varchar[32]    **菜单名称**
-        - **menu_order**    tinyint[1]    **菜单序号**
-        - **component**    varchar[255]    **组件路径**
-        - **url**          varchar[100]    **菜单url**
-        - **open_type**       varchar[32]    **打开方式**
-        - **menu_type**    tinyint[1]    **菜单类型(1: 页面, 2: 按钮)**
-        - **icon**         varchar[100]    **菜单图标**
+        - **menu_order**    tinyint[3]    **菜单序号**
+        - **component**    varchar[100]    **组件路径**
+        - **menu_path**          varchar[100]    **菜单url**
+        - **open_type**       tinyint[1]    **打开方式**
+        - **menu_icon**         varchar[50]    **菜单图标**
     --
     **基础行信息**
         - **creator**   varchar[64]    **行记录创建者**
@@ -49,10 +48,10 @@ class sys_user {
     - **id**    bigint    **主键id**
     ..
      **基础信息**
-        - **account**    varchar[100]    **登录账号**
-        - **nick_name**    varchar[32]    **昵称**
-        - **password**    varchar[255]    **登录密码**
-        - **phone**          varchar[11]    **手机号**
+        - **account**    varchar[20]    **登录账号**
+        - **nick_name**    varchar[8]    **昵称**
+        - **password**    varchar[50]    **登录密码**
+        - **phone**          char[11]    **手机号**
         - **email**       varchar[50]    **用户邮箱**
         - **sex**    tinyint[1]    **用户性别(1 男, 2女)**
         - **avatar**         varchar[255]    **用户头像路径**
@@ -78,7 +77,6 @@ class sys_api {
      **基础信息**
         - **api_code**    varchar[16]    **接口编码**
         - **api_name**    varchar[50]    **接口名称**
-        - **api_type**    tinyint[2]    **接口类型**
         - **api_desc**    varchar[32]    **接口描述**
         - **api_url**     varchar[100]    **请求路径**
         - **status**      tinyint[1]    **账号状态(1启用, 2停用)**
@@ -95,7 +93,7 @@ class sys_api {
         - **deleted**    bigint    **是否删除**
 }
 
-class sys_user_role {
+class sys_role_user {
     - **id**    bigint    **主键id**
     ..
     **基础信息**

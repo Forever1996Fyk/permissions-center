@@ -114,23 +114,7 @@ class sys_user_api {
     ..
     **基础信息**
         - **user_id** bigint  **用户id**
-        - **api_id**  bigint  **权限id**
-    **基础行信息**
-        - **creator**   varchar[64]    **行记录创建者**
-        - **modifier**    varchar[64]    **行记录最近修改者**
-        - **created_time**    timestamps    **行记录创建时间**
-        - **modified_time**    timestamps    **行记录最近修改时间**
-        - **version**    tinyint unsigned    **版本号**
-        - **extension**    varchar[2048]    **拓展字段**
-        - **deleted**    bigint    **是否删除**
-}
-
-class sys_user_menu {
-    - **id**    bigint    **主键id**
-    ..
-    **基础信息**
-        - **role_id** bigint  **用户id**
-        - **menu_id**  bigint  **菜单id**
+        - **api_code**  bigint  **权限编码**
     **基础行信息**
         - **creator**   varchar[64]    **行记录创建者**
         - **modifier**    varchar[64]    **行记录最近修改者**
@@ -146,7 +130,7 @@ class sys_role_api {
     ..
     **基础信息**
         - **role_id** bigint  **角色id**
-        - **api_id**  bigint  **权限id**
+        - **api_code**  bigint  **权限编码**
     **基础行信息**
         - **creator**   varchar[64]    **行记录创建者**
         - **modifier**    varchar[64]    **行记录最近修改者**
@@ -173,13 +157,35 @@ class sys_role_menu {
         - **deleted**    bigint    **是否删除**
 }
 
-sys_user --> sys_api : n:n
+class sys_user_menu {
+    - **id**    bigint    **主键id**
+    ..
+    **基础信息**
+        - **user_id** bigint  **用户id**
+        - **menu_id**  bigint  **菜单id**
+    **基础行信息**
+        - **creator**   varchar[64]    **行记录创建者**
+        - **modifier**    varchar[64]    **行记录最近修改者**
+        - **created_time**    timestamps    **行记录创建时间**
+        - **modified_time**    timestamps    **行记录最近修改时间**
+        - **version**    tinyint unsigned    **版本号**
+        - **extension**    varchar[2048]    **拓展字段**
+        - **deleted**    bigint    **是否删除**
+}
 
-sys_user --> sys_menu : n:n
-
-sys_user --> sys_role : n:n
-
-sys_role --> sys_menu : n:n
-
-sys_role --> sys_api : n:n
+class sys_menu_api {
+    - **id**    bigint    **主键id**
+    ..
+    **基础信息**
+        - **menu_id** bigint  **菜单id**
+        - **api_code**  bigint  **权限编码**
+    **基础行信息**
+        - **creator**   varchar[64]    **行记录创建者**
+        - **modifier**    varchar[64]    **行记录最近修改者**
+        - **created_time**    timestamps    **行记录创建时间**
+        - **modified_time**    timestamps    **行记录最近修改时间**
+        - **version**    tinyint unsigned    **版本号**
+        - **extension**    varchar[2048]    **拓展字段**
+        - **deleted**    bigint    **是否删除**
+}
 @enduml

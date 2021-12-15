@@ -93,7 +93,7 @@ class sys_api {
         - **deleted**    bigint    **是否删除**
 }
 
-class sys_role_user {
+class sys_user_role {
     - **id**    bigint    **主键id**
     ..
     **基础信息**
@@ -109,28 +109,13 @@ class sys_role_user {
         - **deleted**    bigint    **是否删除**
 }
 
-class sys_user_api {
-    - **id**    bigint    **主键id**
-    ..
-    **基础信息**
-        - **user_id** bigint  **用户id**
-        - **api_code**  bigint  **权限编码**
-    **基础行信息**
-        - **creator**   varchar[64]    **行记录创建者**
-        - **modifier**    varchar[64]    **行记录最近修改者**
-        - **created_time**    timestamps    **行记录创建时间**
-        - **modified_time**    timestamps    **行记录最近修改时间**
-        - **version**    tinyint unsigned    **版本号**
-        - **extension**    varchar[2048]    **拓展字段**
-        - **deleted**    bigint    **是否删除**
-}
-
-class sys_role_api {
+class sys_role_permission {
     - **id**    bigint    **主键id**
     ..
     **基础信息**
         - **role_id** bigint  **角色id**
-        - **api_code**  bigint  **权限编码**
+        - **menu_id_list**  varchar(1024)  **菜单id集合**
+        - **api_code_list**  text  **接口编码集合**
     **基础行信息**
         - **creator**   varchar[64]    **行记录创建者**
         - **modifier**    varchar[64]    **行记录最近修改者**
@@ -139,30 +124,17 @@ class sys_role_api {
         - **version**    tinyint unsigned    **版本号**
         - **extension**    varchar[2048]    **拓展字段**
         - **deleted**    bigint    **是否删除**
+    **索引设计**
+        - unique_index  unique_role_id(role_id, deleted)    角色id唯一索引
 }
 
-class sys_role_menu {
-    - **id**    bigint    **主键id**
-    ..
-    **基础信息**
-        - **role_id** bigint  **角色id**
-        - **menu_id**  bigint  **菜单id**
-    **基础行信息**
-        - **creator**   varchar[64]    **行记录创建者**
-        - **modifier**    varchar[64]    **行记录最近修改者**
-        - **created_time**    timestamps    **行记录创建时间**
-        - **modified_time**    timestamps    **行记录最近修改时间**
-        - **version**    tinyint unsigned    **版本号**
-        - **extension**    varchar[2048]    **拓展字段**
-        - **deleted**    bigint    **是否删除**
-}
-
-class sys_user_menu {
+class sys_user_permission {
     - **id**    bigint    **主键id**
     ..
     **基础信息**
         - **user_id** bigint  **用户id**
-        - **menu_id**  bigint  **菜单id**
+        - **menu_id_list**  varchar(1024)  **菜单id集合**
+        - **api_code_list**  text  **接口编码集合**
     **基础行信息**
         - **creator**   varchar[64]    **行记录创建者**
         - **modifier**    varchar[64]    **行记录最近修改者**
@@ -171,6 +143,8 @@ class sys_user_menu {
         - **version**    tinyint unsigned    **版本号**
         - **extension**    varchar[2048]    **拓展字段**
         - **deleted**    bigint    **是否删除**
+    **索引设计**
+        - unique_index  unique_user_id(user_id, deleted)    用户id唯一索引
 }
 
 class sys_menu_api {
@@ -178,7 +152,7 @@ class sys_menu_api {
     ..
     **基础信息**
         - **menu_id** bigint  **菜单id**
-        - **api_code**  bigint  **权限编码**
+        - **api_code_list**  text  **接口编码集合**
     **基础行信息**
         - **creator**   varchar[64]    **行记录创建者**
         - **modifier**    varchar[64]    **行记录最近修改者**
@@ -187,5 +161,7 @@ class sys_menu_api {
         - **version**    tinyint unsigned    **版本号**
         - **extension**    varchar[2048]    **拓展字段**
         - **deleted**    bigint    **是否删除**
+    **索引设计**
+        - unique_index  unique_menu_id(menu_id, deleted)    菜单id唯一索引
 }
 @enduml

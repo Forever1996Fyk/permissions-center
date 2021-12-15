@@ -4,11 +4,8 @@ import com.ah.cloud.permissions.biz.domain.role.form.PermissionsRoleAddForm;
 import com.ah.cloud.permissions.biz.domain.role.form.PermissionsRoleUpdateForm;
 import com.ah.cloud.permissions.biz.domain.role.query.PermissionsRoleQuery;
 import com.ah.cloud.permissions.biz.domain.role.vo.PermissionsRoleVO;
-import com.ah.cloud.permissions.biz.infrastructure.application.manager.PermissionsRoleManager;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.PermissionsRole;
-import com.ah.cloud.permissions.domain.common.PageResult;
+import com.ah.cloud.permissions.biz.application.manager.PermissionsRoleManager;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-package com.ah.cloud.biz.infrastructure.util;
+package com.ah.cloud.permissions.biz.infrastructure.util;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
@@ -22,7 +22,8 @@ class CodeGeneratorUtil {
     public static void main(String[] args) {
 
         //todo 需要生成的表
-        String[] tables = new String[]{"permissions_role"};
+        String[] tables = new String[]{"sys_api","sys_menu","sys_menu_api","sys_role"
+                ,"sys_role_permission","sys_user","sys_user_permission","sys_user_role"};
 
 
         //代码生成器
@@ -43,7 +44,7 @@ class CodeGeneratorUtil {
 
         //数据源配置 //jdbc:mysql://192.168.122.4:3306/ypsx_ofc
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://49.234.219.109:3306/permissions-center?nullCatalogMeansCurrent=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8")
+        dsc.setUrl("jdbc:mysql://49.234.219.109:3306/permissions-center?nullCatalogMeansCurrent=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false")
                 .setDriverName("com.mysql.cj.jdbc.Driver")
                 .setUsername("root")
                 .setPassword("root");
@@ -54,13 +55,13 @@ class CodeGeneratorUtil {
         // 需要去除parent, 否则包名前还会添加默认包路径 com.baomidou
         pc.setParent("");
         pc.setEntity("com.ah.cloud.permissions.biz.infrastructure.repository.bean")
-                .setMapper("com.ah.cloud.permissions.biz.infrastructure.repository.dao")
+                .setMapper("com.ah.cloud.permissions.biz.infrastructure.repository.mapper")
                 .setService("com.ah.cloud.permissions.biz.infrastructure.application.service")
                 .setServiceImpl("com.ah.cloud.permissions.biz.infrastructure.application.service.impl")
         ;
         Map<String, String> packageInfo = new HashMap<>();
         packageInfo.put(ConstVal.ENTITY, "com.ah.cloud.permissions.biz.infrastructure.repository.bean");
-        packageInfo.put(ConstVal.MAPPER, "com.ah.cloud.permissions.biz.infrastructure.repository.dao");
+        packageInfo.put(ConstVal.MAPPER, "com.ah.cloud.permissions.biz.infrastructure.repository.mapper");
         packageInfo.put(ConstVal.SERVICE, "com.ah.cloud.permissions.biz.infrastructure.application.service");
         packageInfo.put(ConstVal.SERVICE_IMPL, "com.ah.cloud.permissions.biz.infrastructure.application.service.impl")
         ;
@@ -100,6 +101,7 @@ class CodeGeneratorUtil {
         strategy.setEntityLombokModel(true);
 
         strategy.setInclude(tables);
+        strategy.setEntityBooleanColumnRemoveIsPrefix(true);
 
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix("");

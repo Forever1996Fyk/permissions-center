@@ -1,4 +1,4 @@
-package com.ah.cloud.permissions.biz.infrastructure.application.service;
+package com.ah.cloud.permissions.biz.application.service;
 
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.PermissionsRole;
 import com.baomidou.mybatisplus.extension.service.IService;

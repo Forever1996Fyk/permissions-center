@@ -1,4 +1,4 @@
-package com.ah.cloud.permissions.biz.infrastructure.application.checker;
+package com.ah.cloud.permissions.biz.application.checker;
 
 import com.ah.cloud.permissions.biz.domain.role.form.PermissionsRoleAddForm;
 import com.ah.cloud.permissions.biz.domain.role.form.PermissionsRoleUpdateForm;

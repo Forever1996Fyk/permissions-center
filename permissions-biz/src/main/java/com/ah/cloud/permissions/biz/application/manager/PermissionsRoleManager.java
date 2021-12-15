@@ -1,12 +1,12 @@
-package com.ah.cloud.permissions.biz.infrastructure.application.manager;
+package com.ah.cloud.permissions.biz.application.manager;
 
+import com.ah.cloud.permissions.biz.application.checker.PermissionsRoleChecker;
+import com.ah.cloud.permissions.biz.application.helper.PermissionsRoleHelper;
 import com.ah.cloud.permissions.biz.domain.role.form.PermissionsRoleAddForm;
 import com.ah.cloud.permissions.biz.domain.role.form.PermissionsRoleUpdateForm;
 import com.ah.cloud.permissions.biz.domain.role.query.PermissionsRoleQuery;
 import com.ah.cloud.permissions.biz.domain.role.vo.PermissionsRoleVO;
-import com.ah.cloud.permissions.biz.infrastructure.application.checker.PermissionsRoleChecker;
-import com.ah.cloud.permissions.biz.infrastructure.application.helper.PermissionsRoleHelper;
-import com.ah.cloud.permissions.biz.infrastructure.application.service.PermissionsRoleService;
+import com.ah.cloud.permissions.biz.application.service.PermissionsRoleService;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.PermissionsRole;
 import com.ah.cloud.permissions.domain.common.PageResult;
@@ -19,7 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Objects;
 
 /**

@@ -1,8 +1,8 @@
-package com.ah.cloud.permissions.biz.infrastructure.application.service.impl;
+package com.ah.cloud.permissions.biz.application.service.impl;
 
+import com.ah.cloud.permissions.biz.application.service.PermissionsRoleService;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.PermissionsRole;
-import com.ah.cloud.permissions.biz.infrastructure.repository.dao.PermissionsRoleMapper;
-import com.ah.cloud.permissions.biz.infrastructure.application.service.PermissionsRoleService;
+import com.ah.cloud.permissions.biz.infrastructure.repository.mapper.PermissionsRoleMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.ah.cloud.permissions.biz.infrastructure.repository.dao;
+package com.ah.cloud.permissions.biz.infrastructure.repository.mapper;
 
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.PermissionsRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;

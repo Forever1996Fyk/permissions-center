@@ -12,4 +12,19 @@ public class PermissionsConstants {
      * 默认操作人: 系统
      */
     public static final String OPERATOR_SYSTEM = "SYSTEM";
+
+    /**
+     * redis token key prefix
+     */
+    public static final String TOKEN_KEY_PREFIX = "ACCESS:";
+
+    /**
+     * token 类型
+     */
+    public static final String TOKEN_TYPE = "Bearer";
+
+    /**
+     * 认证请求头
+     */
+    public static final String TOKEN_HEAD = "Authorization";
 }

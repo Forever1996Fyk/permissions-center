@@ -55,7 +55,7 @@ public class SysUser implements Serializable {
     /**
      * 性别(1: 男, 2: 女)
      */
-    private Boolean sex;
+    private Integer sex;
 
     /**
      * 用于头像路径

@@ -30,6 +30,6 @@ public class LoginController {
      */
     @PostMapping("/password")
     public ResponseResult usernamePasswordLogin(@RequestBody @Valid UsernamePasswordLoginForm form) {
-        return ResponseResult.ok(loginManager.login(form));
+        return ResponseResult.ok(loginManager.getAccessToken(form));
     }
 }

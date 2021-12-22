@@ -23,6 +23,16 @@ public class ResponseResult<T> {
     private String msg;
 
     /**
+     * 子编码
+     */
+    private String subCode;
+
+    /**
+     * 子消息
+     */
+    private String subMsg;
+
+    /**
      * 返回对象
      */
     private T data;
@@ -35,6 +45,10 @@ public class ResponseResult<T> {
         return newResponse(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMsg(), data);
     }
 
+    public static <T> ResponseResult<T> error(ErrorCodeEnum errorCodeEnum, String subCode, String subMsg){
+        return newResponse(errorCodeEnum.getCode(), errorCodeEnum.getMsg(), subCode, subMsg);
+    }
+
     public static <T> ResponseResult<T> newResponse(int code, String msg,T data) {
         ResponseResult<T> result = new ResponseResult<T>();
         result.setCode(code);
@@ -44,6 +58,15 @@ public class ResponseResult<T> {
         } else {
             result.setData(data);
         }
+        return result;
+    }
+
+    public static <T> ResponseResult<T> newResponse(int code, String msg, String subCode, String subMsg) {
+        ResponseResult<T> result = new ResponseResult<T>();
+        result.setCode(code);
+        result.setMsg(msg);
+        result.setSubCode(subCode);
+        result.setSubMsg(subMsg);
         return result;
     }
 

@@ -56,6 +56,11 @@ public class LocalUser implements UserDetails {
      */
     private BaseUserInfo userInfo;
 
+    /**
+     * 当前用户的登录token
+     */
+    private String accessToken;
+
     @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {

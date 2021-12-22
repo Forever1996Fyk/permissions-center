@@ -1,6 +1,7 @@
 package com.ah.cloud.permissions.security.service;
 
 import com.ah.cloud.permissions.security.domain.token.AccessToken;
+import com.ah.cloud.permissions.security.domain.user.LocalUser;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,16 +15,28 @@ public interface TokenService {
 
     /**
      * 创建token
-     * @param o
+     * @param localUser
      * @return
      */
-    AccessToken createToken(Object o);
+    AccessToken createToken(LocalUser localUser);
 
     /**
-     * 验证 token 有效期
-     * @param accessToken
+     * 验证 token 合法
+     * @param request
      */
-    void verifyToken(String accessToken);
+    String verifyToken(HttpServletRequest request);
+
+    /**
+     * 刷新token有效期
+     * @param token
+     */
+    void refreshToken(String token);
+
+    /**
+     * 刷新token有效期
+     * @param request
+     */
+    void refreshToken(HttpServletRequest request);
 
     /**
      * 请求解析token

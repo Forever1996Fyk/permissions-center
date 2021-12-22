@@ -33,7 +33,7 @@ public class LoginManager {
      * @param loginForm
      * @return
      */
-    public AccessToken login(UsernamePasswordLoginForm loginForm) {
+    public AccessToken getAccessToken(UsernamePasswordLoginForm loginForm) {
         UsernamePasswordAuthenticationToken token = authenticationHelper.buildUsernamePasswordAuthenticationToken(loginForm);
         Authentication authenticate = authenticationManager.authenticate(token);
         LocalUser localUser = (LocalUser) authenticate.getPrincipal();

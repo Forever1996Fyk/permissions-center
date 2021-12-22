@@ -43,7 +43,17 @@ public enum ErrorCodeEnum implements ErrorCode {
     /**
      * 调用频次超限
      */
-    CALL_LIMITED(40005,"call limited.")
+    CALL_LIMITED(40005,"call limited."),
+
+    /**
+     * token验证异常
+     */
+    TOKEN_EXCEPTION(40007, "token exception."),
+
+    /**
+     * 账号错误
+     */
+    ACCOUNT_ERROR(40008, "account error."),
     ;
 
     private int code;

@@ -20,6 +20,13 @@ public interface SecurityTokenService extends TokenService {
     LocalUser getLocalUser(HttpServletRequest request);
 
     /**
+     * 获取当前Security 用户信息
+     * @param token
+     * @return
+     */
+    LocalUser getLocalUser(String token);
+
+    /**
      * 删除当前Security 用户信息
      * @param key
      */

@@ -1,7 +1,9 @@
 package com.ah.cloud.permissions.security.service.impl;
 
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
+import com.ah.cloud.permissions.biz.infrastructure.exception.CustomException;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
+import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.ah.cloud.permissions.security.domain.token.AccessToken;
 import com.ah.cloud.permissions.security.domain.user.LocalUser;
 import com.ah.cloud.permissions.security.service.SecurityTokenService;
@@ -41,7 +43,17 @@ public class RedisSecurityTokenServiceImpl implements SecurityTokenService {
     @Override
     public LocalUser getLocalUser(HttpServletRequest request) {
         // 获取请求携带的令牌
-        String accessToken = getToken(request);
+        return this.getLocalUser(getToken(request));
+    }
+
+    /**
+     * 根据token 获取当前登录信息
+     * @param accessToken
+     * @return
+     */
+    @Override
+    public LocalUser getLocalUser(String accessToken) {
+        // 获取请求携带的令牌
         if (StringUtils.isNotEmpty(accessToken)) {
             LocalUser localUser = (LocalUser) redisTemplate.opsForValue().get(getTokenKey(accessToken));
             return localUser;
@@ -55,10 +67,11 @@ public class RedisSecurityTokenServiceImpl implements SecurityTokenService {
     }
 
     @Override
-    public AccessToken createToken(Object o) {
-        log.info("[用户登录] ==> [创建token] 入参:{}", JsonUtils.toJSONString(o));
+    public AccessToken createToken(LocalUser localUser) {
+        log.info("[用户登录] ==> [创建token] 入参:{}", JsonUtils.toJSONString(localUser));
         String accessToken = UUID.randomUUID().toString();
-        redisTemplate.opsForValue().set(getTokenKey(accessToken), o,  expires_in, TimeUnit.SECONDS);
+        localUser.setAccessToken(accessToken);
+        redisTemplate.opsForValue().set(getTokenKey(accessToken), localUser,  expires_in, TimeUnit.SECONDS);
         return AccessToken.builder()
                 .access_token(accessToken)
                 .expires_in(expires_in)
@@ -66,11 +79,32 @@ public class RedisSecurityTokenServiceImpl implements SecurityTokenService {
     }
 
     @Override
-    public void verifyToken(String accessToken) {
+    public String verifyToken(HttpServletRequest request) {
+        String token = this.getToken(request);
+        if (StringUtils.isEmpty(token)) {
+            throw new CustomException(ErrorCodeEnum.TOKEN_EXCEPTION, "token exception", "非法token, 请重新登录");
+        }
+        return token;
+    }
+
+    @Override
+    public void refreshToken(HttpServletRequest request) {
+        String accessToken = getToken(request);
+        String tokenKey = getTokenKey(accessToken);
         // 获取 当前 token 剩余存活时间
-        Long expire = redisTemplate.opsForValue().getOperations().getExpire(getTokenKey(accessToken));
+        Long expire = redisTemplate.opsForValue().getOperations().getExpire(tokenKey);
         if(expire > 0 && expire < renewal_in) {
-            redisTemplate.expire(getTokenKey(accessToken), expires_in , TimeUnit.SECONDS);
+            redisTemplate.expire(tokenKey, expires_in , TimeUnit.SECONDS);
+        }
+    }
+
+    @Override
+    public void refreshToken(String token) {
+        String tokenKey = getTokenKey(token);
+        // 获取 当前 token 剩余存活时间
+        Long expire = redisTemplate.opsForValue().getOperations().getExpire(tokenKey);
+        if(expire > 0 && expire < renewal_in) {
+            redisTemplate.expire(tokenKey, expires_in , TimeUnit.SECONDS);
         }
     }
 
@@ -91,6 +125,7 @@ public class RedisSecurityTokenServiceImpl implements SecurityTokenService {
         }
         return null;
     }
+
 
     private String getTokenKey(String accessToken) {
         return PermissionsConstants.TOKEN_KEY_PREFIX + accessToken;

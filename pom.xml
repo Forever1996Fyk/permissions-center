@@ -42,6 +42,7 @@
         <apache.commons-lang3.version>3.11</apache.commons-lang3.version>
         <orika-version>1.5.2</orika-version>
         <commons.io.version>2.5</commons.io.version>
+        <commons.pool.version>2.6.2</commons.pool.version>
         <pingyin.version>2.5.0</pingyin.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
         <jackson.version>2.11.2</jackson.version>
@@ -147,6 +148,11 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons.io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${commons.pool.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>

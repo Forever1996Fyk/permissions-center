@@ -1,5 +1,7 @@
 package com.ah.cloud.permissions.security.domain.authority;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 /**
@@ -8,6 +10,8 @@ import org.springframework.security.core.GrantedAuthority;
  * @author: YuKai Fan
  * @create: 2021-12-17 17:42
  **/
+@NoArgsConstructor
+@AllArgsConstructor
 public class DefaultAuthority implements GrantedAuthority {
 
     /**
@@ -18,9 +22,5 @@ public class DefaultAuthority implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return authority;
-    }
-
-    public void setAuthority(String authority) {
-        this.authority = authority;
     }
 }

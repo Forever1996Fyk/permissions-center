@@ -6,6 +6,7 @@ import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.ah.cloud.permissions.security.domain.token.AccessToken;
 import com.ah.cloud.permissions.security.domain.user.LocalUser;
+import com.ah.cloud.permissions.security.exception.SecurityErrorException;
 import com.ah.cloud.permissions.security.service.SecurityTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -81,9 +82,9 @@ public class RedisSecurityTokenServiceImpl implements SecurityTokenService {
     @Override
     public String verifyToken(HttpServletRequest request) {
         String token = this.getToken(request);
-        if (StringUtils.isEmpty(token)) {
-            throw new CustomException(ErrorCodeEnum.TOKEN_EXCEPTION, "token exception", "非法token, 请重新登录");
-        }
+//        if (StringUtils.isEmpty(token)) {
+//            throw new SecurityErrorException(ErrorCodeEnum.TOKEN_EXCEPTION, "token exception", "非法token, 请重新登录");
+//        }
         return token;
     }
 

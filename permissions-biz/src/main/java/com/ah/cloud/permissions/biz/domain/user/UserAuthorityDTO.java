@@ -1,5 +1,6 @@
 package com.ah.cloud.permissions.biz.domain.user;
 
+import com.ah.cloud.permissions.enums.UserStatusEnum;
 import com.baomidou.mybatisplus.annotation.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,9 +38,10 @@ public class UserAuthorityDTO {
     private String password;
 
     /**
-     * 账号状态(1:正常,2:停用,3:注销)
+     * 账号状态枚举
      */
-    private Integer status;
+    private UserStatusEnum userStatusEnum;
+
 
     /**
      * 用户权限集合

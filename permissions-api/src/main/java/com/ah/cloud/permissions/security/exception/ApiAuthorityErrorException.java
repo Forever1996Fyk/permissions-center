@@ -1,18 +1,17 @@
 package com.ah.cloud.permissions.security.exception;
 
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
-import lombok.Data;
 import lombok.Getter;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.access.AccessDeniedException;
 
 /**
  * @program: permissions-center
- * @description: 自定义认证权限异常
+ * @description:
  * @author: YuKai Fan
- * @create: 2021-12-22 17:21
+ * @create: 2021-12-24 17:04
  **/
 @Getter
-public class SecurityErrorException extends AuthenticationException {
+public class ApiAuthorityErrorException extends AccessDeniedException {
 
     private ErrorCodeEnum errorCodeEnum;
 
@@ -20,18 +19,19 @@ public class SecurityErrorException extends AuthenticationException {
 
     private String subMsg;
 
-    public SecurityErrorException(ErrorCodeEnum errorCodeEnum, String subCode, String subMsg) {
+    public ApiAuthorityErrorException(ErrorCodeEnum errorCodeEnum, String subCode, String subMsg) {
         super(errorCodeEnum.getMsg());
         this.errorCodeEnum = errorCodeEnum;
         this.subCode = subCode;
         this.subMsg = subMsg;
     }
 
-    public SecurityErrorException(String msg, Throwable cause) {
-        super(msg, cause);
+
+    public ApiAuthorityErrorException(String msg) {
+        super(msg);
     }
 
-    public SecurityErrorException(String msg) {
-        super(msg);
+    public ApiAuthorityErrorException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author: YuKai Fan
  * @create: 2021-12-03 11:56
  **/
-@MapperScan(basePackages = {"com.ah.cloud.permissions.biz.infrastructure.repository.dao"} )
+@MapperScan(basePackages = {"com.ah.cloud.permissions.biz.infrastructure.repository.mapper"} )
 @SpringBootApplication(scanBasePackages = {"com.ah.cloud"})
 public class PermissionsApiApplication {
 

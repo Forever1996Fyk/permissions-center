@@ -27,11 +27,6 @@ public class LocalUser implements UserDetails {
     private String username;
 
     /**
-     * 用户昵称
-     */
-    private String nickName;
-
-    /**
      * 用户密码
      */
     private String password;

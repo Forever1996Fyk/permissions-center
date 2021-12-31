@@ -4,6 +4,7 @@ import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.ah.cloud.permissions.security.exception.SecurityErrorException;
+import com.ah.cloud.permissions.security.exception.UserAccountErrorException;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
- * @description token无效 端点处理
+ * @description 认证异常处理类
  * @author yinjinbiao
  * @create 2021/12/16 10:40
  * @version 1.0
@@ -37,9 +38,20 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint, S
 	    	SecurityErrorException exception = (SecurityErrorException) e;
 			response.setStatus(exception.getErrorCodeEnum().getCode());
 			response.getWriter()
-					.print(JsonUtils.toJSONString(ResponseResult.error(exception.getErrorCodeEnum()
+					.print(JsonUtils.toJSONString(
+							ResponseResult.error(exception.getErrorCodeEnum()
 							,exception.getSubCode()
-							, exception.getSubMsg())));
+							, exception.getSubMsg())
+					));
+		} else if (e instanceof UserAccountErrorException) {
+			UserAccountErrorException exception = (UserAccountErrorException) e;
+			response.setStatus(exception.getErrorCodeEnum().getCode());
+			response.getWriter()
+					.print(JsonUtils.toJSONString(
+							ResponseResult.error(exception.getErrorCodeEnum()
+									,exception.getSubCode()
+									, exception.getSubMsg())
+					));
 		} else {
 			response.setStatus(ErrorCodeEnum.UNKNOWN_PERMISSION.getCode());
 			response.getWriter()

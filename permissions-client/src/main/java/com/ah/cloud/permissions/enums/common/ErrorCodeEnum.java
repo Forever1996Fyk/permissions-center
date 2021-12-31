@@ -54,6 +54,26 @@ public enum ErrorCodeEnum implements ErrorCode {
      * 账号错误
      */
     ACCOUNT_ERROR(40008, "account error."),
+
+    /**
+     * 账号被禁用
+     */
+    ACCOUNT_DISABLED(40009, "account disabled."),
+
+    /**
+     * 账号被注销
+     */
+    ACCOUNT_LOG_OFF(400010, "account log off."),
+
+    /**
+     * api被禁用
+     */
+    AUTHORITY_API_DISABLED(50001, "api disabled."),
+
+    /**
+     * api未公开
+     */
+    AUTHORITY_API_NOT_OPEN(500002, "api not open."),
     ;
 
     private int code;

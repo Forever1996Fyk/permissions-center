@@ -23,30 +23,16 @@ public class ResponseResult<T> {
     private String msg;
 
     /**
-     * 子编码
-     */
-    private String subCode;
-
-    /**
-     * 子消息
-     */
-    private String subMsg;
-
-    /**
      * 返回对象
      */
     private T data;
 
     public static <T> ResponseResult<T> ok(){
-        return newResponse(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMsg(), null);
+        return newResponse(ErrorCodeEnum.SUCCESS, null);
     }
 
     public static <T> ResponseResult<T> ok(T data){
-        return newResponse(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMsg(), data);
-    }
-
-    public static <T> ResponseResult<T> error(ErrorCodeEnum errorCodeEnum, String subCode, String subMsg){
-        return newResponse(errorCodeEnum.getCode(), errorCodeEnum.getMsg(), subCode, subMsg);
+        return newResponse(ErrorCodeEnum.SUCCESS, data);
     }
 
     public static <T> ResponseResult<T> newResponse(int code, String msg,T data) {
@@ -61,12 +47,23 @@ public class ResponseResult<T> {
         return result;
     }
 
-    public static <T> ResponseResult<T> newResponse(int code, String msg, String subCode, String subMsg) {
+
+    public static <T> ResponseResult<T> newResponse(ErrorCodeEnum errorCodeEnum,T data) {
         ResponseResult<T> result = new ResponseResult<T>();
-        result.setCode(code);
-        result.setMsg(msg);
-        result.setSubCode(subCode);
-        result.setSubMsg(subMsg);
+        result.setCode(errorCodeEnum.getCode());
+        result.setMsg(errorCodeEnum.getMsg());
+        if (data != null && data instanceof String && "".equals(data)) {
+            result.setData(null);
+        } else {
+            result.setData(data);
+        }
+        return result;
+    }
+
+    public static <T> ResponseResult<T> newResponse(ErrorCodeEnum errorCodeEnum) {
+        ResponseResult<T> result = new ResponseResult<T>();
+        result.setCode(errorCodeEnum.getCode());
+        result.setMsg(errorCodeEnum.getMsg());
         return result;
     }
 

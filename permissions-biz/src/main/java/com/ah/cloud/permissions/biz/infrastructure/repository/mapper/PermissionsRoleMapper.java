@@ -1,6 +1,6 @@
 package com.ah.cloud.permissions.biz.infrastructure.repository.mapper;
 
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.PermissionsRole;
+import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,5 +11,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author auto_generation
  * @since 2021-12-03
  */
-public interface PermissionsRoleMapper extends BaseMapper<PermissionsRole> {
+public interface SysRoleMapper extends BaseMapper<SysRole> {
 }

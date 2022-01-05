@@ -57,7 +57,7 @@ mybatis-plus:
 
 logging:
   level:
-    root: info
+    root: debug
   file:
     name: ./logs/permissions-api.log
 

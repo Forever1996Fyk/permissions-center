@@ -1,7 +1,7 @@
 package com.ah.cloud.permissions.api.handler;
 
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
-import com.ah.cloud.permissions.biz.infrastructure.exception.CustomException;
+import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -56,18 +56,16 @@ public class GlobalExceptionHandler {
      * @param e
      * @return
      */
-    @ExceptionHandler(CustomException.class)
-    public ResponseErrorResult handleCustomException(CustomException e) {
+    @ExceptionHandler(BizException.class)
+    public ResponseErrorResult handleCustomException(BizException e) {
         log.error(e.getMessage(), e);
         ResponseErrorResult response = new ResponseErrorResult();
         response.setCode(e.getErrorCode().getCode());
         response.setMsg(e.getErrorCode().getMsg());
-        response.setSubCode(e.getSubCode());
-        response.setSubMsg(e.getSubMsg());
         return response;
     }
 
-//    @ExceptionHandler(Exception.class)
+//    @SecurityExceptionHandler(Exception.class)
 //    public ResponseErrorResult handleException(Exception e) {
 //        log.error(e.getMessage(), e);
 //        ResponseErrorResult response = new ResponseErrorResult();

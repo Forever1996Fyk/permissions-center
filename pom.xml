@@ -49,6 +49,9 @@
 
         <!-- template engine -->
         <freemarker.version>2.3.28</freemarker.version>
+
+        <servlet-api.version>2.5</servlet-api.version>
+        <hutool.version>5.7.18</hutool.version>
     </properties>
 
     <dependencyManagement>
@@ -173,6 +176,16 @@
                 <groupId>org.freemarker</groupId>
                 <artifactId>freemarker</artifactId>
                 <version>${freemarker.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>${servlet-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-core</artifactId>
+                <version>${hutool.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

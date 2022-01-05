@@ -1,16 +1,15 @@
 package com.ah.cloud.permissions.api.controller;
 
+import com.ah.cloud.permissions.biz.application.manager.SysUserManager;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserAddForm;
-import com.ah.cloud.permissions.biz.infrastructure.application.service.SysUserService;
-import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUser;
+import com.ah.cloud.permissions.biz.domain.user.query.SysUserQuery;
+import com.ah.cloud.permissions.biz.domain.user.vo.SysUserVo;
+import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * @program: permissions-center
@@ -22,30 +21,50 @@ import java.util.List;
 @RequestMapping("/user")
 public class SysUserController {
     @Autowired
-    private SysUserService sysUserService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private SysUserManager sysUserManager;
 
+    /**
+     * 添加新用户
+     * @param form
+     * @return
+     */
     @PostMapping("/add")
     public ResponseResult add(@Valid @RequestBody SysUserAddForm form) {
-        SysUser sysUser = new SysUser();
-        sysUser.setId(1L);
-        sysUser.setNickName("超级管理员");
-        sysUser.setAccount(form.getAccount());
-        sysUser.setPhone(form.getPhone());
-        sysUser.setEmail(form.getEmail());
-        sysUser.setSex(form.getSex());
-        sysUser.setPassword(passwordEncoder.encode("123456"));
-        sysUser.setCreator(PermissionsConstants.OPERATOR_SYSTEM);
-        sysUser.setModifier(PermissionsConstants.OPERATOR_SYSTEM);
-        sysUserService.save(sysUser);
-
+        sysUserManager.addSysUser(form);
         return ResponseResult.ok();
     }
 
-    @GetMapping("/list")
-    public ResponseResult list() {
-        List<SysUser> list = sysUserService.list();
-        return ResponseResult.ok(list);
+    /**
+     * 根据id删除用户
+     *
+     * @param id
+     * @return
+     */
+    @PostMapping("/delete/{id}")
+    public ResponseResult delete(@PathVariable(value = "id") Long id) {
+        sysUserManager.deleteSysUserById(id);
+        return ResponseResult.ok();
+    }
+
+    /**
+     * 根据id查询用户信息
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/find/{id}")
+    public ResponseResult<SysUserVo> find(@PathVariable(value = "id") Long id) {
+        return ResponseResult.ok(sysUserManager.findSysUserById(id));
+    }
+
+    /**
+     * 分页查询角色列表
+     *
+     * @param query
+     * @return
+     */
+    @GetMapping("/page")
+    public ResponseResult<PageResult<SysUserVo>> page(SysUserQuery query) {
+        return ResponseResult.ok(sysUserManager.pageSysUsers(query));
     }
 }

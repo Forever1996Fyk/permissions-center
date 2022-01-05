@@ -13,13 +13,6 @@ import javax.validation.constraints.NotNull;
  **/
 @Data
 public class SysUserAddForm {
-
-    /**
-     * 登录账号
-     */
-    @NotEmpty(message = "登录账号不能为空")
-    private String account;
-
     /**
      * 用户昵称
      */
@@ -30,12 +23,6 @@ public class SysUserAddForm {
      */
     @NotEmpty(message = "手机号不能为空")
     private String phone;
-
-    /**
-     * 邮箱
-     */
-    @NotEmpty(message = "邮箱不能为空")
-    private String email;
 
     /**
      * 性别(1: 男, 2: 女)

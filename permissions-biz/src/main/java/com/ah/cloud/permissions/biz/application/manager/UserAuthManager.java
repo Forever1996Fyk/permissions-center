@@ -1,8 +1,11 @@
 package com.ah.cloud.permissions.biz.application.manager;
 
 import com.ah.cloud.permissions.biz.application.helper.UserAuthorityHelper;
+import com.ah.cloud.permissions.biz.application.service.SysRolePermissionService;
+import com.ah.cloud.permissions.biz.application.service.SysUserPermissionService;
+import com.ah.cloud.permissions.biz.application.service.SysUserRoleService;
+import com.ah.cloud.permissions.biz.application.service.SysUserService;
 import com.ah.cloud.permissions.biz.domain.user.UserAuthorityDTO;
-import com.ah.cloud.permissions.biz.infrastructure.application.service.*;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysRolePermission;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUser;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUserPermission;
@@ -22,7 +25,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @program: permissions-center

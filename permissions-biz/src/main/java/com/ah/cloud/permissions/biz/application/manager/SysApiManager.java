@@ -2,7 +2,7 @@ package com.ah.cloud.permissions.biz.application.manager;
 
 import com.ah.cloud.permissions.biz.application.helper.SysApiHelper;
 import com.ah.cloud.permissions.biz.domain.api.dto.AuthorityApiDTO;
-import com.ah.cloud.permissions.biz.infrastructure.application.service.SysApiService;
+import com.ah.cloud.permissions.biz.application.service.SysApiService;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysApi;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

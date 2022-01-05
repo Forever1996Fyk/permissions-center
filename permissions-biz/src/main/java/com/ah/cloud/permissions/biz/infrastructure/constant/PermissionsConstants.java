@@ -27,4 +27,9 @@ public class PermissionsConstants {
      * 认证请求头
      */
     public static final String TOKEN_HEAD = "Authorization";
+
+    /**
+     * 用户默认密码
+     */
+    public static final String DEFAULT_PASSWORD = "123456";
 }

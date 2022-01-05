@@ -1,9 +1,9 @@
 package com.ah.cloud.permissions.security.config;
 
-import com.ah.cloud.permissions.security.filter.RedisAuthenticationTokenFilter;
-import com.ah.cloud.permissions.security.handler.AccessDeniedHandlerImpl;
-import com.ah.cloud.permissions.security.handler.AuthenticationEntryPointImpl;
-import com.ah.cloud.permissions.security.handler.LogoutSuccessHandlerImpl;
+import com.ah.cloud.permissions.biz.infrastructure.security.filter.RedisAuthenticationTokenFilter;
+import com.ah.cloud.permissions.biz.infrastructure.security.handler.AccessDeniedHandlerImpl;
+import com.ah.cloud.permissions.biz.infrastructure.security.handler.AuthenticationEntryPointImpl;
+import com.ah.cloud.permissions.biz.infrastructure.security.handler.LogoutSuccessHandlerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -2,7 +2,7 @@ package com.ah.cloud.permissions.api.controller;
 
 import com.ah.cloud.permissions.biz.domain.login.UsernamePasswordLoginForm;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
-import com.ah.cloud.permissions.security.application.manager.LoginManager;
+import com.ah.cloud.permissions.biz.application.manager.LoginManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

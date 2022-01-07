@@ -31,6 +31,7 @@ public enum ErrorCodeEnum implements ErrorCode {
     PERMISSION_DENY(200_0_002,"权限不足, 拒绝访问"),
     AUTHORITY_API_DISABLED(200_1_001, "当前接口已被禁用,无法访问"),
     AUTHORITY_API_NOT_OPEN(200_1_002, "当前接口未公开, 无法访问"),
+    VALIDATE_CODE_USER_IS_NULL(200_2_001, "短信认证失败, 用户不存在");
 
     /**
      * 认证相关响应码

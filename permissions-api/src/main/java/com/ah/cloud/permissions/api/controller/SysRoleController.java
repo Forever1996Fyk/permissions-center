@@ -82,4 +82,9 @@ public class SysRoleController {
     public ResponseResult<PageResult<SysRoleVO>> page(SysRoleQuery query) {
         return ResponseResult.ok(sysRoleManager.pageSysRoles(query));
     }
+
+    @PostMapping("/selectAndAddUsers")
+    public ResponseResult selectAndAddUsers() {
+        return ResponseResult.ok();
+    }
 }

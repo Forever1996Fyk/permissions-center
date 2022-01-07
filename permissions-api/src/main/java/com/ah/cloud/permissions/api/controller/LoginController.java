@@ -1,6 +1,8 @@
 package com.ah.cloud.permissions.api.controller;
 
 import com.ah.cloud.permissions.biz.domain.login.UsernamePasswordLoginForm;
+import com.ah.cloud.permissions.biz.domain.login.ValidateCodeLoginForm;
+import com.ah.cloud.permissions.biz.domain.token.AccessToken;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
 import com.ah.cloud.permissions.biz.application.manager.LoginManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +30,18 @@ public class LoginController {
      * @param form
      * @return
      */
-    @PostMapping("/password")
-    public ResponseResult usernamePasswordLogin(@RequestBody @Valid UsernamePasswordLoginForm form) {
+    @PostMapping("/usernamePasswordLogin")
+    public ResponseResult<AccessToken> usernamePasswordLogin(@RequestBody @Valid UsernamePasswordLoginForm form) {
         return ResponseResult.ok(loginManager.getAccessToken(form));
+    }
+
+    /**
+     * 验证码登录
+     * @param form
+     * @return
+     */
+    @PostMapping("/validateCodeLogin")
+    public ResponseResult validateCodeLogin(@RequestBody @Valid ValidateCodeLoginForm form) {
+        return ResponseResult.ok();
     }
 }

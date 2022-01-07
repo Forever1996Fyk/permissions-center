@@ -1,11 +1,10 @@
 package com.ah.cloud.permissions.biz.infrastructure.security.service.impl;
 
-import com.ah.cloud.permissions.biz.application.manager.UserAuthManager;
-import com.ah.cloud.permissions.biz.domain.user.UserAuthorityDTO;
 import com.ah.cloud.permissions.biz.application.checker.LocalUserChecker;
 import com.ah.cloud.permissions.biz.application.helper.LocalUserHelper;
+import com.ah.cloud.permissions.biz.application.manager.UserAuthManager;
+import com.ah.cloud.permissions.biz.domain.user.UserAuthorityDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,11 +16,11 @@ import javax.annotation.Resource;
  * @program: permissions-center
  * @description:
  * @author: YuKai Fan
- * @create: 2021-12-22 15:15
+ * @create: 2022-01-06 21:35
  **/
 @Slf4j
 @Component
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class ValidateCodeUserDetailsServiceImpl implements UserDetailsService {
     @Resource
     private UserAuthManager userAuthManager;
     @Resource

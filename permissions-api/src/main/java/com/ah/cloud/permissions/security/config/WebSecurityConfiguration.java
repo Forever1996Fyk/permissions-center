@@ -4,6 +4,7 @@ import com.ah.cloud.permissions.biz.infrastructure.security.filter.RedisAuthenti
 import com.ah.cloud.permissions.biz.infrastructure.security.handler.AccessDeniedHandlerImpl;
 import com.ah.cloud.permissions.biz.infrastructure.security.handler.AuthenticationEntryPointImpl;
 import com.ah.cloud.permissions.biz.infrastructure.security.handler.LogoutSuccessHandlerImpl;
+import com.ah.cloud.permissions.biz.infrastructure.security.provider.ValidateCodeAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,6 +56,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     /**
      * 默认的账号密码登录校验
      */
+    @Resource(name="validateCodeUserDetailsServiceImpl")
+    private UserDetailsService validateCodeUserDetailsService;
+
+    /**
+     * 默认的账号密码登录校验
+     */
     @Resource(name="userDetailsServiceImpl")
     private UserDetailsService usernamePasswordUserDetailsService;
 
@@ -97,15 +104,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        // 注入默认的账号密码验证
-//        auth.userDetailsService(usernamePasswordUserDetailsService)
-//                // 加入密码编码器为BCrypt方式
-//                .passwordEncoder(passwordEncoder());
-
-        // 向 ProviderManager 中加入新的认证方式
-//        auth.authenticationProvider(new SmsAuthenticationProvider(smsCodePasswordUserDetailsService));
         auth.authenticationProvider(daoAuthenticationProvider());
-
+        auth.authenticationProvider(validateCodeAuthenticationProvider());
     }
 
     /**
@@ -146,5 +146,19 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         daoAuthenticationProvider.setUserDetailsService(usernamePasswordUserDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
+    }
+
+
+    /**
+     * 重新注入DaoAuthenticationProvider
+     *
+     * 设置setHideUserNotFoundExceptions为false, 可以抛出UsernameNotFoundException
+     * @return
+     */
+    @Bean
+    public ValidateCodeAuthenticationProvider validateCodeAuthenticationProvider() {
+        ValidateCodeAuthenticationProvider validateCodeAuthenticationProvider = new ValidateCodeAuthenticationProvider();
+        validateCodeAuthenticationProvider.setUserDetailsService(validateCodeUserDetailsService);
+        return validateCodeAuthenticationProvider;
     }
 }

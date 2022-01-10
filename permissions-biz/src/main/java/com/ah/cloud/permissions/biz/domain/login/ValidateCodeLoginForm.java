@@ -11,7 +11,7 @@ import javax.validation.constraints.NotEmpty;
  * @create: 2022-01-05 22:15
  **/
 @Data
-public class ValidateCodeLoginForm {
+public class ValidateCodeLoginForm  implements LoginForm {
 
     /**
      * 发送账号

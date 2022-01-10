@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
  * @create: 2021-12-17 17:58
  **/
 @Data
-public class UsernamePasswordLoginForm {
+public class UsernamePasswordLoginForm implements LoginForm {
     /**
      * 账号
      */

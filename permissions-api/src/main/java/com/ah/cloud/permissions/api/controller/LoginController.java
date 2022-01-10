@@ -1,16 +1,16 @@
 package com.ah.cloud.permissions.api.controller;
 
+import com.ah.cloud.permissions.biz.application.manager.login.HandleManager;
 import com.ah.cloud.permissions.biz.domain.login.UsernamePasswordLoginForm;
 import com.ah.cloud.permissions.biz.domain.login.ValidateCodeLoginForm;
 import com.ah.cloud.permissions.biz.domain.token.AccessToken;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
-import com.ah.cloud.permissions.biz.application.manager.LoginManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 
 /**
@@ -22,8 +22,8 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/login")
 public class LoginController {
-    @Autowired
-    private LoginManager loginManager;
+    @Resource
+    private HandleManager handleManager;
 
     /**
      * 账号密码登录
@@ -32,7 +32,7 @@ public class LoginController {
      */
     @PostMapping("/usernamePasswordLogin")
     public ResponseResult<AccessToken> usernamePasswordLogin(@RequestBody @Valid UsernamePasswordLoginForm form) {
-        return ResponseResult.ok(loginManager.getAccessToken(form));
+        return ResponseResult.ok(handleManager.getAccessToken(form));
     }
 
     /**
@@ -41,7 +41,7 @@ public class LoginController {
      * @return
      */
     @PostMapping("/validateCodeLogin")
-    public ResponseResult validateCodeLogin(@RequestBody @Valid ValidateCodeLoginForm form) {
-        return ResponseResult.ok();
+    public ResponseResult<AccessToken> validateCodeLogin(@RequestBody @Valid ValidateCodeLoginForm form) {
+        return ResponseResult.ok(handleManager.getAccessToken(form));
     }
 }

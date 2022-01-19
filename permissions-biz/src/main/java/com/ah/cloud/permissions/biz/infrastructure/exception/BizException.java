@@ -1,5 +1,7 @@
 package com.ah.cloud.permissions.biz.infrastructure.exception;
 
+import com.ah.cloud.permissions.biz.infrastructure.util.AppUtils;
+import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.ah.cloud.permissions.exception.ErrorCode;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -16,34 +18,18 @@ public class BizException extends RuntimeException {
     /**
      * 错误码
      */
-    private ErrorCode errorCode;
+    private ErrorCodeEnum errorCode;
 
     private String errorMessage;
 
-    public BizException(ErrorCode errorCode) {
+    public BizException(ErrorCodeEnum errorCode) {
         super(errorCode.getMsg());
         this.errorCode = errorCode;
     }
 
-    public BizException(ErrorCode errorCode, String... args) {
-        super(getErrorMsg(errorCode, args));
-        this.errorMessage = getErrorMsg(errorCode, args);
+    public BizException(ErrorCodeEnum errorCode, String... args) {
+        super(AppUtils.getErrorMsg(errorCode, args));
+        this.errorMessage = AppUtils.getErrorMsg(errorCode, args);
         this.errorCode = errorCode;
-    }
-
-    public static String getErrorMsg(ErrorCode errorCode, String... args) {
-        String errorMsg = String.format(errorCode.getMsg(), args);
-        // 说明StringFormat不启作用
-        if (StringUtils.equals(errorMsg, errorCode.getMsg())) {
-            StringBuffer sb = new StringBuffer();
-            sb.append(errorCode.getMsg()).append("，详情：");
-            if (args != null && args.length > 0) {
-                for (String arg : args) {
-                    sb.append(arg).append(" ");
-                }
-            }
-            errorMsg = sb.toString();
-        }
-        return errorMsg;
     }
 }

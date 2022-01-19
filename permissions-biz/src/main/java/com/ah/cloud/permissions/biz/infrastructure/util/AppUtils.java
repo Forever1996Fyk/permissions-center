@@ -1,5 +1,8 @@
 package com.ah.cloud.permissions.biz.infrastructure.util;
 
+import com.ah.cloud.permissions.exception.ErrorCode;
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * @program: zbgx_system
  * @description:
@@ -22,5 +25,22 @@ public class AppUtils {
      */
     public static Long randomLongId() {
         return IdWorker.idWorker().createId();
+    }
+
+
+    public static String getErrorMsg(ErrorCode errorCode, String... args) {
+        String errorMsg = String.format(errorCode.getMsg(), args);
+        // 说明StringFormat不启作用
+        if (StringUtils.equals(errorMsg, errorCode.getMsg())) {
+            StringBuffer sb = new StringBuffer();
+            sb.append(errorCode.getMsg()).append("，详情：");
+            if (args != null && args.length > 0) {
+                for (String arg : args) {
+                    sb.append(arg).append(" ");
+                }
+            }
+            errorMsg = sb.toString();
+        }
+        return errorMsg;
     }
 }

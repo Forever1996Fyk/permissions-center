@@ -31,7 +31,7 @@ public enum ErrorCodeEnum implements ErrorCode {
     PERMISSION_DENY(200_0_002,"权限不足, 拒绝访问"),
     AUTHORITY_API_DISABLED(200_1_001, "当前接口已被禁用,无法访问"),
     AUTHORITY_API_NOT_OPEN(200_1_002, "当前接口未公开, 无法访问"),
-    VALIDATE_CODE_USER_IS_NULL(200_2_001, "短信认证失败, 用户不存在");
+    VALIDATE_CODE_USER_IS_NULL(500_0_001, "短信认证失败, 用户不存在"),
 
     /**
      * 认证相关响应码
@@ -47,6 +47,15 @@ public enum ErrorCodeEnum implements ErrorCode {
     USER_NOT_EXIST(400_0_002, "用户不存在"),
     CURRENT_USER_IS_NOT_EXIST(400_0_003, "当前登录用户不存在"),
     ANONYMOUS_USER_HAS_NO_INFO(400_0_004, "当前匿名用户无具体信息"),
+
+    /**
+     * 验证码相关错误
+     */
+    VALIDATE_CODE_SAVE_ERROR(500_0_001, "[%s]存储验证码失败"),
+    VALIDATE_CODE_INVALID(500_0_002, "验证码已过期, 请重新发送"),
+    VALIDATE_CODE_DISCORD(500_0_003, "验证码错误, 请重新输入"),
+    VALIDATE_CODE_PHONE_OR_EMAIL_FORMAT_ERROR(500_0_004, "手机或邮箱格式错误"),
+
     ;
 
     private int code;

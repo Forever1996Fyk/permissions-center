@@ -3,13 +3,18 @@ package com.ah.cloud.permissions.biz.infrastructure.util;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.*;
+import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
+import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
+import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * mp生成器
@@ -17,13 +22,14 @@ import java.util.Map;
  * 生成的代码在src目录下,需要手动挪到对应目录
  * 使用教程 https://mp.baomidou.com/guide/wrapper.html
  */
-class CodeGeneratorUtil {
+public class CodeGeneratorUtil {
 
     public static void main(String[] args) {
 
         //todo 需要生成的表
-        String[] tables = new String[]{"sys_api","sys_menu","sys_menu_api","sys_role"
-                ,"sys_role_permission","sys_user","sys_user_permission","sys_user_role"};
+        String[] tables = new String[]{"sys_api", "sys_menu", "sys_user", "sys_role"
+                , "sys_user_role", "sys_user_api", "sys_user_menu"
+                , "sys_role_menu", "sys_role_api", "sys_menu_api"};
 
 
         //代码生成器
@@ -48,7 +54,20 @@ class CodeGeneratorUtil {
                 .setDriverName("com.mysql.cj.jdbc.Driver")
                 .setUsername("root")
                 .setPassword("root");
+
+        // 设置 tinyint为 Integer
+        dsc.setTypeConvert(new MySqlTypeConvert() {
+            @Override
+            public IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
+                String t = fieldType.toLowerCase();
+                if (t.contains("tinyint")) {
+                    return DbColumnType.INTEGER;
+                }
+                return super.processTypeConvert(globalConfig, fieldType);
+            }
+        });
         mpg.setDataSource(dsc);
+
 
         //包配置
         PackageConfig pc = new PackageConfig();
@@ -56,14 +75,14 @@ class CodeGeneratorUtil {
         pc.setParent("");
         pc.setEntity("com.ah.cloud.permissions.biz.infrastructure.repository.bean")
                 .setMapper("com.ah.cloud.permissions.biz.infrastructure.repository.mapper")
-                .setService("com.ah.cloud.permissions.biz.infrastructure.application.service")
-                .setServiceImpl("com.ah.cloud.permissions.biz.infrastructure.application.service.impl")
+                .setService("com.ah.cloud.permissions.biz.application.service")
+                .setServiceImpl("com.ah.cloud.permissions.biz.application.service.impl")
         ;
         Map<String, String> packageInfo = new HashMap<>();
         packageInfo.put(ConstVal.ENTITY, "com.ah.cloud.permissions.biz.infrastructure.repository.bean");
         packageInfo.put(ConstVal.MAPPER, "com.ah.cloud.permissions.biz.infrastructure.repository.mapper");
-        packageInfo.put(ConstVal.SERVICE, "com.ah.cloud.permissions.biz.infrastructure.application.service");
-        packageInfo.put(ConstVal.SERVICE_IMPL, "com.ah.cloud.permissions.biz.infrastructure.application.service.impl")
+        packageInfo.put(ConstVal.SERVICE, "com.ah.cloud.permissions.biz.application.service");
+        packageInfo.put(ConstVal.SERVICE_IMPL, "com.ah.cloud.permissions.biz.application.service.impl")
         ;
 
         /*
@@ -99,6 +118,9 @@ class CodeGeneratorUtil {
         strategy.setVersionFieldName("version");
         //默认是false
         strategy.setEntityLombokModel(true);
+
+        // 去除is前缀
+        strategy.setEntityBooleanColumnRemoveIsPrefix(true);
 
         strategy.setInclude(tables);
         strategy.setEntityBooleanColumnRemoveIsPrefix(true);

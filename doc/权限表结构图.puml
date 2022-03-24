@@ -3,7 +3,7 @@ skinparam handwritten true
 skinparam backgroundColor #EEEBDC
 skinparam actorStyle hollow
 
-class sys_role{
+class sys_role {
     - **id**    bigint    **主键id**
     ..
      **基础信息**
@@ -28,11 +28,12 @@ class sys_menu {
         - **parent_id**    bigint    **父菜单id**
         - **menu_code**    varchar[16]    **菜单编码**
         - **menu_name**    varchar[32]    **菜单名称**
-        - **menu_order**    tinyint[3]    **菜单序号**
+        - **menu_type**    tinyint[3]    **菜单类型**
+        - **menu_order**   tinyint[3]    **菜单序号**
         - **component**    varchar[100]    **组件路径**
-        - **menu_path**          varchar[100]    **菜单url**
-        - **open_type**       tinyint[1]    **打开方式**
-        - **menu_icon**         varchar[50]    **菜单图标**
+        - **menu_path**    varchar[100]    **菜单url**
+        - **open_type**    tinyint[1]    **打开方式**
+        - **menu_icon**    varchar[50]    **菜单图标**
     --
     **基础行信息**
         - **creator**   varchar[64]    **行记录创建者**
@@ -42,12 +43,15 @@ class sys_menu {
         - **version**    tinyint unsigned    **版本号**
         - **extension**    varchar[2048]    **拓展字段**
         - **deleted**    bigint    **是否删除**
+    **索引设计**
+        - index  idx_menu_code(menu_code)    菜单编码索引
 }
 
 class sys_user {
     - **id**    bigint    **主键id**
     ..
      **基础信息**
+        - **user_id**    bigint    **用户id**
         - **account**    varchar[20]    **登录账号**
         - **nick_name**    varchar[8]    **昵称**
         - **password**    varchar[50]    **登录密码**
@@ -66,6 +70,7 @@ class sys_user {
         - **extension**    varchar[2048]    **拓展字段**
         - **deleted**    bigint    **是否删除**
     **索引设计**
+        - unique_index  unique_user_id(user_id, deleted)    用户id唯一索引
         - unique_index  unique_phone(phone, deleted)    手机号唯一索引
         - unique_index  unique_email(email, deleted)    邮箱唯一索引
         - unique_index  unique_account(account, deleted)    账号唯一索引
@@ -77,6 +82,7 @@ class sys_api {
      **基础信息**
         - **api_code**    varchar[16]    **接口编码**
         - **api_name**    varchar[50]    **接口名称**
+        - **api_type**    tinyint[3]    **接口类型**
         - **api_desc**    varchar[32]    **接口描述**
         - **api_url**     varchar[100]    **请求路径**
         - **status**      tinyint[1]    **账号状态(1启用, 2停用)**
@@ -91,6 +97,8 @@ class sys_api {
         - **version**    tinyint unsigned    **版本号**
         - **extension**    varchar[2048]    **拓展字段**
         - **deleted**    bigint    **是否删除**
+    **索引设计**
+        - index  idx_api_code(api_code)    接口编码索引
 }
 
 class sys_user_role {
@@ -98,7 +106,7 @@ class sys_user_role {
     ..
     **基础信息**
         - **user_id** bigint  **用户id**
-        - **role_id** bigint **角色id**
+        - **role_code** bigint **角色编码**
     **基础行信息**
         - **creator**   varchar[64]    **行记录创建者**
         - **modifier**    varchar[64]    **行记录最近修改者**
@@ -109,13 +117,12 @@ class sys_user_role {
         - **deleted**    bigint    **是否删除**
 }
 
-class sys_role_permission {
+class sys_role_menu {
     - **id**    bigint    **主键id**
     ..
     **基础信息**
         - **role_id** bigint  **角色id**
-        - **menu_id_list**  varchar(1024)  **菜单id集合**
-        - **api_code_list**  text  **接口编码集合**
+        - **menu_code**  varchar(32)  **菜单编码**
     **基础行信息**
         - **creator**   varchar[64]    **行记录创建者**
         - **modifier**    varchar[64]    **行记录最近修改者**
@@ -125,34 +132,16 @@ class sys_role_permission {
         - **extension**    varchar[2048]    **拓展字段**
         - **deleted**    bigint    **是否删除**
     **索引设计**
-        - unique_index  unique_role_id(role_id, deleted)    角色id唯一索引
+        - index  idx_role_id(role_id)    角色id索引
 }
 
-class sys_user_permission {
-    - **id**    bigint    **主键id**
-    ..
-    **基础信息**
-        - **user_id** bigint  **用户id**
-        - **menu_id_list**  varchar(1024)  **菜单id集合**
-        - **api_code_list**  text  **接口编码集合**
-    **基础行信息**
-        - **creator**   varchar[64]    **行记录创建者**
-        - **modifier**    varchar[64]    **行记录最近修改者**
-        - **created_time**    timestamps    **行记录创建时间**
-        - **modified_time**    timestamps    **行记录最近修改时间**
-        - **version**    tinyint unsigned    **版本号**
-        - **extension**    varchar[2048]    **拓展字段**
-        - **deleted**    bigint    **是否删除**
-    **索引设计**
-        - unique_index  unique_user_id(user_id, deleted)    用户id唯一索引
-}
 
 class sys_menu_api {
     - **id**    bigint    **主键id**
     ..
     **基础信息**
         - **menu_id** bigint  **菜单id**
-        - **api_code_list**  text  **接口编码集合**
+        - **api_code**  varchar(32)  **接口编码**
     **基础行信息**
         - **creator**   varchar[64]    **行记录创建者**
         - **modifier**    varchar[64]    **行记录最近修改者**
@@ -162,6 +151,42 @@ class sys_menu_api {
         - **extension**    varchar[2048]    **拓展字段**
         - **deleted**    bigint    **是否删除**
     **索引设计**
-        - unique_index  unique_menu_id(menu_id, deleted)    菜单id唯一索引
+        - index  idx_menu_id(menu_id, deleted)    菜单id索引
+}
+
+class sys_role_api {
+    - **id**    bigint    **主键id**
+    ..
+    **基础信息**
+        - **role_id** bigint  **角色id**
+        - **api_code**  varchar(32)  **接口编码**
+    **基础行信息**
+        - **creator**   varchar[64]    **行记录创建者**
+        - **modifier**    varchar[64]    **行记录最近修改者**
+        - **created_time**    timestamps    **行记录创建时间**
+        - **modified_time**    timestamps    **行记录最近修改时间**
+        - **version**    tinyint unsigned    **版本号**
+        - **extension**    varchar[2048]    **拓展字段**
+        - **deleted**    bigint    **是否删除**
+    **索引设计**
+        - index  idx_role_id(role_id)    角色id索引
+}
+
+class sys_user_api {
+    - **id**    bigint    **主键id**
+    ..
+    **基础信息**
+        - **user_id** bigint  **用户id**
+        - **api_code**  varchar(32)  **接口编码**
+    **基础行信息**
+        - **creator**   varchar[64]    **行记录创建者**
+        - **modifier**    varchar[64]    **行记录最近修改者**
+        - **created_time**    timestamps    **行记录创建时间**
+        - **modified_time**    timestamps    **行记录最近修改时间**
+        - **version**    tinyint unsigned    **版本号**
+        - **extension**    varchar[2048]    **拓展字段**
+        - **deleted**    bigint    **是否删除**
+    **索引设计**
+        - index  idx_user_id(user_id)    用户id索引
 }
 @enduml

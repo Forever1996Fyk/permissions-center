@@ -40,17 +40,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     /**
      * 退出处理类
      */
-    @Autowired
+    @Resource
     private LogoutSuccessHandlerImpl logoutSuccessHandler;
 
 
     /**
      * 认证失败处理类
      */
-    @Autowired
+    @Resource
     private AuthenticationEntryPointImpl unauthorizedHandler;
 
-    @Autowired
+    @Resource
     private AccessDeniedHandlerImpl accessDeniedHandler;
 
     /**
@@ -68,7 +68,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     /**
      * token 验证过滤器
      */
-    @Autowired
+    @Resource
     private RedisAuthenticationTokenFilter authenticationTokenFilter;
 
     @Override

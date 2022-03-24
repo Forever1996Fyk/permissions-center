@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author auto_generation
- * @since 2022-01-04
+ * @since 2022-03-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -45,6 +45,8 @@ public class SysMenu implements Serializable {
      */
     private String menuName;
 
+    private Integer menuType;
+
     /**
      * 菜单序号
      */
@@ -63,7 +65,7 @@ public class SysMenu implements Serializable {
     /**
      * 打开方式(1:页面内,2:外链)
      */
-    private Boolean openType;
+    private Integer openType;
 
     /**
      * 菜单图标

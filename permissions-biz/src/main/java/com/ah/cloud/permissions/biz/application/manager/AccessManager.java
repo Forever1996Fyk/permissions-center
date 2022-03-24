@@ -17,6 +17,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Map;
@@ -31,9 +32,9 @@ import java.util.Objects;
 @Slf4j
 @Component
 public class AccessManager {
-    @Autowired
+    @Resource
     private ApiProperties apiProperties;
-    @Autowired
+    @Resource
     private ResourceLoader resourceLoader;
 
     /**

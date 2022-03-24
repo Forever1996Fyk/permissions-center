@@ -38,26 +38,4 @@ public class SysRoleVO {
      * 角色名称
      */
     private String roleName;
-
-    /**
-     * 行记录创建人
-     */
-    private String creator;
-
-    /**
-     * 行记录最近修改人
-     */
-    private String modifier;
-
-    /**
-     * 行记录创建时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date createdTime;
-
-    /**
-     * 行记录最近修改时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date modifiedTime;
 }

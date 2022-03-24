@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author auto_generation
- * @since 2022-01-04
+ * @since 2022-03-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -26,6 +26,11 @@ public class SysUser implements Serializable {
      * 主键id
      */
     private Long id;
+
+    /**
+     * 用户id
+     */
+    private Long userId;
 
     /**
      * 登录账号

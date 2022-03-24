@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 import java.util.UUID;
@@ -25,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class RedisSecurityTokenServiceImpl implements SecurityTokenService {
-    @Autowired
+    @Resource
     private RedisTemplate redisTemplate;
 
     /**

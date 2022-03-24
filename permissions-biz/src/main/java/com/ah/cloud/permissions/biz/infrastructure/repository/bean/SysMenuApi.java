@@ -11,11 +11,11 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 系统菜单接口表
+ * 系统菜单权限表
  * </p>
  *
  * @author auto_generation
- * @since 2022-01-04
+ * @since 2022-03-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -31,14 +31,19 @@ public class SysMenuApi implements Serializable {
     private Long id;
 
     /**
-     * 用户id
+     * 菜单id
      */
     private Long menuId;
 
     /**
-     * 接口编码集合
+     * 接口编码
      */
-    private String apiCodeList;
+    private String apiCode;
+
+    /**
+     * 是否可用
+     */
+    private Integer available;
 
     /**
      * 行记录创建者

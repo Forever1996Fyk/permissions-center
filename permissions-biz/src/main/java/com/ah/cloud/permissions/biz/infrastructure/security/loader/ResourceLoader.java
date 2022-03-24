@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class ResourceLoader implements InitializingBean {
-    @Autowired
+    @Resource
     private SysApiManager sysApiManager;
 
     private Map<String, AuthorityApiDTO> uriAndApiCodeMap;

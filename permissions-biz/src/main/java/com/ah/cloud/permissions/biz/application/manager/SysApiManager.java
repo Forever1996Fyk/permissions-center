@@ -7,9 +7,9 @@ import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysApi;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -21,9 +21,9 @@ import java.util.List;
 @Slf4j
 @Component
 public class SysApiManager {
-    @Autowired
+    @Resource
     private SysApiHelper sysApiHelper;
-    @Autowired
+    @Resource
     private SysApiService sysApiService;
 
     /**

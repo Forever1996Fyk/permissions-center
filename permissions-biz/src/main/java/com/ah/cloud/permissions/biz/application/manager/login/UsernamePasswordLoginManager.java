@@ -3,8 +3,6 @@ package com.ah.cloud.permissions.biz.application.manager.login;
 import com.ah.cloud.permissions.biz.application.helper.AuthenticationHelper;
 import com.ah.cloud.permissions.biz.domain.login.LoginForm;
 import com.ah.cloud.permissions.biz.domain.login.UsernamePasswordLoginForm;
-import com.ah.cloud.permissions.biz.domain.token.AccessToken;
-import com.baomidou.mybatisplus.extension.api.R;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 

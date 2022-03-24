@@ -1,6 +1,7 @@
 package com.ah.cloud.permissions.biz.application.checker;
 
 import com.ah.cloud.permissions.biz.application.service.SysUserService;
+import com.ah.cloud.permissions.biz.domain.user.form.SysUserAddForm;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUser;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -22,21 +24,13 @@ import java.util.List;
 @Slf4j
 @Component
 public class SysUserChecker {
-    @Autowired
+    @Resource
     private SysUserService sysUserService;
 
     /**
-     * 根据手机号判断当前用户是否已存在
-     * @param phone
+     * 校验参数
+     * @param form
      */
-    public void checkUserIsExist(String phone) {
-        List<SysUser> sysUsers = sysUserService.list(new QueryWrapper<SysUser>().lambda()
-                .eq(SysUser::getPhone, phone)
-                .eq(SysUser::getDeleted, DeletedEnum.NO.value)
-        );
-
-        if (!CollectionUtils.isEmpty(sysUsers)) {
-            throw new BizException(ErrorCodeEnum.USER_PHONE_IS_EXISTED, phone);
-        }
+    public void checkSysUserAddForm(SysUserAddForm form) {
     }
 }

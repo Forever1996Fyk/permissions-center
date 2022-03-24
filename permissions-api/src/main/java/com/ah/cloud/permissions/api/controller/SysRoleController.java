@@ -2,14 +2,15 @@ package com.ah.cloud.permissions.api.controller;
 
 import com.ah.cloud.permissions.biz.application.manager.SysRoleManager;
 import com.ah.cloud.permissions.biz.domain.role.form.SysRoleAddForm;
+import com.ah.cloud.permissions.biz.domain.role.form.SysRolePermissionForm;
 import com.ah.cloud.permissions.biz.domain.role.form.SysRoleUpdateForm;
 import com.ah.cloud.permissions.biz.domain.role.query.SysRoleQuery;
 import com.ah.cloud.permissions.biz.domain.role.vo.SysRoleVO;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 
 /**
@@ -22,7 +23,7 @@ import javax.validation.Valid;
 @RequestMapping("/role")
 public class SysRoleController {
 
-    @Autowired
+    @Resource
     private SysRoleManager sysRoleManager;
 
     /**
@@ -32,7 +33,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/add")
-    public ResponseResult add(@Valid @RequestBody SysRoleAddForm form) {
+    public ResponseResult<Void> add(@Valid @RequestBody SysRoleAddForm form) {
         sysRoleManager.addSysRole(form);
         return ResponseResult.ok();
     }
@@ -44,7 +45,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/update")
-    public ResponseResult update(@Valid @RequestBody SysRoleUpdateForm form) {
+    public ResponseResult<Void> update(@Valid @RequestBody SysRoleUpdateForm form) {
         sysRoleManager.updateSysRole(form);
         return ResponseResult.ok();
     }
@@ -56,7 +57,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/delete/{id}")
-    public ResponseResult delete(@PathVariable(value = "id") Long id) {
+    public ResponseResult<Void> delete(@PathVariable(value = "id") Long id) {
         sysRoleManager.deleteSysRole(id);
         return ResponseResult.ok();
     }
@@ -67,8 +68,8 @@ public class SysRoleController {
      * @param id
      * @return
      */
-    @GetMapping("/find/{id}")
-    public ResponseResult<SysRoleVO> find(@PathVariable(value = "id") Long id) {
+    @GetMapping("/findById/{id}")
+    public ResponseResult<SysRoleVO> findById(@PathVariable(value = "id") Long id) {
         return ResponseResult.ok(sysRoleManager.findSysRoleById(id));
     }
 
@@ -83,8 +84,14 @@ public class SysRoleController {
         return ResponseResult.ok(sysRoleManager.pageSysRoles(query));
     }
 
-    @PostMapping("/selectAndAddUsers")
-    public ResponseResult selectAndAddUsers() {
+    /**
+     * 设置菜单和接口编码
+     * @param form
+     * @return
+     */
+    @PostMapping("/setSysMenuAndApiCode")
+    public ResponseResult<Void> setSysMenuAndApiCode(@RequestBody SysRolePermissionForm form) {
+        sysRoleManager.setSysMenuAndApiCode(form);
         return ResponseResult.ok();
     }
 }

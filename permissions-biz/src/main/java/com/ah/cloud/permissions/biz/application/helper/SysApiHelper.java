@@ -1,11 +1,8 @@
 package com.ah.cloud.permissions.biz.application.helper;
 
 import com.ah.cloud.permissions.biz.domain.api.dto.AuthorityApiDTO;
-import com.ah.cloud.permissions.biz.domain.user.UserAuthorityDTO;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysApi;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUser;
 import com.ah.cloud.permissions.enums.ApiStatusEnum;
-import com.ah.cloud.permissions.enums.UserStatusEnum;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

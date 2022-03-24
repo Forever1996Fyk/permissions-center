@@ -1,23 +1,23 @@
 package com.ah.cloud.permissions.biz.application.helper;
 
 import cn.hutool.core.util.RandomUtil;
-import com.ah.cloud.permissions.biz.domain.role.vo.SysRoleVO;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserAddForm;
 import com.ah.cloud.permissions.biz.domain.user.vo.SysUserVo;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysRole;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUser;
+import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUserRole;
 import com.ah.cloud.permissions.biz.infrastructure.util.AppUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.enums.UserStatusEnum;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -28,7 +28,7 @@ import java.util.List;
  **/
 @Component
 public class SysUserHelper {
-    @Autowired
+    @Resource
     private PasswordEncoder passwordEncoder;
 
     /**
@@ -38,7 +38,7 @@ public class SysUserHelper {
      */
     public SysUser buildSysUserEntity(SysUserAddForm form) {
         SysUser sysUser = this.convertToEntity(form);
-        sysUser.setId(this.generateUserId());
+        sysUser.setUserId(this.generateUserId());
         sysUser.setPassword(this.encodePassword(PermissionsConstants.DEFAULT_PASSWORD));
         sysUser.setNickName(StringUtils.isEmpty(sysUser.getNickName())?sysUser.getNickName():generateNickName());
         sysUser.setStatus(UserStatusEnum.NORMAL.getStatus());
@@ -96,6 +96,17 @@ public class SysUserHelper {
      */
     public String encodePassword(String oldPassword) {
         return passwordEncoder.encode(oldPassword);
+    }
+
+    public List<SysUserRole> buildSysUserRoleEntity(Long userId, List<String> roleCodeList) {
+        List<SysUserRole> sysUserRoleList = Lists.newArrayList();
+        for (String roleCode : roleCodeList) {
+            SysUserRole sysUserRole = new SysUserRole();
+            sysUserRole.setUserId(userId);
+            sysUserRole.setRoleCode(roleCode);
+            sysUserRoleList.add(sysUserRole);
+        }
+        return sysUserRoleList;
     }
 
     @Mapper

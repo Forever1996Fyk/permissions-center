@@ -17,7 +17,7 @@ public class SysRoleUpdateForm {
     /**
      * 角色id
      */
-    @NotNull(message = "编辑id不能为空")
+    @NotNull(message = "角色id不能为空")
     private Long id;
 
     /**

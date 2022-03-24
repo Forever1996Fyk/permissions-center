@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +15,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author auto_generation
- * @since 2022-01-04
+ * @since 2022-03-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -42,6 +41,11 @@ public class SysApi implements Serializable {
     private String apiName;
 
     /**
+     * 接口类型
+     */
+    private Integer apiType;
+
+    /**
      * 接口描述
      */
     private String apiDesc;
@@ -59,14 +63,12 @@ public class SysApi implements Serializable {
     /**
      * 是否认证
      */
-    @TableField("is_auth")
-    private Boolean auth;
+    private Integer isAuth;
 
     /**
      * 是否公开
      */
-    @TableField("is_open")
-    private Boolean open;
+    private Integer isOpen;
 
     /**
      * 备注

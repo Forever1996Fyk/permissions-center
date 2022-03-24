@@ -2,7 +2,6 @@ package com.ah.cloud.permissions.biz.application.manager.login;
 
 import com.ah.cloud.permissions.biz.application.helper.AuthenticationHelper;
 import com.ah.cloud.permissions.biz.domain.login.LoginForm;
-import com.ah.cloud.permissions.biz.domain.login.UsernamePasswordLoginForm;
 import com.ah.cloud.permissions.biz.domain.login.ValidateCodeLoginForm;
 import com.ah.cloud.permissions.biz.infrastructure.security.token.ValidateCodeAuthenticationToken;
 import org.springframework.stereotype.Component;

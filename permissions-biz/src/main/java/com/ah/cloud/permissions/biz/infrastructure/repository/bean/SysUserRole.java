@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author auto_generation
- * @since 2022-01-04
+ * @since 2022-03-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -36,9 +36,14 @@ public class SysUserRole implements Serializable {
     private Long userId;
 
     /**
-     * 角色id
+     * 角色编码
      */
-    private Long roleId;
+    private String roleCode;
+
+    /**
+     * 是否可用
+     */
+    private Integer available;
 
     /**
      * 行记录创建者

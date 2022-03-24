@@ -9,6 +9,11 @@ package com.ah.cloud.permissions.biz.infrastructure.constant;
 public class PermissionsConstants {
 
     /**
+     * 超级管理员id
+     */
+    public static final Long SUPER_ADMIN = 1L;
+
+    /**
      * 默认操作人: 系统
      */
     public static final String OPERATOR_SYSTEM = "SYSTEM";
@@ -47,4 +52,9 @@ public class PermissionsConstants {
      * 邮箱正则
      */
     public static final String EMAIL_REGEX = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+
+    /**
+     * 逗号分隔符
+     */
+    public static final String COMMA_SEPARATOR = ",";
 }

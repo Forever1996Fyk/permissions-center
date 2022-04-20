@@ -5,12 +5,15 @@ import com.ah.cloud.permissions.biz.domain.user.form.SysUserAddForm;
 import com.ah.cloud.permissions.biz.domain.user.vo.SysUserVo;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUser;
+import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUserApi;
+import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUserMenu;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUserRole;
 import com.ah.cloud.permissions.biz.infrastructure.util.AppUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.enums.UserStatusEnum;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -18,7 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @program: permissions-center
@@ -98,7 +103,7 @@ public class SysUserHelper {
         return passwordEncoder.encode(oldPassword);
     }
 
-    public List<SysUserRole> buildSysUserRoleEntity(Long userId, List<String> roleCodeList) {
+    public List<SysUserRole> buildSysUserRoleEntityList(Long userId, List<String> roleCodeList) {
         List<SysUserRole> sysUserRoleList = Lists.newArrayList();
         for (String roleCode : roleCodeList) {
             SysUserRole sysUserRole = new SysUserRole();
@@ -107,6 +112,30 @@ public class SysUserHelper {
             sysUserRoleList.add(sysUserRole);
         }
         return sysUserRoleList;
+    }
+
+
+    public List<SysUserMenu> getSysUserMenuEntityList(Long userId, List<Long> menuIdList) {
+        List<SysUserMenu> sysUserMenuList = Lists.newArrayList();
+        for (Long menuId : menuIdList) {
+            SysUserMenu sysUserMenu = new SysUserMenu();
+            sysUserMenu.setUserId(userId);
+            sysUserMenu.setMenuId(menuId);
+            sysUserMenuList.add(sysUserMenu);
+        }
+        return sysUserMenuList;
+    }
+
+    public List<SysUserApi> getSysUserApiEntityList(Long userId, Collection<String> apiCodeList) {
+        Set<String> distinctApiCodeList = Sets.newHashSet(apiCodeList);
+        List<SysUserApi> sysUserApiList = Lists.newArrayList();
+        for (String apiCode : distinctApiCodeList) {
+            SysUserApi sysUserApi = new SysUserApi();
+            sysUserApi.setUserId(userId);
+            sysUserApi.setApiCode(apiCode);
+            sysUserApiList.add(sysUserApi);
+        }
+        return sysUserApiList;
     }
 
     @Mapper

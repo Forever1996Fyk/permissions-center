@@ -1,8 +1,6 @@
 package com.ah.cloud.permissions.biz.application.service.ext;
 
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUserApi;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUserMenu;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUserRole;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 

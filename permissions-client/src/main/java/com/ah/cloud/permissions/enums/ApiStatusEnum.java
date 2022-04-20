@@ -12,6 +12,11 @@ import java.util.Objects;
  **/
 @Getter
 public enum ApiStatusEnum {
+
+    /**
+     * 未知
+     */
+    UNKNOWN(-1, "未知"),
     /**
      * 正常
      */
@@ -49,6 +54,6 @@ public enum ApiStatusEnum {
                 return e;
             }
         }
-        return null;
+        return UNKNOWN;
     }
 }

@@ -2,6 +2,7 @@ package com.ah.cloud.permissions.biz.infrastructure.util;
 
 import com.ah.cloud.permissions.biz.domain.user.BaseUserInfo;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
+import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.google.common.base.Throwables;
@@ -48,5 +49,32 @@ public class SecurityUtils {
      */
     public static BaseUserInfo getBaseUserInfo() {
         return getLocalUser().getUserInfo();
+    }
+
+    /**
+     * 获取当前登录人名称
+     *
+     * @return
+     */
+    public static String getUserNameBySession() {
+        try {
+            BaseUserInfo baseUserInfo = getBaseUserInfo();
+            return baseUserInfo.getName();
+        } catch (Throwable throwable) {
+            return PermissionsConstants.OPERATOR_SYSTEM;
+        }
+    }
+    /**
+     * 获取当前登录人id
+     *
+     * @return
+     */
+    public static Long getUserIdBySession() {
+        try {
+            BaseUserInfo baseUserInfo = getBaseUserInfo();
+            return baseUserInfo.getUserId();
+        } catch (Throwable throwable) {
+            return PermissionsConstants.ZERO;
+        }
     }
 }

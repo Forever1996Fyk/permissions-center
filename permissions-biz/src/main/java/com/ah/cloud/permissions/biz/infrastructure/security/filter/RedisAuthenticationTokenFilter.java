@@ -3,11 +3,16 @@ package com.ah.cloud.permissions.biz.infrastructure.security.filter;
 import com.ah.cloud.permissions.biz.application.helper.AuthenticationHelper;
 import com.ah.cloud.permissions.biz.application.manager.TokenManager;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
+import com.ah.cloud.permissions.biz.infrastructure.exception.SecurityErrorException;
+import com.ah.cloud.permissions.biz.infrastructure.exception.UserAccountErrorException;
+import com.ah.cloud.permissions.biz.infrastructure.security.token.InMemoryAuthenticationToken;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
+import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -21,6 +26,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @program: permissions-center
@@ -48,15 +54,28 @@ public class RedisAuthenticationTokenFilter extends OncePerRequestFilter {
          */
         try {
             LocalUser localUser = tokenManager.getLocalUserByRequest(request);
-            log.info("RedisAuthenticationTokenFilter[doFilterInternal] ==> 根据token获取当前登录用户信息 ==> localUser:{}", JsonUtils.toJSONString(localUser));
-            if (ObjectUtils.isNotEmpty(localUser) && ObjectUtils.isEmpty(SecurityContextHolder.getContext().getAuthentication())){
+            log.info("RedisAuthenticationTokenFilter[doFilterInternal] 根据token获取当前登录用户信息 localUser:{}", JsonUtils.toJSONString(localUser));
+            if (ObjectUtils.isNotEmpty(localUser)) {
+                // 重新刷新token过期时间
                 tokenManager.refreshToken(localUser.getAccessToken());
-                UsernamePasswordAuthenticationToken authenticationToken = authenticationHelper.buildUsernamePasswordAuthenticationToken(localUser);
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                // 判断当前登录人信息是否可用
+                if (!localUser.isEnabled()) {
+                    throw new SecurityErrorException(ErrorCodeEnum.AUTHENTICATION_ACCOUNT_DISABLED);
+                }
+                // 判断当前上下文是否存储认证信息
+                if (Objects.isNull(SecurityContextHolder.getContext().getAuthentication()) || localUser.isAuthorityChanged()) {
+                    InMemoryAuthenticationToken authenticationToken = authenticationHelper.buildInMemoryAuthenticationToken(localUser);
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    /*
+                    设置到上下文 方便获取当前登录人信息 可自定义策略SecurityContextHolderStrategy
+                    通过spring.security.strategy 设置对应的策略类全限定名(类路径)即可
+                     */
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    localUser.setAuthorityChanged(false);
+                }
             }
-        } catch (AuthenticationException e) {
-            log.error("RedisAuthenticationTokenFilter[doFilterInternal] ==> 根据token认证用户信息异常 ==> exception:{}", Throwables.getStackTraceAsString(e));
+        }  catch (AuthenticationException e) {
+            log.error("RedisAuthenticationTokenFilter[doFilterInternal] 根据token认证用户信息异常 exception:{}", Throwables.getStackTraceAsString(e));
             authenticationFailureHandler.onAuthenticationFailure(request, response, e);
             return;
         }

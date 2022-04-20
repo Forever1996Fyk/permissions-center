@@ -31,9 +31,9 @@ public class SysRoleMenu implements Serializable {
     private Long id;
 
     /**
-     * 角色id
+     * 角色编码
      */
-    private Long roleId;
+    private String roleCode;
 
     /**
      * 菜单id

@@ -1,23 +1,17 @@
 package com.ah.cloud.permissions.biz.application.manager;
 
 import com.ah.cloud.permissions.biz.application.helper.UserAuthorityHelper;
-import com.ah.cloud.permissions.biz.application.service.SysUserRoleService;
 import com.ah.cloud.permissions.biz.application.service.SysUserService;
 import com.ah.cloud.permissions.biz.domain.user.UserAuthorityDTO;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUser;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUserRole;
-import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
+import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
+import com.ah.cloud.permissions.biz.infrastructure.repository.bean.*;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
+import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -34,8 +28,6 @@ public class UserAuthManager {
     @Resource
     private SysUserService sysUserService;
     @Resource
-    private SysUserRoleService sysUserRoleService;
-    @Resource
     private UserAuthorityHelper userAuthorityHelper;
 
     /**
@@ -48,20 +40,28 @@ public class UserAuthManager {
         /*
         1. 根据账号查询用户信息
          */
-        SysUser sysUser = sysUserService.getOne(new QueryWrapper<SysUser>().lambda()
-                .eq(SysUser::getAccount, username)
-                .eq(SysUser::getDeleted, DeletedEnum.NO.value)
+        SysUser sysUser = sysUserService.getOne(
+                new QueryWrapper<SysUser>().lambda()
+                        .eq(SysUser::getAccount, username)
+                        .eq(SysUser::getDeleted, DeletedEnum.NO.value)
         );
         if (Objects.isNull(sysUser)) {
-            log.warn("UserAuthManager[createUserAuthorityByUsername] ==> 根据账号查询用户信息为空 ==> account:{}", username);
-            return null;
+            log.warn("UserAuthManager[createUserAuthorityByUsername] query SysUser is empty by account={}", username);
+            throw new BizException(ErrorCodeEnum.AUTHENTICATION_ACCOUNT_ERROR, username);
         }
-
         /*
         数据转换成用户权限实体
+        该操作查询的次数较多, 根据实际的请求并发数进行不同的技术优化
+        1、提前把用户对应的menu, api, role数据加载到缓存中(内存/redis)
+        2、使用线程池进行异步查询, 最后汇总
          */
         UserAuthorityDTO userAuthorityDTO = userAuthorityHelper.convertDTO(sysUser);
-
+        Set<String> roleCodeSet = userAuthorityHelper.buildRoleCodeSet(sysUser.getUserId());
+        Set<Long> menuIdSet = userAuthorityHelper.buildMenuIdSet(sysUser.getUserId(), roleCodeSet);
+        Set<String> apiCodeSet = userAuthorityHelper.buildApiCodeSet(sysUser.getUserId(), roleCodeSet, menuIdSet);
+        userAuthorityDTO.setAuthorities(apiCodeSet);
+        userAuthorityDTO.setRoleCodeSet(roleCodeSet);
+        userAuthorityDTO.setMenuIdSet(menuIdSet);
         return userAuthorityDTO;
     }
 }

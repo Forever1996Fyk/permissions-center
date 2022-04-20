@@ -3,6 +3,7 @@ package com.ah.cloud.permissions.biz.application.helper;
 import com.ah.cloud.permissions.biz.domain.login.UsernamePasswordLoginForm;
 import com.ah.cloud.permissions.biz.domain.login.ValidateCodeLoginForm;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
+import com.ah.cloud.permissions.biz.infrastructure.security.token.InMemoryAuthenticationToken;
 import com.ah.cloud.permissions.biz.infrastructure.security.token.ValidateCodeAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,15 @@ public class AuthenticationHelper {
      */
     public UsernamePasswordAuthenticationToken buildUsernamePasswordAuthenticationToken(LocalUser localUser) {
         return new UsernamePasswordAuthenticationToken(localUser, null, localUser.getAuthorities());
+    }
+
+    /**
+     * 构建内存存储认证token
+     * @param localUser
+     * @return
+     */
+    public InMemoryAuthenticationToken buildInMemoryAuthenticationToken(LocalUser localUser) {
+        return new InMemoryAuthenticationToken(localUser, null, localUser.getAuthorities());
     }
 
     /**

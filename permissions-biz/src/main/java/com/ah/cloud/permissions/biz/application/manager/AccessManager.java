@@ -1,25 +1,33 @@
 package com.ah.cloud.permissions.biz.application.manager;
 
+import com.ah.cloud.permissions.biz.application.manager.login.LoginManager;
+import com.ah.cloud.permissions.biz.application.provider.access.AccessProvider;
 import com.ah.cloud.permissions.biz.domain.api.dto.AuthorityApiDTO;
+import com.ah.cloud.permissions.biz.domain.token.AccessToken;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
 import com.ah.cloud.permissions.biz.infrastructure.config.ApiProperties;
 import com.ah.cloud.permissions.biz.infrastructure.exception.ApiAuthorityErrorException;
 import com.ah.cloud.permissions.biz.infrastructure.security.loader.ResourceLoader;
+import com.ah.cloud.permissions.biz.infrastructure.security.token.AppAuthenticationToken;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.enums.ApiStatusEnum;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.log.LogMessage;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -31,114 +39,39 @@ import java.util.Objects;
  **/
 @Slf4j
 @Component
-public class AccessManager {
+public class AccessManager implements InitializingBean {
     @Resource
-    private ApiProperties apiProperties;
-    @Resource
-    private ResourceLoader resourceLoader;
-
-    /**
-     * 路径匹配器
-     */
-    private static AntPathMatcher PATH_MATCHER = new AntPathMatcher();
+    private List<AccessProvider> accessProviderList;
 
     /**
      * Spring Security 权限校验表达式方法
+     *
      * @param request
      * @param authentication
      * @return
      */
     public boolean access(HttpServletRequest request, Authentication authentication) {
-        /*
-        获取当前请求uri
-         */
-        String uri = request.getRequestURI();
-
-        /*
-        判断当前uri是否可放行
-         */
-        if (checkUriIsPermit(uri)) {
-            return Boolean.TRUE;
+        int currentPosition = 0;
+        int size = this.accessProviderList.size();
+        for (AccessProvider accessProvider : accessProviderList) {
+            if (!accessProvider.support(authentication)) {
+                continue;
+            }
+            if (log.isTraceEnabled()) {
+                log.trace(String.valueOf(LogMessage.format("AccessManager request with %s (%d/%d)",
+                        authentication.getClass().getSimpleName(), ++currentPosition, size)));
+            }
+            return accessProvider.access(request, authentication);
         }
-
-        /*
-        根据uri匹配对应的apiCode
-         */
-        Map<String, AuthorityApiDTO> apiCodeMap = resourceLoader.getUriAndApiCodeMap();
-        AuthorityApiDTO authorityApiDTO = apiCodeMap.get(uri);
-
-        /*
-        如果没有匹配到apiCode则直接返回false
-         */
-        if (Objects.isNull(authorityApiDTO)) {
-            return Boolean.FALSE;
-        }
-
-        /*
-        校验当前api属性
-         */
-        checkApi(authorityApiDTO);
-
-        /*
-        获取当前用户信息的apiCode集合
-         */
-        if (authentication instanceof AnonymousAuthenticationToken) {
-            log.warn("AccessManager[access] ==> 当前认证信息为匿名认证 ==> Authentication is AnonymousAuthenticationToken");
-            return Boolean.FALSE;
-        }
-
-        LocalUser localUser = (LocalUser) authentication.getPrincipal();
-        Collection<? extends GrantedAuthority> authorities = localUser.getAuthorities();
-        /*
-        判断当前用户是否存在该apiCode
-         */
-        if (!checkUserHasAuthorities(authorities, authorityApiDTO.getApiCode())) {
-            log.warn("AccessManager[access] ==> 当前用户无权限访问 ==> 当前用户信息localUser:{}, 当前uri:{}, 当前api属性authorityApiDTO:{}",
-                    JsonUtils.toJSONString(localUser),
-                    uri,
-                    JsonUtils.toJSONString(authorityApiDTO));
-            return Boolean.FALSE;
-        }
-        return Boolean.TRUE;
+        log.error("AccessManager has no Provider");
+        return false;
     }
 
-    /**
-     * 校验uri是否可放行
-     * @param uri
-     * @return
-     */
-    private boolean checkUriIsPermit(String uri) {
-        return apiProperties.getPermitAll().stream()
-                .filter(item -> PATH_MATCHER.match(item, uri))
-                .findAny()
-                .isPresent();
-    }
-
-    /**
-     * 验证api状态
-     * @param authorityApiDTO
-     */
-    private void checkApi(AuthorityApiDTO authorityApiDTO) {
-        if (Objects.equals(authorityApiDTO.getApiStatusEnum(), ApiStatusEnum.DISABLED)) {
-            throw new ApiAuthorityErrorException(ErrorCodeEnum.AUTHORITY_API_DISABLED);
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        if (CollectionUtils.isEmpty(accessProviderList)) {
+            throw new RuntimeException("加载AccessProvider失败, 不存在登录管理器");
         }
-
-        if (!authorityApiDTO.getOpen()) {
-            throw new ApiAuthorityErrorException(ErrorCodeEnum.AUTHORITY_API_NOT_OPEN);
-        }
-
-    }
-
-    /**
-     * 校验用户是否存在权限
-     * @param authorities
-     * @param apiCode
-     * @return
-     */
-    private boolean checkUserHasAuthorities(Collection<? extends GrantedAuthority> authorities, String apiCode) {
-        return authorities.stream()
-                .filter(item -> StringUtils.equals(item.getAuthority(), apiCode))
-                .findFirst()
-                .isPresent();
+        log.info("初始化AccessProvider集合数据:{}", JsonUtils.toJSONString(accessProviderList));
     }
 }

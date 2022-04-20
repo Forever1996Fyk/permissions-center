@@ -2,13 +2,12 @@ package com.ah.cloud.permissions.biz.application.manager;
 
 import com.ah.cloud.permissions.biz.application.checker.SysUserChecker;
 import com.ah.cloud.permissions.biz.application.helper.SysUserHelper;
-import com.ah.cloud.permissions.biz.application.service.SysRoleApiService;
 import com.ah.cloud.permissions.biz.application.service.SysRoleMenuService;
-import com.ah.cloud.permissions.biz.application.service.SysUserMenuService;
 import com.ah.cloud.permissions.biz.application.service.SysUserService;
 import com.ah.cloud.permissions.biz.application.service.ext.SysUserApiExtService;
 import com.ah.cloud.permissions.biz.application.service.ext.SysUserMenuExtService;
 import com.ah.cloud.permissions.biz.application.service.ext.SysUserRoleExtService;
+import com.ah.cloud.permissions.biz.domain.menu.vo.RouterVo;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserAddForm;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserApiAddForm;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserMenuAddForm;
@@ -17,7 +16,6 @@ import com.ah.cloud.permissions.biz.domain.user.query.SysUserQuery;
 import com.ah.cloud.permissions.biz.domain.user.vo.SysUserVo;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.*;
-import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
@@ -25,7 +23,6 @@ import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
-import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -33,8 +30,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -51,9 +50,9 @@ public class SysUserManager {
     @Resource
     private SysUserChecker sysUserChecker;
     @Resource
-    private SysUserService sysUserService;
+    private SysMenuManager sysMenuManager;
     @Resource
-    private SysRoleApiService sysRoleApiService;
+    private SysUserService sysUserService;
     @Resource
     private SysRoleMenuService sysRoleMenuService;
     @Resource
@@ -189,36 +188,8 @@ public class SysUserManager {
             return;
         }
 
-        log.info("SysUserManager[setSysUserRole] delete SysUserRole data, count={}, param={}", countDeleted, JsonUtils.toJSONString(form));
-        List<SysUserRole> sysUserRoleList = sysUserHelper.buildSysUserRoleEntity(form.getUserId(), form.getRoleCodeList());
+        List<SysUserRole> sysUserRoleList = sysUserHelper.buildSysUserRoleEntityList(form.getUserId(), form.getRoleCodeList());
         sysUserRoleExtService.saveBatch(sysUserRoleList);
-
-        /*
-        更新用户菜单列表
-         */
-        List<SysRoleMenu> sysRoleMenuList = sysRoleMenuService.list(
-                new QueryWrapper<SysRoleMenu>().lambda()
-                        .in(SysRoleMenu::getRoleId, form.getRoleIdList())
-                        .eq(SysRoleMenu::getDeleted, DeletedEnum.NO.value)
-        );
-        List<Long> menuIdList = sysRoleMenuList.stream()
-                .map(SysRoleMenu::getMenuId)
-                .collect(Collectors.toList());
-        setSysMenuForUser(form.getUserId(), menuIdList);
-
-        /*
-        更新用户api列表
-         */
-        List<SysRoleApi> sysRoleApiList = sysRoleApiService.list(
-                new QueryWrapper<SysRoleApi>().lambda()
-                        .in(SysRoleApi::getRoleId, form.getRoleIdList())
-                        .eq(SysRoleApi::getDeleted, DeletedEnum.NO.value)
-        );
-
-        List<String> apiCodeList = sysRoleApiList.stream()
-                .map(SysRoleApi::getApiCode)
-                .collect(Collectors.toList());
-        setSysApiForUser(form.getUserId(), apiCodeList);
     }
 
     /**
@@ -239,6 +210,48 @@ public class SysUserManager {
         setSysApiForUser(form.getUserId(), form.getApiCodeList());
     }
 
+
+    /**
+     * 获取当前用户菜单路由
+     * @return
+     */
+    public List<RouterVo> listRouterVoByUserId(Long userId) {
+        // 根据用户id获取菜单列表
+        List<SysUserMenu> sysUserMenuList = sysUserMenuExtService.list(
+                new QueryWrapper<SysUserMenu>().lambda()
+                        .eq(SysUserMenu::getUserId, userId)
+                        .eq(SysUserMenu::getDeleted, DeletedEnum.NO.value)
+        );
+
+        // 根据用户id获取角色列表
+        List<SysUserRole> sysUserRoleList = sysUserRoleExtService.list(
+                new QueryWrapper<SysUserRole>().lambda()
+                        .select(SysUserRole::getRoleCode)
+                        .eq(SysUserRole::getUserId, userId)
+                        .eq(SysUserRole::getDeleted, DeletedEnum.NO.value)
+        );
+
+        // 根据角色编码获取菜单列表
+        Set<String> roleSet = sysUserRoleList.stream()
+                .map(SysUserRole::getRoleCode)
+                .collect(Collectors.toSet());
+        List<SysRoleMenu> sysRoleMenuList = sysRoleMenuService.list(
+                new QueryWrapper<SysRoleMenu>().lambda()
+                        .in(SysRoleMenu::getRoleCode, roleSet)
+                        .eq(SysRoleMenu::getDeleted, DeletedEnum.NO.value)
+        );
+
+        Set<Long> userMenuSet = sysUserMenuList.stream()
+                .map(SysUserMenu::getMenuId)
+                .collect(Collectors.toSet());
+
+        Set<Long> roleMenuSet = sysRoleMenuList.stream()
+                .map(SysRoleMenu::getMenuId)
+                .collect(Collectors.toSet());
+        userMenuSet.addAll(roleMenuSet);
+        return sysMenuManager.assembleMenuRouteByUser(userMenuSet);
+    }
+
     private void setSysMenuForUser(Long userId, List<Long> menuIdList) {
         /*
         先删除原有的用户菜单列表, 再重新添加
@@ -251,24 +264,14 @@ public class SysUserManager {
         );
 
         if (CollectionUtils.isEmpty(menuIdList)) {
+            log.warn("SysUserManager[setSysMenuForUser] delete SysUserMenu allData, userId={}", userId);
             return;
         }
-
-        List<SysUserMenu> sysUserMenuList = Lists.newArrayList();
-        for (Long menuId : menuIdList) {
-            SysUserMenu sysUserMenu = new SysUserMenu();
-            sysUserMenu.setUserId(userId);
-            sysUserMenu.setMenuId(menuId);
-            sysUserMenuList.add(sysUserMenu);
-        }
+        List<SysUserMenu> sysUserMenuList = sysUserHelper.getSysUserMenuEntityList(userId, menuIdList);
         sysUserMenuExtService.saveBatch(sysUserMenuList);
-
-        /*
-        更新用户api列表
-         */
     }
 
-    private void setSysApiForUser(Long userId, List<String> apiCodeList) {
+    private void setSysApiForUser(Long userId, Collection<String> apiCodeList) {
         /*
         先删除原有的用户权限列表, 再重新添加
          */
@@ -281,13 +284,8 @@ public class SysUserManager {
         if (CollectionUtils.isEmpty(apiCodeList)) {
             return;
         }
-        List<SysUserApi> sysUserApiList = Lists.newArrayList();
-        for (String apiCode : apiCodeList) {
-            SysUserApi sysUserApi = new SysUserApi();
-            sysUserApi.setUserId(userId);
-            sysUserApi.setApiCode(apiCode);
-            sysUserApiList.add(sysUserApi);
-        }
+        // 去重apiCode
+        List<SysUserApi> sysUserApiList = sysUserHelper.getSysUserApiEntityList(userId, apiCodeList);
         sysUserApiExtService.saveBatch(sysUserApiList);
     }
 }

@@ -1,6 +1,7 @@
 package com.ah.cloud.permissions.biz.application.helper;
 
 import com.ah.cloud.permissions.biz.domain.authority.DefaultAuthority;
+import com.ah.cloud.permissions.biz.domain.user.AuthorityInfo;
 import com.ah.cloud.permissions.biz.domain.user.BaseUserInfo;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
 import com.ah.cloud.permissions.biz.domain.user.UserAuthorityDTO;
@@ -23,13 +24,20 @@ public class LocalUserHelper {
         BaseUserInfo baseUserInfo = BaseUserInfo.builder()
                 .userId(userAuthorityDTO.getUserId())
                 .build();
+        AuthorityInfo authorityInfo = AuthorityInfo.builder()
+                .authorities(this.buildDefaultAuthorities(userAuthorityDTO.getAuthorities()))
+                .menuIdSet(userAuthorityDTO.getMenuIdSet())
+                .roleCodeSet(userAuthorityDTO.getRoleCodeSet())
+                .build();
         return LocalUser.builder()
                 .username(userAuthorityDTO.getAccount())
                 .password(userAuthorityDTO.getPassword())
                 .userInfo(baseUserInfo)
+                .authorityInfo(authorityInfo)
                 .enabled(Boolean.TRUE)
                 .credentialsNonExpired(Boolean.TRUE)
-                .permissions(this.buildDefaultAuthorities(userAuthorityDTO.getAuthorities()))
+                .accountNonExpired(Boolean.TRUE)
+                .accountNonLocked(Boolean.TRUE)
                 .build();
     }
 

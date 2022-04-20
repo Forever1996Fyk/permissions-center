@@ -45,9 +45,34 @@ public class SysMenuTreeVo {
     private Integer menuType;
 
     /**
+     * 菜单序号
+     */
+    private Integer menuOrder;
+
+    /**
+     * 组件路径
+     */
+    private String component;
+
+    /**
+     * 菜单url
+     */
+    private String menuPath;
+
+    /**
+     * 打开方式(1:页面内,2:外链)
+     */
+    private Integer openType;
+
+    /**
      * 菜单图标
      */
     private String menuIcon;
+
+    /**
+     * 是否隐藏
+     */
+    private Integer hidden;
 
     /**
      * 子菜单

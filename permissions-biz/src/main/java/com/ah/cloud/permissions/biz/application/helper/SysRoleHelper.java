@@ -1,12 +1,17 @@
 package com.ah.cloud.permissions.biz.application.helper;
 
 import com.ah.cloud.permissions.biz.domain.role.form.SysRoleAddForm;
+import com.ah.cloud.permissions.biz.domain.role.form.SysRoleApiAddForm;
+import com.ah.cloud.permissions.biz.domain.role.form.SysRoleMenuAddForm;
 import com.ah.cloud.permissions.biz.domain.role.form.SysRoleUpdateForm;
 import com.ah.cloud.permissions.biz.domain.role.vo.SysRoleVO;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysRole;
+import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysRoleApi;
+import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysRoleMenu;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
@@ -71,6 +76,28 @@ public class SysRoleHelper {
         result.setPageSize(pageInfo.getSize());
         result.setPages(pageInfo.getPages());
         return result;
+    }
+
+    public List<SysRoleMenu> buildSysRoleMenuEntityList(SysRoleMenuAddForm form) {
+        List<SysRoleMenu> sysRoleMenuList = Lists.newArrayList();
+        for(Long menuId : form.getMenuIdList()) {
+            SysRoleMenu sysRoleMenu = new SysRoleMenu();
+            sysRoleMenu.setMenuId(menuId);
+            sysRoleMenu.setRoleCode(form.getRoleCode());
+            sysRoleMenuList.add(sysRoleMenu);
+        }
+        return sysRoleMenuList;
+    }
+
+    public List<SysRoleApi> getSysRoleApiEntityList(SysRoleApiAddForm form) {
+        List<SysRoleApi> sysRoleApiList = Lists.newArrayList();
+        for(String apiCode : form.getApiCodeList()) {
+            SysRoleApi sysRoleApi = new SysRoleApi();
+            sysRoleApi.setRoleCode(form.getRoleCode());
+            sysRoleApi.setApiCode(apiCode);
+            sysRoleApiList.add(sysRoleApi);
+        }
+        return sysRoleApiList;
     }
 
     @Mapper

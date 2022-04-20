@@ -42,7 +42,7 @@ public interface CacheHandleStrategy extends InitializingBean {
      * @param <T>
      * @return
      */
-    <T> long deleteBatchObject(final Collection<T> collection);
+    long deleteBatchObject(final Collection<String> collection);
 
 
     /**

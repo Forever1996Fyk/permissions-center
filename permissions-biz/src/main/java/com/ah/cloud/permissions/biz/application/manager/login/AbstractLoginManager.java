@@ -1,11 +1,11 @@
 package com.ah.cloud.permissions.biz.application.manager.login;
 
 import com.ah.cloud.permissions.biz.domain.login.LoginForm;
-import com.ah.cloud.permissions.biz.domain.token.AccessToken;
-import com.ah.cloud.permissions.biz.domain.user.LocalUser;
-import com.ah.cloud.permissions.biz.infrastructure.security.service.SecurityTokenService;
+import com.ah.cloud.permissions.biz.domain.token.Token;
+import com.ah.cloud.permissions.biz.infrastructure.security.service.TokenService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -17,18 +17,16 @@ import javax.annotation.Resource;
  * @create: 2022-01-09 15:36
  **/
 @Component
-public abstract class AbstractLoginManager<T extends Authentication> implements LoginManager {
-    @Resource
-    private SecurityTokenService securityTokenService;
+public abstract class AbstractLoginManager<A extends Authentication, T extends Token, U extends UserDetails> implements LoginManager {
     @Resource
     private AuthenticationManager authenticationManager;
 
     @Override
-    public AccessToken getAccessToken(LoginForm loginForm) {
-        T authentication = buildAuthentication(loginForm);
+    public Token getToken(LoginForm loginForm) {
+        A authentication = buildAuthentication(loginForm);
         Authentication authenticate = authenticationManager.authenticate(authentication);
-        LocalUser localUser = (LocalUser) authenticate.getPrincipal();
-        return securityTokenService.createToken(localUser);
+        U userDetails = (U) authenticate.getPrincipal();
+        return getTokenService().createToken(userDetails);
     }
 
     /**
@@ -36,5 +34,11 @@ public abstract class AbstractLoginManager<T extends Authentication> implements 
      * @param loginForm
      * @return
      */
-    protected abstract T buildAuthentication(LoginForm loginForm);
+    protected abstract A buildAuthentication(LoginForm loginForm);
+
+    /**
+     * 获取TokenService
+     * @return
+     */
+    public abstract TokenService<T, U> getTokenService();
 }

@@ -1,17 +1,21 @@
 package com.ah.cloud.permissions.biz.application.manager;
 
-import com.ah.cloud.permissions.biz.application.checker.SysRoleChecker;
 import com.ah.cloud.permissions.biz.application.helper.SysRoleHelper;
 import com.ah.cloud.permissions.biz.application.service.SysRoleService;
 import com.ah.cloud.permissions.biz.application.service.SysUserRoleService;
+import com.ah.cloud.permissions.biz.application.service.ext.SysRoleApiExtService;
+import com.ah.cloud.permissions.biz.application.service.ext.SysRoleMenuExtService;
 import com.ah.cloud.permissions.biz.domain.role.form.SysRoleAddForm;
-import com.ah.cloud.permissions.biz.domain.role.form.SysRolePermissionForm;
+import com.ah.cloud.permissions.biz.domain.role.form.SysRoleApiAddForm;
+import com.ah.cloud.permissions.biz.domain.role.form.SysRoleMenuAddForm;
 import com.ah.cloud.permissions.biz.domain.role.form.SysRoleUpdateForm;
 import com.ah.cloud.permissions.biz.domain.role.query.SysRoleQuery;
 import com.ah.cloud.permissions.biz.domain.role.vo.SysRoleVO;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysRole;
+import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysRoleApi;
+import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysRoleMenu;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUserRole;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
@@ -22,6 +26,7 @@ import com.github.pagehelper.page.PageMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -40,15 +45,14 @@ public class SysRoleManager {
 
     @Resource
     private SysRoleHelper sysRoleHelper;
-
     @Resource
     private SysRoleService sysRoleService;
-
-    @Resource
-    private SysRoleChecker sysRoleChecker;
-
     @Resource
     private SysUserRoleService sysUserRoleService;
+    @Resource
+    private SysRoleApiExtService sysRoleApiExtService;
+    @Resource
+    private SysRoleMenuExtService sysRoleMenuExtService;
     /**
      * 添加权限角色
      *
@@ -171,10 +175,48 @@ public class SysRoleManager {
     }
 
     /**
-     * 设置菜单和接口编码
+     * 设置角色菜单
      *
      * @param form
      */
-    public void setSysMenuAndApiCode(SysRolePermissionForm form) {
+    @Transactional(rollbackFor = Exception.class)
+    public void setSysMenuForRole(SysRoleMenuAddForm form) {
+        // 删除原有的角色菜单信息
+        int countDeleted = sysRoleMenuExtService.delete(
+                new QueryWrapper<SysRoleMenu>().lambda()
+                        .eq(SysRoleMenu::getRoleCode, form.getRoleCode())
+                        .eq(SysRoleMenu::getDeleted, DeletedEnum.NO.value)
+        );
+        log.info("SysRoleManager[setSysMenuForRole] delete SysRoleMenu count={}", countDeleted);
+        // 重新添加
+        if (CollectionUtils.isEmpty(form.getMenuIdList())) {
+            log.warn("SysRoleManager[setSysMenuForRole] delete SysRoleMenu allData, roleId={}", form.getRoleCode());
+            return;
+        }
+
+        List<SysRoleMenu> sysRoleMenuList = sysRoleHelper.buildSysRoleMenuEntityList(form);
+        sysRoleMenuExtService.saveBatch(sysRoleMenuList);
+    }
+
+    /**
+     * 设置角色api
+     * @param form
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void setSysApiForRole(SysRoleApiAddForm form) {
+        // 删除原有的角色api信息
+        sysRoleApiExtService.delete(
+                new QueryWrapper<SysRoleApi>().lambda()
+                        .eq(SysRoleApi::getRoleId, form.getRoleId())
+                        .eq(SysRoleApi::getDeleted, DeletedEnum.NO.value)
+        );
+        // 重新添加
+        if (CollectionUtils.isEmpty(form.getApiCodeList())) {
+            log.warn("SysRoleManager[setSysApiForRole] delete SysRoleApi allData, roleId={}", form.getRoleId());
+            return;
+        }
+
+        List<SysRoleApi> sysRoleApiList = sysRoleHelper.getSysRoleApiEntityList(form);
+        sysRoleApiExtService.saveBatch(sysRoleApiList);
     }
 }

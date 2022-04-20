@@ -1,9 +1,8 @@
 package com.ah.cloud.permissions.biz.application.manager;
 
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
-import com.ah.cloud.permissions.biz.infrastructure.security.service.SecurityTokenService;
+import com.ah.cloud.permissions.biz.infrastructure.security.service.WebSecurityTokenService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -20,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class TokenManager {
     @Resource
-    private SecurityTokenService securityTokenService;
+    private WebSecurityTokenService webSecurityTokenService;
 
     /**
      * 根据HttpServletRequest 从redis获取当前用户信息
@@ -31,12 +30,11 @@ public class TokenManager {
         /*
         验证token是否有效, 并返回token
          */
-        String token = securityTokenService.verifyToken(request);
+        String token = webSecurityTokenService.verifyToken(request);
         /*
         根据token获取当前登录用户信息
          */
-        LocalUser localUser = securityTokenService.getLocalUser(token);
-        return localUser;
+        return webSecurityTokenService.getLocalUser(token);
     }
 
     /**
@@ -44,7 +42,7 @@ public class TokenManager {
      * @param token
      */
     public void refreshToken(String token) {
-        securityTokenService.refreshToken(token);
+        webSecurityTokenService.refreshToken(token);
     }
 
     /**
@@ -52,7 +50,7 @@ public class TokenManager {
      * @param token
      */
     public void clearToken(String token) {
-        securityTokenService.deleteLocalUser(token);
+        webSecurityTokenService.deleteLocalUser(token);
     }
 
 }

@@ -1,11 +1,15 @@
 package com.ah.cloud.permissions.biz.domain.api.dto;
 
 import com.ah.cloud.permissions.enums.ApiStatusEnum;
+import com.ah.cloud.permissions.enums.SysApiTypeEnum;
+import com.ah.cloud.permissions.enums.YesOrNoEnum;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Objects;
 
 /**
  * @program: permissions-center
@@ -36,6 +40,11 @@ public class AuthorityApiDTO {
     private ApiStatusEnum apiStatusEnum;
 
     /**
+     * api类型
+     */
+    private SysApiTypeEnum apiTypeEnum;
+
+    /**
      * 是否认证
      */
     private Boolean auth;
@@ -44,5 +53,4 @@ public class AuthorityApiDTO {
      * 是否公开
      */
     private Boolean open;
-
 }

@@ -36,7 +36,7 @@ public class ValidateCodeController {
      * @return
      */
     @PostMapping("/sendCode")
-    public ResponseResult sendCode(@RequestBody @Valid LoginCodeForm form) {
+    public ResponseResult<Void> sendCode(@RequestBody @Valid LoginCodeForm form) {
         validateCodeManager.sendCode(assembler.convert(form.getSender()));
         return ResponseResult.ok();
     }
@@ -47,7 +47,7 @@ public class ValidateCodeController {
      * @return
      */
     @PostMapping("/sendSmsCode")
-    public ResponseResult sendSmsCode(@RequestBody @Valid LoginSmsCodeForm form) {
+    public ResponseResult<Void> sendSmsCode(@RequestBody @Valid LoginSmsCodeForm form) {
         validateCodeManager.sendCode(assembler.convert(form));
         return ResponseResult.ok();
     }
@@ -58,7 +58,7 @@ public class ValidateCodeController {
      * @return
      */
     @PostMapping("/sendEmailCode")
-    public ResponseResult sendEmailCode(@RequestBody @Valid LoginEmailCodeForm form) {
+    public ResponseResult<Void> sendEmailCode(@RequestBody @Valid LoginEmailCodeForm form) {
         validateCodeManager.sendCode(assembler.convert(form));
         return ResponseResult.ok();
     }

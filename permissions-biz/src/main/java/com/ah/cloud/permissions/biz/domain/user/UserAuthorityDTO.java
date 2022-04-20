@@ -23,7 +23,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserAuthorityDTO {
     /**
-     * 主键id
+     * 用户id
      */
     private Long userId;
 
@@ -42,9 +42,18 @@ public class UserAuthorityDTO {
      */
     private UserStatusEnum userStatusEnum;
 
-
     /**
      * 用户权限集合
      */
     private Set<String> authorities;
+
+    /**
+     * 角色编码集合
+     */
+    private Set<String> roleCodeSet;
+
+    /**
+     * 菜单集合
+     */
+    private Set<Long> menuIdSet;
 }

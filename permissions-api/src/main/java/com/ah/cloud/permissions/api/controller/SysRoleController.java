@@ -1,11 +1,10 @@
 package com.ah.cloud.permissions.api.controller;
 
 import com.ah.cloud.permissions.biz.application.manager.SysRoleManager;
-import com.ah.cloud.permissions.biz.domain.role.form.SysRoleAddForm;
-import com.ah.cloud.permissions.biz.domain.role.form.SysRolePermissionForm;
-import com.ah.cloud.permissions.biz.domain.role.form.SysRoleUpdateForm;
+import com.ah.cloud.permissions.biz.domain.role.form.*;
 import com.ah.cloud.permissions.biz.domain.role.query.SysRoleQuery;
 import com.ah.cloud.permissions.biz.domain.role.vo.SysRoleVO;
+import com.ah.cloud.permissions.biz.infrastructure.annotation.ApiMethodLog;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +31,7 @@ public class SysRoleController {
      * @param form
      * @return
      */
+    @ApiMethodLog
     @PostMapping("/add")
     public ResponseResult<Void> add(@Valid @RequestBody SysRoleAddForm form) {
         sysRoleManager.addSysRole(form);
@@ -44,6 +44,7 @@ public class SysRoleController {
      * @param form
      * @return
      */
+    @ApiMethodLog
     @PostMapping("/update")
     public ResponseResult<Void> update(@Valid @RequestBody SysRoleUpdateForm form) {
         sysRoleManager.updateSysRole(form);
@@ -56,6 +57,7 @@ public class SysRoleController {
      * @param id
      * @return
      */
+    @ApiMethodLog
     @PostMapping("/delete/{id}")
     public ResponseResult<Void> delete(@PathVariable(value = "id") Long id) {
         sysRoleManager.deleteSysRole(id);
@@ -85,13 +87,28 @@ public class SysRoleController {
     }
 
     /**
-     * 设置菜单和接口编码
+     * 设置角色菜单
+     *
      * @param form
      * @return
      */
-    @PostMapping("/setSysMenuAndApiCode")
-    public ResponseResult<Void> setSysMenuAndApiCode(@RequestBody SysRolePermissionForm form) {
-        sysRoleManager.setSysMenuAndApiCode(form);
+    @ApiMethodLog
+    @PostMapping("/setSysMenuForRole")
+    public ResponseResult<Void> setSysMenuForRole(@RequestBody SysRoleMenuAddForm form) {
+        sysRoleManager.setSysMenuForRole(form);
+        return ResponseResult.ok();
+    }
+
+    /**
+     * 设置角色api
+     *
+     * @param form
+     * @return
+     */
+    @ApiMethodLog
+    @PostMapping("/setSysApiForRole")
+    public ResponseResult<Void> setSysApiForRole(@RequestBody SysRoleApiAddForm form) {
+        sysRoleManager.setSysApiForRole(form);
         return ResponseResult.ok();
     }
 }

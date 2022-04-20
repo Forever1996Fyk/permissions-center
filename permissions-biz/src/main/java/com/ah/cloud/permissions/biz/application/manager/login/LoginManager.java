@@ -2,6 +2,7 @@ package com.ah.cloud.permissions.biz.application.manager.login;
 
 import com.ah.cloud.permissions.biz.domain.login.LoginForm;
 import com.ah.cloud.permissions.biz.domain.token.AccessToken;
+import com.ah.cloud.permissions.biz.domain.token.Token;
 import com.baomidou.mybatisplus.extension.api.R;
 
 /**
@@ -16,7 +17,7 @@ public interface LoginManager {
      * 获取认证token
      * @return
      */
-    AccessToken getAccessToken(LoginForm loginForm);
+    Token getToken(LoginForm loginForm);
 
     /**
      * 判断是否支持

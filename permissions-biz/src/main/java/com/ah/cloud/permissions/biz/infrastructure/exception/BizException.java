@@ -2,6 +2,7 @@ package com.ah.cloud.permissions.biz.infrastructure.exception;
 
 import com.ah.cloud.permissions.biz.infrastructure.util.AppUtils;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
+import com.ah.cloud.permissions.enums.common.RedisErrorCodeEnum;
 import com.ah.cloud.permissions.exception.ErrorCode;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -18,12 +19,23 @@ public class BizException extends RuntimeException {
     /**
      * 错误码
      */
-    private ErrorCodeEnum errorCode;
+    private ErrorCode errorCode;
 
     private String errorMessage;
 
     public BizException(ErrorCodeEnum errorCode) {
         super(errorCode.getMsg());
+        this.errorCode = errorCode;
+    }
+
+    public BizException(RedisErrorCodeEnum errorCode) {
+        super(errorCode.getMsg());
+        this.errorCode = errorCode;
+    }
+
+    public BizException(RedisErrorCodeEnum errorCode, String...args) {
+        super(AppUtils.getErrorMsg(errorCode, args));
+        this.errorMessage = AppUtils.getErrorMsg(errorCode, args);
         this.errorCode = errorCode;
     }
 

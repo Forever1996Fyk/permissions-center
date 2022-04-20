@@ -37,7 +37,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         3. 用户权限校验
          */
         localUserChecker.checkUserAuthority(userAuthorityDTO);
-
         /*
         构建当前登录用户信息
          */

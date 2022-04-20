@@ -2,6 +2,7 @@ package com.ah.cloud.permissions.biz.application.manager.login;
 
 import com.ah.cloud.permissions.biz.domain.login.LoginForm;
 import com.ah.cloud.permissions.biz.domain.token.AccessToken;
+import com.ah.cloud.permissions.biz.domain.token.Token;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -21,7 +22,7 @@ import java.util.Objects;
  **/
 @Slf4j
 @Component
-public class HandleManager implements InitializingBean {
+public class LoginProvider implements InitializingBean {
     @Resource
     private List<LoginManager> loginManagerList;
 
@@ -38,8 +39,8 @@ public class HandleManager implements InitializingBean {
      * @param loginForm
      * @return
      */
-    public AccessToken getAccessToken(LoginForm loginForm) {
-        AccessToken accessToken = null;
+    public Token getAccessToken(LoginForm loginForm) {
+        Token token = null;
         int currentPosition = 0;
         int size = this.loginManagerList.size();
         for (LoginManager loginManager : loginManagerList) {
@@ -51,14 +52,13 @@ public class HandleManager implements InitializingBean {
                         loginManager.getClass().getSimpleName(), ++currentPosition, size)));
             }
 
-            accessToken = loginManager.getAccessToken(loginForm);
+            token = loginManager.getToken(loginForm);
 
-            if (!Objects.isNull(accessToken)) {
+            if (!Objects.isNull(token)) {
                 break;
             }
         }
-
-        return accessToken;
+        return token;
     }
 
 }

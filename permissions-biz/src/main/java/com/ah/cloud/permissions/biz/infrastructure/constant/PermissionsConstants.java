@@ -24,6 +24,11 @@ public class PermissionsConstants {
     public static final String TOKEN_KEY_PREFIX = "ACCESS:";
 
     /**
+     * redis token key
+     */
+    public static final String TOKEN_USER_KEY = "ACCESS_USER_AUTHORITY";
+
+    /**
      * token 类型
      */
     public static final String TOKEN_TYPE = "Bearer";
@@ -57,4 +62,19 @@ public class PermissionsConstants {
      * 逗号分隔符
      */
     public static final String COMMA_SEPARATOR = ",";
+
+    /**
+     * Long  0
+     */
+    public static final Long ZERO = 0L;
+
+    /**
+     * Integer 0
+     */
+    public static final Integer ZERO_INT = 0;
+
+    /**
+     * String  0
+     */
+    public static final String ZERO_STR = "0";
 }

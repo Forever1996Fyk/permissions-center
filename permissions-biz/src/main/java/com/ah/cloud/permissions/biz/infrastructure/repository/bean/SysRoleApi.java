@@ -33,7 +33,7 @@ public class SysRoleApi implements Serializable {
     /**
      * 角色id
      */
-    private Long roleId;
+    private String roleCode;
 
     /**
      * 接口编码

@@ -1,12 +1,17 @@
 package com.ah.cloud.permissions.api.controller;
 
 import com.ah.cloud.permissions.biz.application.manager.SysUserManager;
+import com.ah.cloud.permissions.biz.application.strategy.cache.impl.RedisCacheHandleStrategy;
+import com.ah.cloud.permissions.biz.domain.menu.vo.RouterVo;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserAddForm;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserApiAddForm;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserMenuAddForm;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserRoleAddForm;
 import com.ah.cloud.permissions.biz.domain.user.query.SysUserQuery;
 import com.ah.cloud.permissions.biz.domain.user.vo.SysUserVo;
+import com.ah.cloud.permissions.biz.infrastructure.annotation.ApiMethodLog;
+import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
+import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @program: permissions-center
@@ -32,6 +38,7 @@ public class SysUserController {
      * @param form
      * @return
      */
+    @ApiMethodLog
     @PostMapping("/add")
     public ResponseResult<Void> add(@Valid @RequestBody SysUserAddForm form) {
         sysUserManager.addSysUser(form);
@@ -44,6 +51,7 @@ public class SysUserController {
      * @param id
      * @return
      */
+    @ApiMethodLog
     @PostMapping("/delete/{id}")
     public ResponseResult<Void> delete(@PathVariable(value = "id") Long id) {
         sysUserManager.deleteSysUserById(id);
@@ -77,6 +85,7 @@ public class SysUserController {
      * @param form
      * @return
      */
+    @ApiMethodLog
     @PostMapping("/setSysUserRole")
     public ResponseResult<Void> setSysUserRole(@Valid @RequestBody SysUserRoleAddForm form) {
         sysUserManager.setSysUserRole(form);
@@ -88,6 +97,7 @@ public class SysUserController {
      * @param form
      * @return
      */
+    @ApiMethodLog
     @PostMapping("/setSysMenuForUser")
     public ResponseResult<Void> setSysMenuForUser(@Valid @RequestBody SysUserMenuAddForm form) {
         sysUserManager.setSysMenuForUser(form);
@@ -99,10 +109,22 @@ public class SysUserController {
      * @param form
      * @return
      */
+    @ApiMethodLog
     @PostMapping("/setSysApiForUser")
     public ResponseResult<Void> setSysApiForUser(@Valid @RequestBody SysUserApiAddForm form) {
         sysUserManager.setSysApiForUser(form);
         return ResponseResult.ok();
+    }
+
+    /**
+     * 根据当前登录人id获取菜单路由信息
+     * @return
+     */
+    @ApiMethodLog
+    @GetMapping("/listRouterVoByUserId")
+    public ResponseResult<List<RouterVo>> listRouterVoByUserId() {
+        Long currentUserId = SecurityUtils.getUserIdBySession();
+        return ResponseResult.ok(sysUserManager.listRouterVoByUserId(currentUserId));
     }
 
 }

@@ -25,7 +25,7 @@ public class LocalUserChecker {
      */
     public void checkUserAuthority(UserAuthorityDTO userAuthorityDTO) {
         if (Objects.isNull(userAuthorityDTO)) {
-            throw new UserAccountErrorException(ErrorCodeEnum.ACCOUNT_ERROR);
+            throw new UserAccountErrorException(ErrorCodeEnum.AUTHENTICATION_ACCOUNT_ERROR);
         }
         checkUserStatus(userAuthorityDTO.getUserStatusEnum());
         checkUserAuthorities(userAuthorityDTO.getAuthorities());
@@ -37,11 +37,11 @@ public class LocalUserChecker {
      */
     public void checkUserStatus(UserStatusEnum userStatusEnum) {
         if (Objects.equals(userStatusEnum, UserStatusEnum.DISABLED)) {
-            throw new UserAccountErrorException(ErrorCodeEnum.ACCOUNT_DISABLED);
+            throw new UserAccountErrorException(ErrorCodeEnum.AUTHENTICATION_ACCOUNT_DISABLED);
         }
 
         if (Objects.equals(userStatusEnum, UserStatusEnum.LOG_OFF)) {
-            throw new UserAccountErrorException(ErrorCodeEnum.ACCOUNT_LOG_OFF);
+            throw new UserAccountErrorException(ErrorCodeEnum.AUTHENTICATION_ACCOUNT_LOG_OFF);
         }
     }
 

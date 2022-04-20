@@ -3,6 +3,7 @@ package com.ah.cloud.permissions.biz.domain.authority;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.SpringSecurityCoreVersion;
 
 /**
  * @program: permissions-center
@@ -13,6 +14,8 @@ import org.springframework.security.core.GrantedAuthority;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DefaultAuthority implements GrantedAuthority {
+
+    private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
     /**
      * 权限标识

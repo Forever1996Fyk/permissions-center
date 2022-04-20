@@ -8,26 +8,21 @@ import java.util.List;
 
 /**
  * @program: permissions-center
- * @description:
+ * @description: 设置用户角色form
  * @author: YuKai Fan
- * @create: 2022-03-21 23:42
+ * @create: 2022-03-21 22:11
  **/
 @Data
-public class SysRolePermissionForm {
+public class SysRoleApiAddForm {
 
     /**
      * 角色id
      */
-    @NotNull(message = "角色id不能为空")
-    private Long roleId;
+    @NotEmpty(message = "角色编码不能为空")
+    private String roleCode;
 
     /**
-     * 菜单编码集合
-     */
-    private List<String> menuCodeList;
-
-    /**
-     * api编码集合
+     * apiCode列表
      */
     private List<String> apiCodeList;
 }

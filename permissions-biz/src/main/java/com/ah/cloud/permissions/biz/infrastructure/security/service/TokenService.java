@@ -2,7 +2,9 @@ package com.ah.cloud.permissions.biz.infrastructure.security.service;
 
 
 import com.ah.cloud.permissions.biz.domain.token.AccessToken;
+import com.ah.cloud.permissions.biz.domain.token.Token;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,14 +14,14 @@ import javax.servlet.http.HttpServletRequest;
  * @author: YuKai Fan
  * @create: 2021-12-17 18:26
  **/
-public interface TokenService {
+public interface TokenService<T extends Token, U extends UserDetails> {
 
     /**
      * 创建token
-     * @param localUser
+     * @param u
      * @return
      */
-    AccessToken createToken(LocalUser localUser);
+    T createToken(U u);
 
     /**
      * 验证 token 合法

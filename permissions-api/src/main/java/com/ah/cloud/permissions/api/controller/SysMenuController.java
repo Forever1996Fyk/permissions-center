@@ -3,10 +3,12 @@ package com.ah.cloud.permissions.api.controller;
 import com.ah.cloud.permissions.biz.application.manager.SysMenuManager;
 import com.ah.cloud.permissions.biz.domain.menu.form.SysMenuAddForm;
 import com.ah.cloud.permissions.biz.domain.menu.form.SysMenuUpdateForm;
-import com.ah.cloud.permissions.biz.domain.menu.vo.RouterVo;
+import com.ah.cloud.permissions.biz.domain.menu.query.SysMenuQuery;
+import com.ah.cloud.permissions.biz.domain.menu.query.SysMenuTreeSelectQuery;
+import com.ah.cloud.permissions.biz.domain.menu.tree.SysMenuTreeSelectVo;
+import com.ah.cloud.permissions.biz.domain.menu.tree.SysMenuTreeVo;
 import com.ah.cloud.permissions.biz.domain.menu.vo.SysMenuVo;
-import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
-import com.ah.cloud.permissions.domain.common.PageResult;
+import com.ah.cloud.permissions.biz.infrastructure.annotation.ApiMethodLog;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +32,7 @@ public class SysMenuController {
      * @param form
      * @return
      */
+    @ApiMethodLog
     @PostMapping("/add")
     public ResponseResult<Void> add(@Valid @RequestBody SysMenuAddForm form) {
         sysMenuManager.addSysMenu(form);
@@ -41,6 +44,7 @@ public class SysMenuController {
      * @param form
      * @return
      */
+    @ApiMethodLog
     @PostMapping("/update")
     public ResponseResult<Void> update(@Valid @RequestBody SysMenuUpdateForm form) {
         sysMenuManager.updateSysMenu(form);
@@ -53,6 +57,7 @@ public class SysMenuController {
      * @param id
      * @return
      */
+    @ApiMethodLog
     @PostMapping("/delete/{id}")
     public ResponseResult<Void> delete(@PathVariable(value = "id") Long id) {
         sysMenuManager.deleteSysMenuById(id);
@@ -70,11 +75,24 @@ public class SysMenuController {
         return ResponseResult.ok(sysMenuManager.findSysMenuById(id));
     }
 
-    @GetMapping("/listRouterVo")
-    public ResponseResult<List<RouterVo>> listRouterVo() {
-        // 获取当前用户id todo
-        Long currentUserId = PermissionsConstants.SUPER_ADMIN;
-        return ResponseResult.ok(sysMenuManager.listRouterVo());
+    /**
+     * 获取菜单树列表 todo 待办
+     * @param query
+     * @return
+     */
+    @GetMapping("/listSysMenuTree")
+    public ResponseResult<List<SysMenuTreeVo>> listSysMenuTree(SysMenuQuery query) {
+        return ResponseResult.ok(sysMenuManager.listSysMenuTree(query));
     }
 
+    /**
+     * 获取菜单树形选择结构列表
+     *
+     * @param query
+     * @return
+     */
+    @GetMapping("/listMenuSelectTree")
+    public ResponseResult<List<SysMenuTreeSelectVo>> listMenuSelectTree(SysMenuTreeSelectQuery query) {
+        return ResponseResult.ok(sysMenuManager.listMenuSelectTree(query));
+    }
 }

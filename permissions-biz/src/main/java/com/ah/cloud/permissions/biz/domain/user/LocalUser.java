@@ -32,6 +32,22 @@ public class LocalUser implements UserDetails {
     private String password;
 
     /**
+     * 用户基本信息
+     */
+    private BaseUserInfo userInfo;
+
+    /**
+     * 用户权限信息
+     */
+    private AuthorityInfo authorityInfo;
+
+    /**
+     * 当前用户的登录token
+     */
+    private String accessToken;
+
+
+    /**
      * 认证是否过期
      */
     private Boolean credentialsNonExpired;
@@ -39,33 +55,33 @@ public class LocalUser implements UserDetails {
     /**
      * 账号是否可用
      */
-    private Boolean enabled;
+    private boolean enabled;
 
     /**
-     * 用户权限
+     * 账号没有过期
      */
-    private Collection<? extends GrantedAuthority> permissions;
+    private boolean accountNonExpired;
 
     /**
-     * 用户基本信息
+     * 账号没有锁定
      */
-    private BaseUserInfo userInfo;
+    private boolean accountNonLocked;
 
     /**
-     * 当前用户的登录token
+     * 权限是否变更
      */
-    private String accessToken;
+    private boolean authorityChanged;
 
     @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return accountNonExpired;
     }
 
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return accountNonLocked;
     }
 
     @JsonIgnore
@@ -83,6 +99,6 @@ public class LocalUser implements UserDetails {
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return permissions;
+        return authorityInfo.getAuthorities();
     }
 }

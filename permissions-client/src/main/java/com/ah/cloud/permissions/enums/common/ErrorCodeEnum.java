@@ -49,9 +49,10 @@ public enum ErrorCodeEnum implements ErrorCode {
     /**
      * 认证相关响应码
      */
-    ACCOUNT_ERROR(300_0_001, "账号错误, 请重新输入"),
-    ACCOUNT_DISABLED(300_0_002, "[%s]当前账号已被禁用"),
-    ACCOUNT_LOG_OFF(300_0_003, "[%s]当前账号已被注销"),
+    AUTHENTICATION_ACCOUNT_ERROR(300_0_001, "账号错误, 请重新输入"),
+    AUTHENTICATION_ACCOUNT_DISABLED(300_0_002, "当前账号已被禁用"),
+    AUTHENTICATION_ACCOUNT_LOG_OFF(300_0_003, "当前账号已被注销"),
+    AUTHENTICATION_LOGIN_PROCESS_EXCEPTION(300_0_004, "登录流程异常, 请联系管理员"),
 
     /**
      * 用户相关响应码
@@ -84,6 +85,13 @@ public enum ErrorCodeEnum implements ErrorCode {
     MENU_INFO_IS_NOT_EXISTED_UPDATE_FAILED(700_0_002, "当前菜单信息不存在, 更新失败"),
     MENU_CODE_CANNOT_CHANGE_UPDATE_FAILED(700_0_003, "菜单编码禁止变更"),
 
+    /**
+     * 系统api相关错误码
+     */
+    API_CODE_IS_EXISTED(800_0_001, "当前接口编码[%s]已存在, 新增失败"),
+    API_INFO_IS_NOT_EXISTED_UPDATE_FAILED(800_0_002, "当前接口信息不存在, 更新失败"),
+    API_CODE_CANNOT_CHANGE_UPDATE_FAILED(800_0_003, "菜单编码禁止变更"),
+    API_INFO_IS_NOT_EXISTED(800_0_004, "当前接口信息不存在"),
     ;
 
     private int code;

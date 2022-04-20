@@ -45,6 +45,9 @@ public class SysMenu implements Serializable {
      */
     private String menuName;
 
+    /**
+     * 菜单类型
+     */
     private Integer menuType;
 
     /**
@@ -71,6 +74,11 @@ public class SysMenu implements Serializable {
      * 菜单图标
      */
     private String menuIcon;
+
+    /**
+     * 是否隐藏
+     */
+    private Integer hidden;
 
     /**
      * 备注

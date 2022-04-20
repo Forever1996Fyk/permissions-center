@@ -15,15 +15,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccessToken {
+public class AccessToken implements Token {
 
     /**
      * token
      */
-    private String access_token;
+    private String accessToken;
 
     /**
      * 过期时间(秒)
      */
-    private Long expires_in;
+    private Long expiresIn;
 }

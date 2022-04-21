@@ -1,5 +1,6 @@
 package com.ah.cloud.permissions.biz.infrastructure.security.service.impl;
 
+import com.ah.cloud.permissions.biz.application.manager.AccessManager;
 import com.ah.cloud.permissions.biz.application.strategy.cache.impl.RedisCacheHandleStrategy;
 import com.ah.cloud.permissions.biz.domain.token.AccessToken;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
@@ -24,6 +25,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class RedisWebSecurityTokenServiceImpl implements WebSecurityTokenService {
+    @Resource
+    private AccessManager accessManager;
     @Resource
     private RedisCacheHandleStrategy redisCacheHandleStrategy;
 
@@ -57,7 +60,7 @@ public class RedisWebSecurityTokenServiceImpl implements WebSecurityTokenService
             if (StringUtils.isEmpty(userId)) {
                 return null;
             }
-            return redisCacheHandleStrategy.getCacheHashByKey(PermissionsConstants.TOKEN_USER_KEY, userId);
+            return (LocalUser) accessManager.getUserDetailsFromRedis(userId);
         }
         return null;
     }
@@ -71,27 +74,14 @@ public class RedisWebSecurityTokenServiceImpl implements WebSecurityTokenService
     public AccessToken createToken(LocalUser localUser) {
         log.info("RedisWebSecurityTokenServiceImpl[createToken] createToken localUser={}", JsonUtils.toJSONString(localUser));
         String accessToken = UUID.randomUUID().toString();
-        localUser.setAccessToken(accessToken);
         /*
         设置token缓存
         key: token
         value: userId
          */
-        redisCacheHandleStrategy.setCacheObjectByExpire(
-                getTokenKey(accessToken)
-                , String.valueOf(localUser.getUserInfo().getUserId())
-                , EXPIRES_IN
-                , TimeUnit.SECONDS);
+        redisCacheHandleStrategy.setCacheObjectByExpire(getTokenKey(accessToken), String.valueOf(localUser.getUserInfo().getUserId()), EXPIRES_IN, TimeUnit.SECONDS);
 
-        /*
-        设置用户信息缓存
-        key: userId
-        value: localUser
-         */
-        redisCacheHandleStrategy.setCacheHashValue(
-                PermissionsConstants.TOKEN_USER_KEY
-                , String.valueOf(localUser.getUserInfo().getUserId())
-                , localUser);
+        accessManager.setUserAuthRedisCache(localUser.getUserInfo().getUserId(), localUser);
         return AccessToken.builder()
                 .accessToken(accessToken)
                 .expiresIn(EXPIRES_IN)
@@ -99,14 +89,7 @@ public class RedisWebSecurityTokenServiceImpl implements WebSecurityTokenService
     }
 
     @Override
-    public String verifyToken(HttpServletRequest request) {
-        return this.getToken(request);
-    }
-
-    @Override
-    public void refreshToken(HttpServletRequest request) {
-        String accessToken = getToken(request);
-        refreshToken(accessToken);
+    public void verifyToken(String token) {
     }
 
     @Override

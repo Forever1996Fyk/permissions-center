@@ -1,7 +1,9 @@
 package com.ah.cloud.permissions.biz.infrastructure.security.filter;
 
 import com.ah.cloud.permissions.biz.application.helper.AuthenticationHelper;
+import com.ah.cloud.permissions.biz.application.manager.AccessManager;
 import com.ah.cloud.permissions.biz.application.manager.TokenManager;
+import com.ah.cloud.permissions.biz.application.manager.UserAuthManager;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
 import com.ah.cloud.permissions.biz.infrastructure.exception.SecurityErrorException;
 import com.ah.cloud.permissions.biz.infrastructure.exception.UserAccountErrorException;
@@ -40,6 +42,8 @@ public class RedisAuthenticationTokenFilter extends OncePerRequestFilter {
     @Resource
     private TokenManager tokenManager;
     @Resource
+    private AccessManager accessManager;
+    @Resource
     private AuthenticationHelper authenticationHelper;
     /**
      * 验证码校验失败处理器
@@ -53,17 +57,18 @@ public class RedisAuthenticationTokenFilter extends OncePerRequestFilter {
         从 request 中提取到token，获取当前登录用户
          */
         try {
-            LocalUser localUser = tokenManager.getLocalUserByRequest(request);
+            String token = tokenManager.getToken(request);
+            LocalUser localUser = tokenManager.getLocalUserByToken(token);
             log.info("RedisAuthenticationTokenFilter[doFilterInternal] 根据token获取当前登录用户信息 localUser:{}", JsonUtils.toJSONString(localUser));
             if (ObjectUtils.isNotEmpty(localUser)) {
                 // 重新刷新token过期时间
-                tokenManager.refreshToken(localUser.getAccessToken());
+                tokenManager.refreshToken(token);
                 // 判断当前登录人信息是否可用
                 if (!localUser.isEnabled()) {
                     throw new SecurityErrorException(ErrorCodeEnum.AUTHENTICATION_ACCOUNT_DISABLED);
                 }
                 // 判断当前上下文是否存储认证信息
-                if (Objects.isNull(SecurityContextHolder.getContext().getAuthentication()) || localUser.isAuthorityChanged()) {
+                if (Objects.isNull(SecurityContextHolder.getContext().getAuthentication()) || accessManager.isUserAuthChanged(localUser)) {
                     InMemoryAuthenticationToken authenticationToken = authenticationHelper.buildInMemoryAuthenticationToken(localUser);
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     /*
@@ -71,7 +76,7 @@ public class RedisAuthenticationTokenFilter extends OncePerRequestFilter {
                     通过spring.security.strategy 设置对应的策略类全限定名(类路径)即可
                      */
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    localUser.setAuthorityChanged(false);
+                    accessManager.resetUserAuthChangedMark(localUser, false);
                 }
             }
         }  catch (AuthenticationException e) {

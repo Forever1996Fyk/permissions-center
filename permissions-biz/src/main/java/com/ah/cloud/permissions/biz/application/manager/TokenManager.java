@@ -23,14 +23,15 @@ public class TokenManager {
 
     /**
      * 根据HttpServletRequest 从redis获取当前用户信息
-     * @param request
+     *
+     * @param token
      * @return
      */
-    public LocalUser getLocalUserByRequest(HttpServletRequest request) {
+    public LocalUser getLocalUserByToken(String token) {
         /*
         验证token是否有效, 并返回token
          */
-        String token = webSecurityTokenService.verifyToken(request);
+        webSecurityTokenService.verifyToken(token);
         /*
         根据token获取当前登录用户信息
          */
@@ -39,6 +40,7 @@ public class TokenManager {
 
     /**
      * 刷新token过期时间
+     *
      * @param token
      */
     public void refreshToken(String token) {
@@ -47,10 +49,20 @@ public class TokenManager {
 
     /**
      * 清除token
+     *
      * @param token
      */
     public void clearToken(String token) {
         webSecurityTokenService.deleteLocalUser(token);
     }
 
+    /**
+     * 获取token
+     *
+     * @param request
+     * @return
+     */
+    public String getToken(HttpServletRequest request) {
+        return webSecurityTokenService.getToken(request);
+    }
 }

@@ -25,21 +25,15 @@ public interface TokenService<T extends Token, U extends UserDetails> {
 
     /**
      * 验证 token 合法
-     * @param request
+     * @param token
      */
-    String verifyToken(HttpServletRequest request);
+    void verifyToken(String token);
 
     /**
      * 刷新token有效期
      * @param token
      */
     void refreshToken(String token);
-
-    /**
-     * 刷新token有效期
-     * @param request
-     */
-    void refreshToken(HttpServletRequest request);
 
     /**
      * 请求解析token

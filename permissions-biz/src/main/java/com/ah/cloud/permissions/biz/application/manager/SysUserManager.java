@@ -46,6 +46,8 @@ import java.util.stream.Collectors;
 @Component
 public class SysUserManager {
     @Resource
+    private AccessManager accessManager;
+    @Resource
     private SysUserHelper sysUserHelper;
     @Resource
     private SysUserChecker sysUserChecker;
@@ -190,6 +192,9 @@ public class SysUserManager {
 
         List<SysUserRole> sysUserRoleList = sysUserHelper.buildSysUserRoleEntityList(form.getUserId(), form.getRoleCodeList());
         sysUserRoleExtService.saveBatch(sysUserRoleList);
+
+        // 异步处理用户权限更新
+        ThreadPoolManager.updateUserThreadPool.execute(() -> accessManager.updateUserCache(form.getUserId()));
     }
 
     /**
@@ -199,6 +204,8 @@ public class SysUserManager {
     @Transactional(rollbackFor = Exception.class)
     public void setSysMenuForUser(SysUserMenuAddForm form) {
         setSysMenuForUser(form.getUserId(), form.getMenuIdList());
+        // 异步处理用户权限更新
+        ThreadPoolManager.updateUserThreadPool.execute(() -> accessManager.updateUserCache(form.getUserId()));
     }
 
     /**
@@ -208,6 +215,8 @@ public class SysUserManager {
     @Transactional(rollbackFor = Exception.class)
     public void setSysApiForUser(SysUserApiAddForm form) {
         setSysApiForUser(form.getUserId(), form.getApiCodeList());
+        // 异步处理用户权限更新
+        ThreadPoolManager.updateUserThreadPool.execute(() -> accessManager.updateUserCache(form.getUserId()));
     }
 
 

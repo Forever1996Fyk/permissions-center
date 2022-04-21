@@ -1,11 +1,15 @@
 package com.ah.cloud.permissions.biz.application.manager;
 
+import com.ah.cloud.permissions.biz.application.helper.LocalUserHelper;
 import com.ah.cloud.permissions.biz.application.manager.login.LoginManager;
 import com.ah.cloud.permissions.biz.application.provider.access.AccessProvider;
+import com.ah.cloud.permissions.biz.application.strategy.cache.impl.RedisCacheHandleStrategy;
 import com.ah.cloud.permissions.biz.domain.api.dto.AuthorityApiDTO;
 import com.ah.cloud.permissions.biz.domain.token.AccessToken;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
+import com.ah.cloud.permissions.biz.domain.user.UserAuthorityDTO;
 import com.ah.cloud.permissions.biz.infrastructure.config.ApiProperties;
+import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.exception.ApiAuthorityErrorException;
 import com.ah.cloud.permissions.biz.infrastructure.security.loader.ResourceLoader;
 import com.ah.cloud.permissions.biz.infrastructure.security.token.AppAuthenticationToken;
@@ -20,6 +24,7 @@ import org.springframework.core.log.LogMessage;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
@@ -41,7 +46,13 @@ import java.util.Objects;
 @Component
 public class AccessManager implements InitializingBean {
     @Resource
+    private LocalUserHelper localUserHelper;
+    @Resource
+    private UserAuthManager userAuthManager;
+    @Resource
     private List<AccessProvider> accessProviderList;
+    @Resource
+    private RedisCacheHandleStrategy redisCacheHandleStrategy;
 
     /**
      * Spring Security 权限校验表达式方法
@@ -65,6 +76,55 @@ public class AccessManager implements InitializingBean {
         }
         log.error("AccessManager has no Provider");
         return false;
+    }
+
+
+    /**
+     * 校验用户权限是否变更
+     * @param localUser
+     * @return
+     */
+    public boolean isUserAuthChanged(LocalUser localUser) {
+        return localUser.isAuthorityChanged();
+    }
+
+    /**
+     * 重置用户权限标志
+     * @param localUser
+     */
+    public void resetUserAuthChangedMark(LocalUser localUser, boolean changed) {
+        localUser.setAuthorityChanged(changed);
+        setUserAuthRedisCache(localUser.getUserInfo().getUserId(), localUser);
+    }
+
+    /**
+     * 设置用户信息缓存
+     *  key: userId
+     *  value: localUser
+     * @param userId
+     * @param userDetails
+     */
+    public void setUserAuthRedisCache(Long userId, UserDetails userDetails) {
+        redisCacheHandleStrategy.setCacheHashValue(PermissionsConstants.TOKEN_USER_KEY, String.valueOf(userId), userDetails);
+    }
+
+    /**
+     * 从redis获取当前用户信息
+     * @param userId
+     * @return
+     */
+    public UserDetails getUserDetailsFromRedis(String userId) {
+        return redisCacheHandleStrategy.getCacheHashByKey(PermissionsConstants.TOKEN_USER_KEY, userId);
+    }
+
+    /**
+     * 重新构造当前登录人信息, 并放入缓存
+     * @param userId
+     */
+    public void updateUserCache(Long userId) {
+        UserAuthorityDTO userAuthorityDTO = userAuthManager.createUserAuthorityByUserId(userId);
+        LocalUser localUser = localUserHelper.buildLocalUser(userAuthorityDTO);
+        this.setUserAuthRedisCache(userId, localUser);
     }
 
     @Override

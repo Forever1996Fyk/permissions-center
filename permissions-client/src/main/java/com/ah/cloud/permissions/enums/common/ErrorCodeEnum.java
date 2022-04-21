@@ -53,6 +53,7 @@ public enum ErrorCodeEnum implements ErrorCode {
     AUTHENTICATION_ACCOUNT_DISABLED(300_0_002, "当前账号已被禁用"),
     AUTHENTICATION_ACCOUNT_LOG_OFF(300_0_003, "当前账号已被注销"),
     AUTHENTICATION_LOGIN_PROCESS_EXCEPTION(300_0_004, "登录流程异常, 请联系管理员"),
+    AUTHENTICATION_USER_ID_ERROR(300_0_005, "用户id[%s]错误"),
 
     /**
      * 用户相关响应码

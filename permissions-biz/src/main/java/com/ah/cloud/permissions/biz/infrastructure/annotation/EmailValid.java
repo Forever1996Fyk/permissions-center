@@ -2,7 +2,6 @@ package com.ah.cloud.permissions.biz.infrastructure.annotation;
 
 
 import com.ah.cloud.permissions.biz.infrastructure.validator.EmailValidator;
-import com.ah.cloud.permissions.biz.infrastructure.validator.PhoneNumberValidator;
 
 import javax.validation.Constraint;
 import java.lang.annotation.*;

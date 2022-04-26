@@ -27,9 +27,7 @@ public class CodeGeneratorUtil {
     public static void main(String[] args) {
 
         //todo 需要生成的表
-        String[] tables = new String[]{"sys_api", "sys_menu", "sys_user", "sys_role"
-                , "sys_user_role", "sys_user_api", "sys_user_menu"
-                , "sys_role_menu", "sys_role_api", "sys_menu_api"};
+        String[] tables = new String[]{"thread_pool_data"};
 
 
         //代码生成器

@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author auto_generation
- * @since 2022-03-22
+ * @since 2022-04-26
  */
 public interface SysApiService extends IService<SysApi> {
 

@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author auto_generation
- * @since 2022-03-22
+ * @since 2022-04-26
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -43,7 +43,7 @@ public class SysMenuApi implements Serializable {
     /**
      * 是否可用
      */
-    private Integer available;
+    private Integer isAvailable;
 
     /**
      * 行记录创建者

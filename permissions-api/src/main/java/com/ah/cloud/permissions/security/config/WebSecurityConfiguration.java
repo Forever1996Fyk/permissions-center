@@ -27,13 +27,11 @@ import javax.annotation.Resource;
 /**
  * @program: permissions-center
  * @description: Security配置类
+ * 查看其注解源码，主要是引用WebSecurityConfiguration.class 和 加入了@EnableGlobalAuthentication 注解 ，这里就不介绍了，我们只要明白添加 @EnableWebSecurity 注解将开启 Security 功能。
  * @author: YuKai Fan
  * @create: 2021-12-17 15:22
  **/
 @Configuration
-/*
-查看其注解源码，主要是引用WebSecurityConfiguration.class 和 加入了@EnableGlobalAuthentication 注解 ，这里就不介绍了，我们只要明白添加 @EnableWebSecurity 注解将开启 Security 功能。
- */
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -43,13 +41,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Resource
     private LogoutSuccessHandlerImpl logoutSuccessHandler;
 
-
     /**
      * 认证失败处理类
      */
     @Resource
     private AuthenticationEntryPointImpl unauthorizedHandler;
 
+    /**
+     * 无权限处理类
+     */
     @Resource
     private AccessDeniedHandlerImpl accessDeniedHandler;
 

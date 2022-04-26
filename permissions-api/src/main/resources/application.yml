@@ -1,51 +1,28 @@
 server:
   port: 8080
 
+# 建议放一些通用的、与环境无关、与系统相关的配置在这里
+# SpringBoot的相关配置
 spring:
   profiles:
     active: dev
   application:
     name: permissions-center
-  datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://49.234.219.109:3306/permissions-center?serverTimezone=GMT%2B8&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
-    username: root
-    password: root
-    hikari:
-      minimum-idle: 5
-      idle-timeout: 600000
-      maximum-pool-size: 10
-      auto-commit: true
-      pool-name: MyHikariCP
-      max-lifetime: 1800000
-      connection-timeout: 30000
-      connection-test-query: SELECT 1
-  redis:
-    ################### redis 单机版 start ##########################
-    host: 121.37.67.125
-    port: 6379
-    password: fyk961222..
-    timeout: 6000
-    database: 0
-    lettuce:
-      pool:
-        # 连接池最大连接数（使用负值表示没有限制）,如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)
-        max-active: 10
-        # 连接池中的最大空闲连接 ，默认值也是8
-        max-idle: 8
-        # 等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接抛出JedisConnectionException
-        max-wa-: 100
-        # 连接池中的最小空闲连接 ，默认值也是0
-        min-idle: 2
-      shutdown-timeout: 100ms
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
-# MyBatis配置
-pagehelper:
-  helperDialect: mysql
-  reasonable: false
-  supportMethodsArguments: true
-  params: count=countSql
+
+# slf4j日志配置
+logging:
+  config: classpath:logback-spring.xml
+  path: ./logs/ypsx-logistics-platform/
+  level:
+    root: INFO
+    org:
+      springframework:
+        boot:
+          autoconfigure: ERROR
 
 mybatis:
   configuration:
@@ -55,16 +32,8 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
 
-logging:
-  level:
-    root: debug
-  file:
-    name: ./logs/permissions-api.log
-
-
-security:
-  api:
-    permit-all:
-      - /login/password
-
-
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql

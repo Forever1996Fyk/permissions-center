@@ -1,8 +1,10 @@
+
 create table sys_user
 (
     id            bigint                                        not null comment '主键id'
         primary key,
     user_id       bigint                                        not null comment '用户id',
+    name          varchar(32)                                   not null comment '用户姓名',
     account       varchar(20)         default ''                not null comment '登录账号',
     nick_name     varchar(8)          default ''                not null comment '昵称',
     password      varchar(100)        default ''                not null comment '登录密码',
@@ -140,7 +142,7 @@ create table sys_user_menu
     version       tinyint unsigned default 0                 not null comment '行版本号',
     extension     varchar(2048)    default ''                not null comment '拓展字段',
     deleted       bigint           default 0                 not null comment '是否删除',
-    unique key uniq_user_menu(user_id, menu, deleted)
+    unique key uniq_user_menu(user_id, menu_id, deleted)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4 COMMENT '系统用户权限表';
 
 create table sys_role_api
@@ -174,7 +176,7 @@ create table sys_role_menu
     version       tinyint unsigned default 0                 not null comment '行版本号',
     extension     varchar(2048)    default ''                not null comment '拓展字段',
     deleted       bigint           default 0                 not null comment '是否删除',
-    unique key uniq_role_menu(role_id, menu_id, deleted)
+    unique key uniq_role_menu(role_code, menu_id, deleted)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4 COMMENT '系统角色菜单表';
 
 create table sys_menu_api

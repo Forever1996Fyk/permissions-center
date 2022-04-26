@@ -207,12 +207,12 @@ public class SysRoleManager {
         // 删除原有的角色api信息
         sysRoleApiExtService.delete(
                 new QueryWrapper<SysRoleApi>().lambda()
-                        .eq(SysRoleApi::getRoleId, form.getRoleId())
+                        .eq(SysRoleApi::getRoleCode, form.getRoleCode())
                         .eq(SysRoleApi::getDeleted, DeletedEnum.NO.value)
         );
         // 重新添加
         if (CollectionUtils.isEmpty(form.getApiCodeList())) {
-            log.warn("SysRoleManager[setSysApiForRole] delete SysRoleApi allData, roleId={}", form.getRoleId());
+            log.warn("SysRoleManager[setSysApiForRole] delete SysRoleApi allData, roleId={}", form.getRoleCode());
             return;
         }
 

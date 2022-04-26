@@ -77,4 +77,25 @@ public class PermissionsConstants {
      * String  0
      */
     public static final String ZERO_STR = "0";
+
+    /**
+     * 核心线程数最大值
+     */
+    public static final Long CORE_POOL_SIZE_LIMIT_UP = 100L;
+
+    /**
+     * 核心线程数最小值
+     */
+    public static final Long CORE_POOL_SIZE_LIMIT_DOWN = 5L;
+
+
+    /**
+     * 最大线程数最大值
+     */
+    public static final long MAX_POOL_SIZE_LIMIT_UP = Integer.MAX_VALUE;
+
+    /**
+     * 最大线程数最小值
+     */
+    public static final Long MAX_POOL_SIZE_LIMIT_DOWN = 10L;
 }

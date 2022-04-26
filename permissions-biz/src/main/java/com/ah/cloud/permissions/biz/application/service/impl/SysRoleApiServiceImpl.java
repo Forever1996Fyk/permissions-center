@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author auto_generation
- * @since 2022-03-22
+ * @since 2022-04-26
  */
 @Service
 public class SysRoleApiServiceImpl extends ServiceImpl<SysRoleApiMapper, SysRoleApi> implements SysRoleApiService {

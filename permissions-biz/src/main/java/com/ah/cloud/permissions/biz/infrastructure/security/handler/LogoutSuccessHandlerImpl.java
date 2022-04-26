@@ -37,7 +37,8 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
-        LocalUser localUser = tokenManager.getLocalUserByRequest(request);
+        String token = tokenManager.getToken(request);
+        LocalUser localUser = tokenManager.getLocalUserByToken(token);
         if (ObjectUtils.isNotEmpty(localUser)) {
             // 删除用户缓存记录
             tokenManager.clearToken(localUser.getAccessToken());

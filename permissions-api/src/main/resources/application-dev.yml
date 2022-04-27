@@ -95,6 +95,12 @@
                 algorithm-class-name: com.ah.cloud.permissions.biz.infrastructure.edi.core.BizRetryTaskShardingHintAlgorithm
           leaf:
             actual-data-nodes: leaf0.leaf_alloc
+          thread_pool_data:
+            actual-data-nodes: permissions0.thread_pool_data_$->{2021..2022}$->{['01','02','03','04','05','06','07','08','09','10','11','12']}
+            table-strategy:
+              standard:
+                sharding-column: sharding_key
+                precise-algorithm-class-name: com.ah.cloud.permissions.biz.infrastructure.sharding.ThreadPoolDataShardingAlgorithm
 
 security:
   api:

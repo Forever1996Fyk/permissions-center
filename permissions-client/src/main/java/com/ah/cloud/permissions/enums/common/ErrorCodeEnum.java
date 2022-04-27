@@ -29,6 +29,7 @@ public enum ErrorCodeEnum implements ErrorCode {
      * 公共业务异常
      */
     BUSINESS_FAIL(100_2_001,"业务处理异常"),
+    DATE_CANNOT_ACROSS_THE_MONTH(100_2_002, "日期不能跨月"),
 
     /**
      * 公共操作异常
@@ -93,6 +94,16 @@ public enum ErrorCodeEnum implements ErrorCode {
     API_INFO_IS_NOT_EXISTED_UPDATE_FAILED(800_0_002, "当前接口信息不存在, 更新失败"),
     API_CODE_CANNOT_CHANGE_UPDATE_FAILED(800_0_003, "菜单编码禁止变更"),
     API_INFO_IS_NOT_EXISTED(800_0_004, "当前接口信息不存在"),
+
+    /**
+     * 线程池配置
+     */
+    THREAD_POOL_IS_NULL(900_0_001,"[%s]线程池未找到"),
+    THREAD_POOL_GET_FAILED(900_0_002,"[%s]获取线程池值失败"),
+    THREAD_POOL_GET_CLIENT_FAILED(900_0_003,"获取客户端地址失败"),
+    THREAD_POOL_CORE_SIZE_MORE_THAN_MAX_SIZE(900_0_004, "核心线程数不能大于最大线程数"),
+    CFG_THREAD_POOL_NOT_EXIST(900_0_005, "当前线程池配置[%s]不存在"),
+    CFG_THREAD_POOL_WORK_QUEUE_SIZE_ERROR(900_0_006, "队列大小不能小于[%s]"),
     ;
 
     private int code;

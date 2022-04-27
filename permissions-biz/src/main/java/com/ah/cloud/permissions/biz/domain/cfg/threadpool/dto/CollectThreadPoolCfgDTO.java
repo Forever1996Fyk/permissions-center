@@ -5,11 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 /**
  * @program: permissions-center
  * @description:
@@ -20,7 +15,13 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CfgThreadPoolDTO {
+public class CollectThreadPoolCfgDTO {
+
+    /**
+     * 线程池id
+     */
+    private Long id;
+
     /**
      * 线程池名称
      */
@@ -50,14 +51,4 @@ public class CfgThreadPoolDTO {
      * 存放带执行任务的队列大小
      */
     private Integer workQueueSize;
-
-    /**
-     * 扩展字段
-     */
-    private String ext;
-
-    /**
-     * 描述
-     */
-    private String remark;
 }

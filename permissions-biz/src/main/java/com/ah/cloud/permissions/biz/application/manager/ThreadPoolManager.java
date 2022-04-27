@@ -1,6 +1,7 @@
 package com.ah.cloud.permissions.biz.application.manager;
 
-import java.util.concurrent.LinkedBlockingQueue;
+import com.ah.cloud.permissions.biz.infrastructure.threadpool.ResizeLinkedBlockingQueue;
+
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +28,6 @@ public class ThreadPoolManager {
             10,
             60L,
             TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>(DEFAULT_QUEUE_SIZE),
+            new ResizeLinkedBlockingQueue<>(DEFAULT_QUEUE_SIZE),
             r -> new Thread(r, "UpdateUserThreadPool-" + r.hashCode()));
 }

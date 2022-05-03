@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author auto_generation
- * @since 2022-04-26
+ * @since 2022-04-29
  */
 public interface CfgThreadPoolService extends IService<CfgThreadPool> {
 

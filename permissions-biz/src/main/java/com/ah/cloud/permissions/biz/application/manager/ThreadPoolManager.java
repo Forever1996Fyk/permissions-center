@@ -30,4 +30,18 @@ public class ThreadPoolManager {
             TimeUnit.SECONDS,
             new ResizeLinkedBlockingQueue<>(DEFAULT_QUEUE_SIZE),
             r -> new Thread(r, "UpdateUserThreadPool-" + r.hashCode()));
+
+
+    /**
+     * 记录任务调度线程池
+     * 单线程顺序执行
+     * updateUserThreadPool
+     */
+    public static ThreadPoolExecutor recordQuartzJobThreadPool = new ThreadPoolExecutor(
+            1,
+            1,
+            0L,
+            TimeUnit.MILLISECONDS,
+            new ResizeLinkedBlockingQueue<>(DEFAULT_QUEUE_SIZE),
+            r -> new Thread(r, "RecordQuartzJobThreadPool-" + r.hashCode()));
 }

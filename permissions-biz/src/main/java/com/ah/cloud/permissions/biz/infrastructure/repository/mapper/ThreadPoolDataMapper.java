@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author auto_generation
- * @since 2022-04-26
+ * @since 2022-04-29
  */
 public interface ThreadPoolDataMapper extends BaseMapper<ThreadPoolData> {
 

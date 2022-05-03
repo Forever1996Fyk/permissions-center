@@ -15,11 +15,13 @@
 核心功能:
 
 1. 完整的权限管理 (√)
-2. 动态线程池监控
-3. ShardingJdbc动态切换数据源, 分库分表 (√)
-4. Netty的即时通讯
-5. ES数据检索
-6. JavaCV视频监控
-7. MySQL binlog数据订阅
-8. 多方式文件上传下载
-9. 大数据excel导入导出
+2. 动态线程池监控 (√)
+3. 基于quartz实现的定时任务功能 (...)
+4. ShardingJdbc动态切换数据源, 分库分表 (√)
+5. Netty的即时通讯
+6. ES数据检索
+7. JavaCV视频监控
+8. MySQL binlog数据订阅
+9. 多方式文件上传下载
+10. 大数据excel导入导出
+11. RocketMQ接入

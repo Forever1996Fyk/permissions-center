@@ -7,7 +7,7 @@ spring:
   profiles:
     active: dev
   application:
-    name: permissions-api
+    name: permissions-server
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

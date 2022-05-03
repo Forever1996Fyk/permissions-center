@@ -52,6 +52,8 @@
         <leaf.version>1.0.1</leaf.version>
         <sharding.version>4.1.1</sharding.version>
         <easyexcel.version>3.0.5</easyexcel.version>
+        <easyexcel.version>3.0.5</easyexcel.version>
+        <quartz.version>2.3.2</quartz.version>
 
         <!-- template engine -->
         <freemarker.version>2.3.28</freemarker.version>
@@ -221,6 +223,18 @@
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-core</artifactId>
                 <version>${hutool.version}</version>
+            </dependency>
+            <!-- 定时任务 -->
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>${quartz.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.mchange</groupId>
+                        <artifactId>c3p0</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>

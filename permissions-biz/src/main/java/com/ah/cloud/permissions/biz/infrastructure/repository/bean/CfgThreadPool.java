@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author auto_generation
- * @since 2022-04-26
+ * @since 2022-04-29
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -63,7 +63,7 @@ public class CfgThreadPool implements Serializable {
     /**
      * 扩展字段
      */
-    private String ext;
+    private String extension;
 
     /**
      * 描述

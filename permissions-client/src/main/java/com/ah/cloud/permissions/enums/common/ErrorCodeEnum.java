@@ -104,6 +104,17 @@ public enum ErrorCodeEnum implements ErrorCode {
     THREAD_POOL_CORE_SIZE_MORE_THAN_MAX_SIZE(900_0_004, "核心线程数不能大于最大线程数"),
     CFG_THREAD_POOL_NOT_EXIST(900_0_005, "当前线程池配置[%s]不存在"),
     CFG_THREAD_POOL_WORK_QUEUE_SIZE_ERROR(900_0_006, "队列大小不能小于[%s]"),
+
+    /**
+     * quartz
+     */
+    QUARTZ_CRON_EXPRESSION_ERROR(1000_0_001, "cron表达式不正确[%s]"),
+    QUARTZ_BUILD_JOB_FAILED(1000_0_002, "jobKey[%s]构建定时任务异常"),
+    QUARTZ_DELETE_JOB_FAILED(1000_0_003, "jobKey[%s]删除定时任务异常"),
+    QUARTZ_JOB_NOT_EXIST(1000_0_004, "当前定时任务[%s]不存在"),
+    QUARTZ_JOB_TRIGGER_FAILED(1000_0_005, "当前定时任务[%s]执行失败"),
+    QUARTZ_JOB_RESUME_FAILED(1000_0_006, "当前定时任务[%s]恢复失败"),
+    QUARTZ_JOB_PAUSE_FAILED(1000_0_007, "当前定时任务[%s]暂停失败"),
     ;
 
     private int code;

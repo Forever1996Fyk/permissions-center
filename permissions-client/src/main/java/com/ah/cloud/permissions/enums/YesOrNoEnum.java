@@ -1,5 +1,7 @@
 package com.ah.cloud.permissions.enums;
 
+import java.util.Objects;
+
 /**
  * @program: permissions-center
  * @description:
@@ -33,6 +35,20 @@ public enum YesOrNoEnum {
     YesOrNoEnum(int type, String desc) {
         this.type = type;
         this.desc = desc;
+    }
+
+    public static YesOrNoEnum getByType(Integer type) {
+        YesOrNoEnum[] yesOrNoEnums = values();
+        for (YesOrNoEnum yesOrNoEnum : yesOrNoEnums) {
+            if (Objects.equals(yesOrNoEnum.getType(), type)) {
+                return yesOrNoEnum;
+            }
+        }
+        return YesOrNoEnum.NO;
+    }
+
+    public boolean isYes() {
+        return Objects.equals(this, YES);
     }
 
     public int getType() {

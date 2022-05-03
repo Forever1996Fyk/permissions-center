@@ -27,7 +27,7 @@ public class CodeGeneratorUtil {
     public static void main(String[] args) {
 
         //todo 需要生成的表
-        String[] tables = new String[]{"thread_pool_data"};
+        String[] tables = new String[]{"quartz_job_log", "quartz_job"};
 
 
         //代码生成器

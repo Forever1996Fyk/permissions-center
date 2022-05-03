@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author auto_generation
- * @since 2022-04-26
+ * @since 2022-04-29
  */
 @Service
 public class CfgThreadPoolServiceImpl extends ServiceImpl<CfgThreadPoolMapper, CfgThreadPool> implements CfgThreadPoolService {

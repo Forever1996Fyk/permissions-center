@@ -7,6 +7,7 @@ import com.ah.cloud.permissions.biz.infrastructure.constant.ScheduleConstants;
 import com.ah.cloud.permissions.biz.infrastructure.quartz.core.ProcessorBeanFactory;
 import com.ah.cloud.permissions.biz.infrastructure.quartz.core.processor.BasicProcessor;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.QuartzJobTask;
+import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.SpringUtils;
 import com.ah.cloud.permissions.enums.JobExecuteStatusEnum;
 import com.google.common.base.Throwables;
@@ -33,21 +34,8 @@ public abstract class AbstractQuartzJob implements Job {
     private QuartzJobTaskManager quartzJobTaskManager;
 
     /**
-     * future获取超时时间
-     */
-    private final static Long FUTURE_GET_TIME = 10L;
-
-    /**
-     * 线程本地变量
-     */
-    private static ThreadLocal<LocalDateTime> THREAD_LOCAL_DATE = new ThreadLocal<>();
-
-
-    /**
      *
-     * ThreadPoolManager.recordQuartzJobThreadPool 为single thread
-     *
-     * 暂时用single thread 控制 执行日志的并发量, 待测试
+     * 定时任务的生成，后期考虑异步处
      *
      * @param context
      * @throws JobExecutionException
@@ -77,7 +65,7 @@ public abstract class AbstractQuartzJob implements Job {
         } catch (Exception e) {
             jobExecuteStatusEnum = JobExecuteStatusEnum.FAILED;
             errorMessage = Throwables.getStackTraceAsString(e);
-            log.error("{}[execute] execute quartz job error, exception:{}", getLogMark(), errorMessage);
+            log.error("{}[execute] execute quartz job error, params:{}, exception:{}", getLogMark(), JsonUtils.toJSONString(scheduleJobDTO), errorMessage);
         }
         quartzJobTaskManager.updateQuartzJobTask(quartzJobTask, jobExecuteStatusEnum, errorMessage);
     }

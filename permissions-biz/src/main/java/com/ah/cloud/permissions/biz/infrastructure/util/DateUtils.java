@@ -4,9 +4,11 @@ import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 /**
  * @program: permissions-center
@@ -85,5 +87,36 @@ public class DateUtils {
             return null;
         }
         return Integer.valueOf(start);
+    }
+
+    /**
+     * instant转为date
+     * @param instant
+     * @return
+     */
+    public static Date instantToDate(Instant instant) {
+        return Date.from(instant);
+    }
+
+    /**
+     * 当前日期是否在目标时间之前
+     *
+     * @param expireTime
+     * @return
+     */
+    public static boolean beforeDate(Date expireTime) {
+        Date date = new Date();
+        return date.before(expireTime);
+    }
+
+    /**
+     * 当前日期是否在目标时间之后
+     *
+     * @param expireTime
+     * @return
+     */
+    public static boolean afterDate(Date expireTime) {
+        Date date = new Date();
+        return date.after(expireTime);
     }
 }

@@ -1,11 +1,10 @@
-package com.ah.cloud.permissions.security.config;
+package com.ah.cloud.permissions.biz.infrastructure.config;
 
 import com.ah.cloud.permissions.biz.infrastructure.security.filter.RedisAuthenticationTokenFilter;
 import com.ah.cloud.permissions.biz.infrastructure.security.handler.AccessDeniedHandlerImpl;
 import com.ah.cloud.permissions.biz.infrastructure.security.handler.AuthenticationEntryPointImpl;
 import com.ah.cloud.permissions.biz.infrastructure.security.handler.LogoutSuccessHandlerImpl;
 import com.ah.cloud.permissions.biz.infrastructure.security.provider.ValidateCodeAuthenticationProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

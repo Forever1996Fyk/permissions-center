@@ -9,5 +9,5 @@ import org.springframework.stereotype.Component;
  * @create: 2021-12-06 14:39
  **/
 @Component
-public class CommonConfig {
+public class CommonConfiguration {
 }

@@ -54,6 +54,7 @@
         <easyexcel.version>3.0.5</easyexcel.version>
         <easyexcel.version>3.0.5</easyexcel.version>
         <quartz.version>2.3.2</quartz.version>
+        <logback2.version>0.1.5</logback2.version>
 
         <!-- template engine -->
         <freemarker.version>2.3.28</freemarker.version>
@@ -236,20 +237,23 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+
+            <!-- logback日志配置 -->
+            <dependency>
+                <groupId>ch.qos.logback.contrib</groupId>
+                <artifactId>logback-json-core</artifactId>
+                <version>${logback2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback.contrib</groupId>
+                <artifactId>logback-json-classic</artifactId>
+                <version>${logback2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback.contrib</groupId>
+                <artifactId>logback-jackson</artifactId>
+                <version>${logback2.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <distributionManagement>
-        <repository>
-            <id>nexus-releases</id>
-            <name>Nexus Release Repository</name>
-            <url>http://106.14.137.240:28080/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>nexus-snapshots</id>
-            <name>Nexus Snapshot Repository</name>
-            <url>http://106.14.137.240:28080/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
-
 </project>

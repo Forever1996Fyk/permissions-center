@@ -20,7 +20,9 @@ import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
+import com.ah.cloud.permissions.enums.common.FileErrorCodeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -55,6 +58,8 @@ public class SysUserManager {
     private SysMenuManager sysMenuManager;
     @Resource
     private SysUserService sysUserService;
+    @Resource
+    private ResourceManager resourceManager;
     @Resource
     private SysRoleMenuService sysRoleMenuService;
     @Resource
@@ -296,5 +301,28 @@ public class SysUserManager {
         // 去重apiCode
         List<SysUserApi> sysUserApiList = sysUserHelper.getSysUserApiEntityList(userId, apiCodeList);
         sysUserApiExtService.saveBatch(sysUserApiList);
+    }
+
+    /**
+     * 上传用户头像
+     * @param request
+     * @return
+     */
+    public String uploadUserAvatar(HttpServletRequest request) {
+        Long userId = SecurityUtils.getBaseUserInfo().getUserId();
+        String url = resourceManager.uploadUrl(request, userId);
+        SysUser updateSysUser = new SysUser();
+        updateSysUser.setUserId(userId);
+        updateSysUser.setAvatar(url);
+        boolean updateResult = sysUserService.update(
+                updateSysUser,
+                new UpdateWrapper<SysUser>().lambda()
+                        .eq(SysUser::getUserId, userId)
+                        .eq(SysUser::getDeleted, DeletedEnum.NO.value)
+        );
+        if (!updateResult) {
+            throw new BizException(ErrorCodeEnum.USER_AVATAR_UPLOAD_FAILED);
+        }
+        return url;
     }
 }

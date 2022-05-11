@@ -37,6 +37,7 @@ public enum ErrorCodeEnum implements ErrorCode {
     CALL_LIMITED(100_3_001,"调用次数过多"),
     TOKEN_EXCEPTION(100_3_002, "Token验证异常"),
     VERSION_ERROR(100_3_003, "数据版本异常，请重试"),
+    SELECTOR_NOT_EXISTED(100_3_004, "[%s]选择处理器不存在"),
 
     /**
      * 授权相关响应码
@@ -63,6 +64,7 @@ public enum ErrorCodeEnum implements ErrorCode {
     USER_NOT_EXIST(400_0_002, "用户不存在"),
     CURRENT_USER_IS_NOT_EXIST(400_0_003, "当前登录用户不存在"),
     ANONYMOUS_USER_HAS_NO_INFO(400_0_004, "当前匿名用户无具体信息"),
+    USER_AVATAR_UPLOAD_FAILED(400_0_004, "头像上传失败"),
 
     /**
      * 验证码相关错误

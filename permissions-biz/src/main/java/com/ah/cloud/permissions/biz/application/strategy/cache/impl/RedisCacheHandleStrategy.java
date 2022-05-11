@@ -163,4 +163,14 @@ public class RedisCacheHandleStrategy implements CacheHandleStrategy {
                 .orElse(PermissionsConstants.ZERO);
     }
 
+    /**
+     * redis发布消息
+     * @param channel
+     * @param t
+     * @param <T>
+     */
+    public <T> void publishMessage(String channel, T t) {
+        redisTemplate.convertAndSend(channel, t);
+    }
+
 }

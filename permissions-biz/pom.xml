@@ -36,6 +36,10 @@
             <artifactId>spring-security-web</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 
         <!--validation-->
         <dependency>
@@ -161,6 +165,19 @@
                     <artifactId>c3p0</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <!-- logback日志配置 -->
+        <dependency>
+            <groupId>ch.qos.logback.contrib</groupId>
+            <artifactId>logback-json-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback.contrib</groupId>
+            <artifactId>logback-json-classic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback.contrib</groupId>
+            <artifactId>logback-jackson</artifactId>
         </dependency>
     </dependencies>
 

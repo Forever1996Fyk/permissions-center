@@ -64,6 +64,12 @@ public class PermissionsConstants {
     public static final String COMMA_SEPARATOR = ",";
 
     /**
+     * 点分隔符
+     */
+    public static final String DOT_SEPARATOR = ".";
+
+
+    /**
      * Long  0
      */
     public static final Long ZERO = 0L;
@@ -82,4 +88,14 @@ public class PermissionsConstants {
      * String "
      */
     public static final String STR_EMPTY = "";
+
+    /**
+     * -1
+     */
+    public static final Integer NEGATIVE_ONE_INT = -1;
+
+    /**
+     * -1L
+     */
+    public static final Long NEGATIVE_ONE_LONG = -1L;
 }

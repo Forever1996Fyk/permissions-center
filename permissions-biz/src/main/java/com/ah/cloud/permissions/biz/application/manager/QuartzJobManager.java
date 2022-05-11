@@ -3,18 +3,21 @@ package com.ah.cloud.permissions.biz.application.manager;
 import com.ah.cloud.permissions.biz.application.checker.QuartzJobChecker;
 import com.ah.cloud.permissions.biz.application.helper.QuartzJobHelper;
 import com.ah.cloud.permissions.biz.application.service.QuartzJobService;
-import com.ah.cloud.permissions.biz.domain.quartz.dto.ScheduleJobDTO;
 import com.ah.cloud.permissions.biz.domain.quartz.form.QuartzJobAddForm;
 import com.ah.cloud.permissions.biz.domain.quartz.form.QuartzJobChangeStatusForm;
 import com.ah.cloud.permissions.biz.domain.quartz.form.QuartzJobUpdateForm;
 import com.ah.cloud.permissions.biz.domain.quartz.query.QuartzJobQuery;
 import com.ah.cloud.permissions.biz.domain.quartz.vo.QuartzJobVo;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
+import com.ah.cloud.permissions.biz.infrastructure.mq.redis.message.QuartzJobChangeMessage;
+import com.ah.cloud.permissions.biz.infrastructure.mq.redis.producer.QuartzJobChangeProducer;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.QuartzJob;
 import com.ah.cloud.permissions.domain.common.PageResult;
-import com.ah.cloud.permissions.enums.JobStatusEnum;
+import com.ah.cloud.permissions.domain.common.ProducerResult;
+import com.ah.cloud.permissions.enums.QuartzJobChangeTypeEnum;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
+import com.ah.cloud.permissions.enums.common.RedisErrorCodeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.PageInfo;
@@ -43,7 +46,7 @@ public class QuartzJobManager {
     @Resource
     private QuartzJobService quartzJobService;
     @Resource
-    private SchedulerManager schedulerManager;
+    private QuartzJobChangeProducer quartzJobChangeProducer;
 
     /**
      * 添加定时任务
@@ -55,7 +58,15 @@ public class QuartzJobManager {
         QuartzJob quartzJob = quartzJobHelper.convertToEntity(form);
         boolean saveResult = quartzJobService.save(quartzJob);
         if (saveResult) {
-            schedulerManager.createScheduleJob(quartzJobHelper.convertScheduleJob(quartzJob));
+            ProducerResult<Void> result = quartzJobChangeProducer.sendMessage(
+                    QuartzJobChangeMessage.builder()
+                            .changeTypeEnum(QuartzJobChangeTypeEnum.ADD)
+                            .jobId(quartzJob.getId())
+                            .build()
+            );
+            if (result.isFailed()) {
+                throw new BizException(RedisErrorCodeEnum.PUBLISH_MESSAGE_ERROR);
+            }
         }
     }
 
@@ -77,7 +88,15 @@ public class QuartzJobManager {
         updateQuartzJob.setId(form.getId());
         boolean updateResult = quartzJobService.updateById(updateQuartzJob);
         if (updateResult) {
-            schedulerManager.updateScheduleJob(quartzJobHelper.convertScheduleJob(updateQuartzJob));
+            ProducerResult<Void> result = quartzJobChangeProducer.sendMessage(
+                    QuartzJobChangeMessage.builder()
+                            .changeTypeEnum(QuartzJobChangeTypeEnum.UPDATE)
+                            .jobId(existQuartzJob.getId())
+                            .build()
+            );
+            if (result.isFailed()) {
+                throw new BizException(RedisErrorCodeEnum.PUBLISH_MESSAGE_ERROR);
+            }
         }
     }
 
@@ -99,7 +118,15 @@ public class QuartzJobManager {
         deleteQuartzJob.setId(jodId);
         boolean deleteResult = quartzJobService.updateById(deleteQuartzJob);
         if (deleteResult) {
-            schedulerManager.deleteQuartzJob(existQuartzJob.getId(), existQuartzJob.getJobGroup());
+            ProducerResult<Void> result = quartzJobChangeProducer.sendMessage(
+                    QuartzJobChangeMessage.builder()
+                            .changeTypeEnum(QuartzJobChangeTypeEnum.DELETED)
+                            .jobId(existQuartzJob.getId())
+                            .build()
+            );
+            if (result.isFailed()) {
+                throw new BizException(RedisErrorCodeEnum.PUBLISH_MESSAGE_ERROR);
+            }
         }
     }
 
@@ -116,7 +143,16 @@ public class QuartzJobManager {
         if (Objects.isNull(quartzJob)) {
             throw new BizException(ErrorCodeEnum.QUARTZ_JOB_NOT_EXIST, String.valueOf(jobId));
         }
-        schedulerManager.triggerJob(quartzJobHelper.convertScheduleJob(quartzJob));
+
+        ProducerResult<Void> result = quartzJobChangeProducer.sendMessage(
+                QuartzJobChangeMessage.builder()
+                        .changeTypeEnum(QuartzJobChangeTypeEnum.RUN)
+                        .jobId(quartzJob.getId())
+                        .build()
+        );
+        if (result.isFailed()) {
+            throw new BizException(RedisErrorCodeEnum.PUBLISH_MESSAGE_ERROR);
+        }
     }
 
     /**
@@ -145,11 +181,14 @@ public class QuartzJobManager {
             throw new BizException(ErrorCodeEnum.VERSION_ERROR);
         }
 
-        ScheduleJobDTO scheduleJobDTO = quartzJobHelper.convertScheduleJob(quartzJob);
-        if (Objects.equals(form.getStatus(), JobStatusEnum.NORMAL.getStatus())) {
-            schedulerManager.resumeJob(scheduleJobDTO);
-        } else if (Objects.equals(form.getStatus(), JobStatusEnum.PAUSE.getStatus())) {
-            schedulerManager.pauseJob(scheduleJobDTO);
+        ProducerResult<Void> result = quartzJobChangeProducer.sendMessage(
+                QuartzJobChangeMessage.builder()
+                        .changeTypeEnum(QuartzJobChangeTypeEnum.CHANGE_STATUS)
+                        .jobId(quartzJob.getId())
+                        .build()
+        );
+        if (result.isFailed()) {
+            throw new BizException(RedisErrorCodeEnum.PUBLISH_MESSAGE_ERROR);
         }
     }
 

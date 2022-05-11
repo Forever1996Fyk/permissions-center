@@ -13,12 +13,17 @@ public enum RedisErrorCodeEnum implements ErrorCode {
     /**
      * 操作Redis的key不能为空
      */
-    OPS_KEY_NOT_NULL(1000_0_001, "操作Redis的key不能为空"),
+    OPS_KEY_NOT_NULL(1_10_0_001, "操作Redis的key不能为空"),
 
     /**
      * 操作redis获取值错误
      */
-    OPS_GET_VALUE_ERROR(1000_0_002, "操作redis获取值错误"),
+    OPS_GET_VALUE_ERROR(1_10_0_002, "操作redis获取值错误"),
+
+    /**
+     * 消息发布错误
+     */
+    PUBLISH_MESSAGE_ERROR(1_10_0_003, "消息发布错误"),
     ;
 
 

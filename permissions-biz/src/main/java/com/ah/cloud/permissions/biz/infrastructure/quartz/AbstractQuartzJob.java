@@ -35,7 +35,7 @@ public abstract class AbstractQuartzJob implements Job {
 
     /**
      *
-     * 定时任务的生成，后期考虑异步处
+     * 定时任务的生成，后期考虑异步处理
      *
      * @param context
      * @throws JobExecutionException

@@ -6,6 +6,7 @@ import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -55,6 +56,27 @@ public class JsonUtils {
             return OBJECT_MAPPER.readValue(json, tClass);
         } catch (JsonProcessingException e) {
             log.error("jackson jsonString to object  error, params:{}, exception:{}", json, Throwables.getStackTraceAsString(e));
+            return null;
+        }
+    }
+
+    /**
+     * bytes convert bean
+     *
+     * @param bytes
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public static <T> T toBean(byte[] bytes, Class<T> clazz) {
+        if (bytes == null || bytes.length == 0) {
+            return null;
+        }
+        try {
+            log.info("jackson bytes to object, bytes:{}, className:{}", bytes, clazz.getName());
+            return OBJECT_MAPPER.readValue(bytes, clazz);
+        } catch (IOException e) {
+            log.error("jackson bytes to object  error, bytes:{}, className:{}, exception:{}", bytes, clazz.getName(), Throwables.getStackTraceAsString(e));
             return null;
         }
     }

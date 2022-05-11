@@ -51,6 +51,10 @@ public enum YesOrNoEnum {
         return Objects.equals(this, YES);
     }
 
+    public boolean isNo() {
+        return Objects.equals(this, NO);
+    }
+
     public int getType() {
         return type;
     }

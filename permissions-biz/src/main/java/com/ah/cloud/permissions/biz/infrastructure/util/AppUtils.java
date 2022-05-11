@@ -3,6 +3,8 @@ package com.ah.cloud.permissions.biz.infrastructure.util;
 import com.ah.cloud.permissions.exception.ErrorCode;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.UUID;
+
 /**
  * @program: zbgx_system
  * @description:
@@ -17,6 +19,19 @@ public class AppUtils {
      */
     public static String randomStrId() {
         return String.valueOf(IdWorker.idWorker().createId());
+    }
+
+    /**
+     * 获取32位uuid
+     * @return
+     */
+    public static String simpleUUID() {
+        String uuid = UUID.randomUUID().toString();
+        return uuid.substring(0, 8) +
+                uuid.substring(9, 13) +
+                uuid.substring(14, 18) +
+                uuid.substring(19, 23) +
+                uuid.substring(24, 36);
     }
 
     /**

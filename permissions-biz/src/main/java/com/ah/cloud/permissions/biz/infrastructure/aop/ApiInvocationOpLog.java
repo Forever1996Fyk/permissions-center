@@ -23,7 +23,7 @@ import java.util.List;
 @Component
 public class ApiInvocationOpLog {
 
-    @Pointcut("execution(com.ah.cloud.permissions.biz.infrastructure.annotation.ApiMethodLog)")
+    @Pointcut("@annotation(com.ah.cloud.permissions.biz.infrastructure.annotation.ApiMethodLog)")
     public void devOpsApiService() {
         // this is aop pointcuts
     }

@@ -1,5 +1,6 @@
 package com.ah.cloud.permissions.api.controller;
 
+import com.ah.cloud.permissions.biz.application.manager.ResourceManager;
 import com.ah.cloud.permissions.biz.application.manager.SysUserManager;
 import com.ah.cloud.permissions.biz.application.strategy.cache.impl.RedisCacheHandleStrategy;
 import com.ah.cloud.permissions.biz.domain.menu.vo.RouterVo;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -32,6 +34,8 @@ import java.util.List;
 public class SysUserController {
     @Resource
     private SysUserManager sysUserManager;
+    @Resource
+    private ResourceManager resourceManager;
 
     /**
      * 添加新用户
@@ -127,4 +131,14 @@ public class SysUserController {
         return ResponseResult.ok(sysUserManager.listRouterVoByUserId(currentUserId));
     }
 
+    /**
+     * 上传用户头像
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/uploadUserAvatar")
+    public ResponseResult<String> uploadUserAvatar(HttpServletRequest request) {
+        return ResponseResult.ok(sysUserManager.uploadUserAvatar(request));
+    }
 }

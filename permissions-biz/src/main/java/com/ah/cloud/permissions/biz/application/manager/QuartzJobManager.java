@@ -50,6 +50,7 @@ public class QuartzJobManager {
 
     /**
      * 添加定时任务
+     *
      * @param form
      */
     @Transactional(rollbackFor = Exception.class)
@@ -72,6 +73,7 @@ public class QuartzJobManager {
 
     /**
      * 更新定时任务
+     *
      * @param form
      */
     public void updateQuartzJob(QuartzJobUpdateForm form) {
@@ -102,6 +104,7 @@ public class QuartzJobManager {
 
     /**
      * 根据id删除定时任务
+     *
      * @param jodId
      */
     public void deleteQuartzJobById(Long jodId) {
@@ -132,6 +135,7 @@ public class QuartzJobManager {
 
     /**
      * 执行一次任务
+     *
      * @param jobId
      */
     public void runOnceQuartzJob(Long jobId) {
@@ -157,6 +161,7 @@ public class QuartzJobManager {
 
     /**
      * 变更定时任务状态
+     *
      * @param form
      */
     public void changeQuartzJobOfStatus(QuartzJobChangeStatusForm form) {
@@ -194,6 +199,7 @@ public class QuartzJobManager {
 
     /**
      * 根据id查询定时任务
+     *
      * @param jodId
      * @return
      */
@@ -211,6 +217,7 @@ public class QuartzJobManager {
 
     /**
      * 分页查询定时任务
+     *
      * @param query
      * @return
      */

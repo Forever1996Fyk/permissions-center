@@ -14,6 +14,7 @@ public interface NewProducer<T> {
      * 发送消息
      *
      * @param t message
+     * @return
      */
     ProducerResult<Void> sendMessage(T t);
 }

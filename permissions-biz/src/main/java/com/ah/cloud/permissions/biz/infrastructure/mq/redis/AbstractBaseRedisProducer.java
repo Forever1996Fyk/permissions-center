@@ -20,7 +20,7 @@ import javax.annotation.Resource;
 @Component
 public abstract class AbstractBaseRedisProducer<T> implements NewProducer<T> {
     @Resource
-    private RedisCacheHandleStrategy redisCacheHandleStrategy;
+    protected RedisCacheHandleStrategy redisCacheHandleStrategy;
 
     @Override
     public ProducerResult<Void> sendMessage(T t) {

@@ -110,10 +110,18 @@ security:
       - /validateCode/sendSmsCode
       - /validateCode/sendEmailCode
 
-producer:
+mq:
   redis:
-    channel:
-      name: quartz-job-change-channel
+    topic:
+      quartzJobChange:
+        name: quartz-job-change-channel
+      operateChatRoom:
+        name: operate-chat-room
+      chatRoomNodeListener:
+        name: chatRoomNodeSend
+      chatRoomNodeListenerPattern:
+        name: chatRoomNodeSend:*
+
 
 system:
   upload:

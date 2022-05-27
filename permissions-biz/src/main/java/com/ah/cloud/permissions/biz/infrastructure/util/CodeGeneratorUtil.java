@@ -27,7 +27,7 @@ public class CodeGeneratorUtil {
     public static void main(String[] args) {
 
         //todo 需要生成的表
-        String[] tables = new String[]{"resource_meta_data"};
+        String[] tables = new String[]{"chat_room"};
 
 
         //代码生成器

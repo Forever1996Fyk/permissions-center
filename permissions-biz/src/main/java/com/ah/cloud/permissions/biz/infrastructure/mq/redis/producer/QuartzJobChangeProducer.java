@@ -17,7 +17,7 @@ public class QuartzJobChangeProducer extends AbstractBaseRedisProducer<QuartzJob
     /**
      * channel
      */
-    @Value("${producer.redis.channel.name}")
+    @Value("${mq.redis.topic.quartzJobChange.name}")
     private String quartzJobChangeChannel;
 
     @Override

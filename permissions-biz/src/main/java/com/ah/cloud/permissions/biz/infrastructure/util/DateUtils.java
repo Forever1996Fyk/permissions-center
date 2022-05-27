@@ -31,6 +31,15 @@ public class DateUtils {
     public static String pattern5 = "yyyyMM";
 
     /**
+     * 获取当前时间 字符串
+     *
+     * @return
+     */
+    public static String getStrCurrentTime() {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern(pattern0));
+    }
+
+    /**
      * 将时间字串转为 LocalDateTime，时间字串的格式请用 pattern 指定
      */
     public static LocalDateTime str2LocalDateTime(String datetimeStr, String pattern) {

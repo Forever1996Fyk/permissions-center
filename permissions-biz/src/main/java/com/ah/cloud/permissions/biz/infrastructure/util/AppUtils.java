@@ -22,6 +22,14 @@ public class AppUtils {
     }
 
     /**
+     * 生成序列化id
+     * @return
+     */
+    public static int generateSequenceId() {
+        return SequenceIdService.getInstance().generateSequenceId();
+    }
+
+    /**
      * 获取32位uuid
      * @return
      */

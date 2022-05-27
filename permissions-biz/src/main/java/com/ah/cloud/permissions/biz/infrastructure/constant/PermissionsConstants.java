@@ -68,6 +68,11 @@ public class PermissionsConstants {
      */
     public static final String DOT_SEPARATOR = ".";
 
+    /**
+     * 冒号隔符
+     */
+    public static final String COLON_SEPARATOR = ":";
+
 
     /**
      * Long  0

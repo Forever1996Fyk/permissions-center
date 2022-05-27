@@ -1,6 +1,7 @@
 package com.ah.cloud.permissions.biz.infrastructure.exception;
 
 import com.ah.cloud.permissions.biz.infrastructure.util.AppUtils;
+import com.ah.cloud.permissions.enums.common.ChatRoomErrorCodeEnum;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.ah.cloud.permissions.enums.common.FileErrorCodeEnum;
 import com.ah.cloud.permissions.enums.common.RedisErrorCodeEnum;
@@ -39,6 +40,10 @@ public class BizException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
+    public BizException(ChatRoomErrorCodeEnum errorCode) {
+        super(errorCode.getMsg());
+        this.errorCode = errorCode;
+    }
 
     public BizException(FileErrorCodeEnum errorCode, String...args) {
         super(AppUtils.getErrorMsg(errorCode, args));
@@ -48,6 +53,12 @@ public class BizException extends RuntimeException {
 
 
     public BizException(RedisErrorCodeEnum errorCode, String...args) {
+        super(AppUtils.getErrorMsg(errorCode, args));
+        this.errorMessage = AppUtils.getErrorMsg(errorCode, args);
+        this.errorCode = errorCode;
+    }
+
+    public BizException(ChatRoomErrorCodeEnum errorCode, String...args) {
         super(AppUtils.getErrorMsg(errorCode, args));
         this.errorMessage = AppUtils.getErrorMsg(errorCode, args);
         this.errorCode = errorCode;

@@ -9,6 +9,7 @@
         <module>permissions-server</module>
         <module>permissions-biz</module>
         <module>permissions-task</module>
+        <module>permissions-netty</module>
     </modules>
 
     <parent>
@@ -55,6 +56,9 @@
         <easyexcel.version>3.0.5</easyexcel.version>
         <quartz.version>2.3.2</quartz.version>
         <logback2.version>0.1.5</logback2.version>
+        <!-- netty -->
+        <io.netty.version>4.1.73.Final</io.netty.version>
+        <protobuf.version>3.14.0</protobuf.version>
 
         <!-- template engine -->
         <freemarker.version>2.3.28</freemarker.version>
@@ -253,6 +257,17 @@
                 <groupId>ch.qos.logback.contrib</groupId>
                 <artifactId>logback-jackson</artifactId>
                 <version>${logback2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${io.netty.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java -->
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>${protobuf.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

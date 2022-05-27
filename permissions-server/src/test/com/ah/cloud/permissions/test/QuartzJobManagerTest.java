@@ -3,7 +3,6 @@ package com.ah.cloud.permissions.test;
 import com.ah.cloud.permissions.biz.infrastructure.mq.redis.message.QuartzJobChangeMessage;
 import com.ah.cloud.permissions.biz.infrastructure.mq.redis.producer.QuartzJobChangeProducer;
 import com.ah.cloud.permissions.enums.QuartzJobChangeTypeEnum;
-import com.ah.cloud.server.consumer.redis.QuartzJobChangeConsumer;
 import org.junit.Test;
 
 import javax.annotation.Resource;

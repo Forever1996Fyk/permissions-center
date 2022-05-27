@@ -44,4 +44,37 @@ public class ThreadPoolManager {
             TimeUnit.MILLISECONDS,
             new ResizeLinkedBlockingQueue<>(DEFAULT_QUEUE_SIZE),
             r -> new Thread(r, "RecordQuartzJobThreadPool-" + r.hashCode()));
+
+    /**
+     * im节点监听线程线程池
+     */
+    public static ThreadPoolExecutor imNodeListenerThreadPool = new ThreadPoolExecutor(
+            1,
+            1,
+            0L,
+            TimeUnit.MILLISECONDS,
+            new ResizeLinkedBlockingQueue<>(DEFAULT_QUEUE_SIZE),
+            r -> new Thread(r, "imNodeListenerThreadPool-" + r.hashCode()));
+
+    /**
+     * 消息存储线程池
+     */
+    public static ThreadPoolExecutor messageStoreThreadPool = new ThreadPoolExecutor(
+            30,
+            50,
+            60L,
+            TimeUnit.SECONDS,
+            new ResizeLinkedBlockingQueue<>(DEFAULT_QUEUE_SIZE),
+            r -> new Thread(r, "messageStoreThreadPool-" + r.hashCode()));
+
+    /**
+     * 离线消息存储线程池
+     */
+    public static ThreadPoolExecutor offlineMessageStoreThreadPool = new ThreadPoolExecutor(
+            30,
+            50,
+            60L,
+            TimeUnit.SECONDS,
+            new ResizeLinkedBlockingQueue<>(DEFAULT_QUEUE_SIZE),
+            r -> new Thread(r, "offlineMessageStoreThreadPool-" + r.hashCode()));
 }

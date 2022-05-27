@@ -9,13 +9,12 @@ import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.ah.cloud.permissions.enums.common.RedisErrorCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.redis.core.RedisOperations;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.io.Serializable;
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -171,6 +170,72 @@ public class RedisCacheHandleStrategy implements CacheHandleStrategy {
      */
     public <T> void publishMessage(String channel, T t) {
         redisTemplate.convertAndSend(channel, t);
+    }
+
+    /**
+     * list push
+     * @param key
+     * @param value
+     * @param <T>
+     * @return
+     */
+    public <T> Long lpush(String key, T value) {
+        return redisTemplate.opsForList().leftPush(key, value);
+    }
+
+    /**
+     * list right pop
+     * @param key
+     * @param duration 如果没有弹出数据，则阻塞 duration时长
+     * @param <T>
+     * @return
+     */
+    public <T> T brpop(String key, Duration duration) {
+        return (T) redisTemplate.opsForList().rightPop(key, duration);
+    }
+
+    /**
+     * redis set集合添加
+     *
+     * @param key
+     * @param value
+     * @param <T>
+     */
+    public <T> Long setAdd(String key, T value) {
+        return redisTemplate.opsForSet().add(key, value);
+    }
+
+    /**
+     * redis set集合移除
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    public <T> Long setRemove(String key, T value) {
+        return redisTemplate.opsForSet().remove(key, value);
+    }
+
+    /**
+     * 获取set集合大小
+     * @param key
+     * @param <T>
+     * @return
+     */
+    public <T> Long getSetSize(String key) {
+        return redisTemplate.opsForSet().size(key);
+    }
+
+    /**
+     * 判断set 值是否存在
+     *
+     * @param key
+     * @param value
+     * @param <T>
+     * @return
+     */
+    public <T> boolean setExisted(String key, T value) {
+        return redisTemplate.opsForSet().isMember(key, value);
     }
 
 }

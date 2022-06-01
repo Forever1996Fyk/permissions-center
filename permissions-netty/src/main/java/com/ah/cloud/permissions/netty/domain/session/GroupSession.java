@@ -1,8 +1,10 @@
 package com.ah.cloud.permissions.netty.domain.session;
 
 import io.netty.channel.Channel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.catalina.Server;
 
 import java.util.Set;
@@ -15,6 +17,8 @@ import java.util.Set;
  **/
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class GroupSession implements ServerSession {
 
     /**
@@ -26,11 +30,6 @@ public class GroupSession implements ServerSession {
      * 当前用户channel
      */
     private transient Channel channel;
-
-    /**
-     * 当前节点 群组成员id集合
-     */
-    private Set<Long> groupMemberIdList;
 
     @Override
     public String getHost() {

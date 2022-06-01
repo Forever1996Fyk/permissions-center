@@ -1,7 +1,7 @@
 package com.ah.cloud.permissions.netty.domain.notify;
 
 import com.ah.cloud.permissions.netty.domain.session.ServerSession;
-import com.ah.cloud.permissions.netty.domain.session.SingleSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.SingleSessionKey;
 
 /**
  * @program: permissions-center

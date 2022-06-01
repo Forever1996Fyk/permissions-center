@@ -1,8 +1,8 @@
 package com.ah.cloud.permissions.netty.infrastructure.service.session;
 
 import com.ah.cloud.permissions.netty.domain.session.ServerSession;
-import com.ah.cloud.permissions.netty.domain.session.SessionKey;
-import com.ah.cloud.permissions.netty.domain.session.SingleSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.SessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.SingleSessionKey;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.Collection;

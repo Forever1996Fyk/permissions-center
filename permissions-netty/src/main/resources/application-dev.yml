@@ -1,3 +1,14 @@
+permission:
+  config:
+    msgcenter:
+      umeng:
+        androidAppKey:
+        androidAppMasterSecret:
+        iosAppKey:
+        iosAppMasterSecret:
+    netty:
+      port: 9090
+
 spring:
   redis:
     ################### redis 单机版 start ##########################
@@ -117,6 +128,15 @@ mq:
         name: quartz-job-change-channel
       operateChatRoom:
         name: operate-chat-room
+      chatRoomNodeListener:
+        name: chat-room-node
+      chatRoomNodeListenerPattern:
+        name: chat-room-node:*
+      groupChatListenerNode:
+        name: group-chat-Node
+      groupChatListenerNodePattern:
+        name: group-chat-Node:*
+
 
 system:
   upload:

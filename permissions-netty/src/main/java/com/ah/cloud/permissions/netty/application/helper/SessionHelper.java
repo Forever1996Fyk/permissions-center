@@ -27,9 +27,9 @@ public class SessionHelper {
      */
     public <T> MessageNodeDTO buildMessageNodeDTO(MessageBody<T> body) {
         return MessageNodeDTO.builder()
-                .formatEnum(body.getFormatEnum())
+                .formatType(body.getFormatEnum().getType())
                 .msgId(body.getMsgId())
-                .msgTypeEnum(body.getMsgTypeEnum())
+                .msgType(body.getMsgTypeEnum().getType())
                 .timestamp(body.getTimestamp())
                 .content(JsonUtils.toJSONString(body.getData()))
                 .fromId(body.getFromId())

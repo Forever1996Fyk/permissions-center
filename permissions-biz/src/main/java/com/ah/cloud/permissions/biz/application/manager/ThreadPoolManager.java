@@ -77,4 +77,15 @@ public class ThreadPoolManager {
             TimeUnit.SECONDS,
             new ResizeLinkedBlockingQueue<>(DEFAULT_QUEUE_SIZE),
             r -> new Thread(r, "offlineMessageStoreThreadPool-" + r.hashCode()));
+
+    /**
+     * 消息推送线程池
+     */
+    public static ThreadPoolExecutor pushMsgThreadPool = new ThreadPoolExecutor(
+            30,
+            50,
+            60L,
+            TimeUnit.SECONDS,
+            new ResizeLinkedBlockingQueue<>(DEFAULT_QUEUE_SIZE),
+            r -> new Thread(r, "pushMsgThreadPool-" + r.hashCode()));
 }

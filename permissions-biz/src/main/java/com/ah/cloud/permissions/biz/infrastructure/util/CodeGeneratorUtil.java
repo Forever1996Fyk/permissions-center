@@ -27,7 +27,7 @@ public class CodeGeneratorUtil {
     public static void main(String[] args) {
 
         //todo 需要生成的表
-        String[] tables = new String[]{"chat_room"};
+        String[] tables = new String[]{"msg_info","msg_account_device","msg_app_push_log","msg_event","msg_reach","msg_target"};
 
 
         //代码生成器

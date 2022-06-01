@@ -1,6 +1,9 @@
 package com.ah.cloud.permissions.netty.application.manager;
 
 import com.ah.cloud.permissions.netty.domain.session.*;
+import com.ah.cloud.permissions.netty.domain.session.key.ChatRoomSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.GroupSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.SingleSessionKey;
 import com.ah.cloud.permissions.netty.infrastructure.constant.SessionConstants;
 import com.ah.cloud.permissions.netty.infrastructure.service.session.GroupSessionService;
 import com.ah.cloud.permissions.netty.infrastructure.service.session.SessionService;
@@ -31,7 +34,7 @@ public class SessionManager {
     /**
      * 聊天室session 静态变量
      */
-    private final static GroupSessionService<ChatRoomSession, GroupSessionKey> CHAT_ROOM_SESSION_SERVICE = new ChatRoomSessionServiceImpl();
+    private final static GroupSessionService<ChatRoomSession, ChatRoomSessionKey> CHAT_ROOM_SESSION_SERVICE = new ChatRoomSessionServiceImpl();
 
     /**
      * 群组session 静态变量
@@ -58,7 +61,7 @@ public class SessionManager {
      *
      * @return
      */
-    public static GroupSessionService<ChatRoomSession, GroupSessionKey> getChatRoomSessionService() {
+    public static GroupSessionService<ChatRoomSession, ChatRoomSessionKey> getChatRoomSessionService() {
         return CHAT_ROOM_SESSION_SERVICE;
     }
 

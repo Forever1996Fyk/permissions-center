@@ -5,6 +5,7 @@ import com.ah.cloud.permissions.enums.common.ChatRoomErrorCodeEnum;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.ah.cloud.permissions.enums.common.FileErrorCodeEnum;
 import com.ah.cloud.permissions.enums.common.RedisErrorCodeEnum;
+import com.ah.cloud.permissions.enums.common.push.PushErrorCode;
 import com.ah.cloud.permissions.exception.ErrorCode;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -45,12 +46,17 @@ public class BizException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
+
+    public BizException(PushErrorCode errorCode) {
+        super(errorCode.getMsg());
+        this.errorCode = errorCode;
+    }
+
     public BizException(FileErrorCodeEnum errorCode, String...args) {
         super(AppUtils.getErrorMsg(errorCode, args));
         this.errorMessage = AppUtils.getErrorMsg(errorCode, args);
         this.errorCode = errorCode;
     }
-
 
     public BizException(RedisErrorCodeEnum errorCode, String...args) {
         super(AppUtils.getErrorMsg(errorCode, args));
@@ -65,6 +71,12 @@ public class BizException extends RuntimeException {
     }
 
     public BizException(ErrorCodeEnum errorCode, String... args) {
+        super(AppUtils.getErrorMsg(errorCode, args));
+        this.errorMessage = AppUtils.getErrorMsg(errorCode, args);
+        this.errorCode = errorCode;
+    }
+
+    public BizException(PushErrorCode errorCode, String... args) {
         super(AppUtils.getErrorMsg(errorCode, args));
         this.errorMessage = AppUtils.getErrorMsg(errorCode, args);
         this.errorCode = errorCode;

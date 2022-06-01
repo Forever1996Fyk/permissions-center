@@ -1,5 +1,6 @@
 package com.ah.cloud.permissions.netty.infrastructure.service.client;
 
+import com.ah.cloud.permissions.domain.common.ImResult;
 import com.ah.cloud.permissions.enums.common.IMErrorCodeEnum;
 import com.ah.cloud.permissions.enums.netty.ChatRoomActionEnum;
 import com.ah.cloud.permissions.netty.application.strategy.chatroom.action.ChatRoomActionHandler;
@@ -7,10 +8,9 @@ import com.ah.cloud.permissions.netty.application.strategy.selector.ChatRoomActi
 import com.ah.cloud.permissions.netty.domain.dto.AckDTO;
 import com.ah.cloud.permissions.netty.domain.message.ChatRoomMessage;
 import com.ah.cloud.permissions.netty.domain.message.body.MessageBody;
-import com.ah.cloud.permissions.netty.domain.session.ChatRoomSession;
-import com.ah.cloud.permissions.netty.domain.session.ServerSession;
-import com.ah.cloud.permissions.netty.domain.session.SingleSession;
-import com.ah.cloud.permissions.netty.domain.session.SingleSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.*;
+import com.ah.cloud.permissions.netty.domain.session.key.ChatRoomSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.GroupSessionKey;
 import com.ah.cloud.permissions.netty.infrastructure.exception.IMBizException;
 import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
@@ -21,18 +21,17 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 
 /**
  * @program: permissions-center
- * @description:
+ * @description: 聊天室的消息发送 消息的实时性，准确性，时序性要求不是很高, 即使存在消息丢失也问题不大, 所以单独构建chatRoomSend方法, 用于聊天室的消息处理
  * @author: YuKai Fan
  * @create: 2022-05-22 21:03
  **/
 @Slf4j
 @Component
-public class ChatRoomSendClientService extends AbstractSendClientService<ChatRoomSession> {
+public class ChatRoomSendClientService extends AbstractSendClientService<ChatRoomSessionKey, ChatRoomSession> {
     private final static String LOG_MARK = "ChatRoomSendClientService";
 
     @Resource
@@ -52,37 +51,12 @@ public class ChatRoomSendClientService extends AbstractSendClientService<ChatRoo
     }
 
     @Override
-    public <T> void simpleSend(ImmutablePair<SingleSessionKey, ServerSession> pair, MessageBody<T> body) {
+    public <T> void sendAndAck(ImmutableTriple<ChatRoomSessionKey, ChatRoomSession, Channel> triple, MessageBody<T> body, Consumer<MessageBody<T>> afterHandle) {
         throw new IMBizException(IMErrorCodeEnum.CHAT_ROOM_NOT_SUPPORT_OPERATE);
     }
 
     @Override
-    protected <T> Future<Void> doSend(ChatRoomSession session, MessageBody<T> body) {
-        throw new IMBizException(IMErrorCodeEnum.CHAT_ROOM_NOT_SUPPORT_OPERATE);
-    }
-
-    @Override
-    protected boolean needThirdPush() {
-        return false;
-    }
-
-    @Override
-    protected boolean needRecordOfflineList() {
-        return false;
-    }
-
-    @Override
-    protected String getLogMark() {
-        return LOG_MARK;
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-
-    }
-
-    @Override
-    public <T> void sendAndAck(ImmutableTriple<SingleSessionKey, ServerSession, ServerSession> triple, MessageBody<T> body, Consumer<MessageBody<T>> afterHandle) {
+    public <T> void simpleSend(ImmutablePair<ChatRoomSessionKey, ChatRoomSession> pair, MessageBody<T> body) {
         throw new IMBizException(IMErrorCodeEnum.CHAT_ROOM_NOT_SUPPORT_OPERATE);
     }
 
@@ -97,17 +71,27 @@ public class ChatRoomSendClientService extends AbstractSendClientService<ChatRoo
     }
 
     @Override
-    public <T> void dispatchNode(SingleSessionKey singleSessionKey, MessageBody<T> body) {
+    public <T> void complexSendMessageBodyList(ImmutablePair<ChatRoomSessionKey, ChatRoomSession> pair, List<MessageBody<T>> messageBodies, Consumer<List<MessageBody<T>>> consumer) {
         throw new IMBizException(IMErrorCodeEnum.CHAT_ROOM_NOT_SUPPORT_OPERATE);
     }
 
     @Override
-    public <T> void complexSendMessageBodyList(ImmutablePair<SingleSessionKey, ChatRoomSession> pair, List<MessageBody<T>> messageBodies, Consumer<List<MessageBody<T>>> consumer) {
+    protected <T> ImResult<Void> doSend(ChatRoomSession session, MessageBody<T> body) {
         throw new IMBizException(IMErrorCodeEnum.CHAT_ROOM_NOT_SUPPORT_OPERATE);
     }
 
     @Override
-    public <T> void complexSendGroupMessage(ImmutablePair<Map<SingleSessionKey, ChatRoomSession>, ChatRoomSession> pair, MessageBody<T> body, Consumer<MessageBody<T>> consumer) {
+    protected String getLogMark() {
+        return LOG_MARK;
+    }
+
+    @Override
+    public <T> boolean dispatchNode(ChatRoomSessionKey sessionKey, MessageBody<T> body) {
         throw new IMBizException(IMErrorCodeEnum.CHAT_ROOM_NOT_SUPPORT_OPERATE);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+
     }
 }

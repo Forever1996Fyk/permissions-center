@@ -8,9 +8,10 @@ import com.ah.cloud.permissions.netty.application.manager.SessionManager;
 import com.ah.cloud.permissions.netty.domain.message.ChatRoomMessage;
 import com.ah.cloud.permissions.netty.domain.message.body.MessageBody;
 import com.ah.cloud.permissions.netty.domain.session.ChatRoomSession;
-import com.ah.cloud.permissions.netty.domain.session.GroupSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.ChatRoomSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.GroupSessionKey;
 import com.ah.cloud.permissions.netty.domain.session.SingleSession;
-import com.ah.cloud.permissions.netty.domain.session.SingleSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.SingleSessionKey;
 import com.ah.cloud.permissions.netty.infrastructure.event.message.AbstractMessageHandler;
 import com.ah.cloud.permissions.netty.infrastructure.event.message.MessageHandler;
 import com.ah.cloud.permissions.netty.infrastructure.exception.IMBizException;
@@ -47,8 +48,8 @@ public class ChatRoomMessageHandler extends AbstractMessageHandler<ChatRoomMessa
     @Override
     protected void doHandle(ChannelHandlerContext context, MessageBody<ChatRoomMessage> body) {
         ChatRoomMessage chatRoomMessage = body.getData();
-        GroupSessionService<ChatRoomSession, GroupSessionKey> groupSessionService = SessionManager.getChatRoomSessionService();
-        GroupSessionKey groupSessionKey = GroupSessionKey.builder().sessionId(chatRoomMessage.getRoomId()).groupTypeEnum(GroupTypeEnum.CHAT_ROOM).build();
+        GroupSessionService<ChatRoomSession, ChatRoomSessionKey> groupSessionService = SessionManager.getChatRoomSessionService();
+        ChatRoomSessionKey groupSessionKey = ChatRoomSessionKey.builder().sessionId(chatRoomMessage.getRoomId()).build();
         ChatRoomSession chatRoomSession = groupSessionService.get(groupSessionKey);
         if (Objects.isNull(chatRoomSession)) {
             throw new IMBizException(IMErrorCodeEnum.CHAT_ROOM_NOT_EXISTED, String.valueOf(chatRoomMessage.getRoomId()));

@@ -2,17 +2,20 @@ package com.ah.cloud.permissions.netty.infrastructure.service.session.impl;
 
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.enums.netty.GroupTypeEnum;
+import com.ah.cloud.permissions.netty.application.manager.GroupMemberManager;
 import com.ah.cloud.permissions.netty.domain.session.GroupSession;
-import com.ah.cloud.permissions.netty.domain.session.GroupSessionKey;
-import com.ah.cloud.permissions.netty.domain.session.SingleSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.GroupSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.SingleSessionKey;
 import com.ah.cloud.permissions.netty.infrastructure.service.session.GroupSessionService;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @program: permissions-center
@@ -24,6 +27,9 @@ import java.util.Map;
 @Component
 public class GroupSessionServiceImpl implements GroupSessionService<GroupSession, GroupSessionKey> {
     private final static Map<String, GroupSession> SESSION_MAP = Maps.newConcurrentMap();
+
+    @Resource
+    private GroupMemberManager groupMemberManager;
 
     @Override
     public int countOnlineNum(GroupSessionKey key) {
@@ -38,6 +44,11 @@ public class GroupSessionServiceImpl implements GroupSessionService<GroupSession
     @Override
     public boolean openGroup(GroupSessionKey key) {
         return false;
+    }
+
+    @Override
+    public Set<Long> getGroupMemberSet(GroupSessionKey key) {
+        return groupMemberManager.getMembersByGroupId(key.getSessionId());
     }
 
     @Override

@@ -1,9 +1,9 @@
 package com.ah.cloud.permissions.netty.infrastructure.service.session;
 
 import com.ah.cloud.permissions.netty.domain.session.ServerSession;
-import com.ah.cloud.permissions.netty.domain.session.SessionKey;
-import com.ah.cloud.permissions.netty.domain.session.SingleSessionKey;
-import org.checkerframework.checker.units.qual.K;
+import com.ah.cloud.permissions.netty.domain.session.key.SessionKey;
+
+import java.util.Set;
 
 /**
  * @program: permissions-center
@@ -33,5 +33,12 @@ public interface GroupSessionService<T extends ServerSession, K extends SessionK
      * @return
      */
     boolean openGroup(K key);
+
+    /**
+     * 获取群组成员集合
+     * @param key
+     * @return
+     */
+    Set<Long> getGroupMemberSet(K key);
 
 }

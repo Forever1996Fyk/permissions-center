@@ -3,8 +3,9 @@ package com.ah.cloud.permissions.netty.infrastructure.service.session.impl;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.enums.netty.GroupTypeEnum;
 import com.ah.cloud.permissions.netty.domain.session.ChatRoomSession;
-import com.ah.cloud.permissions.netty.domain.session.GroupSessionKey;
-import com.ah.cloud.permissions.netty.domain.session.SingleSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.ChatRoomSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.GroupSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.SingleSessionKey;
 import com.ah.cloud.permissions.netty.infrastructure.service.session.GroupSessionService;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +22,11 @@ import java.util.*;
  **/
 @Slf4j
 @Component
-public class ChatRoomSessionServiceImpl implements GroupSessionService<ChatRoomSession, GroupSessionKey> {
+public class ChatRoomSessionServiceImpl implements GroupSessionService<ChatRoomSession, ChatRoomSessionKey> {
     private final static Map<String, ChatRoomSession> SESSION_MAP = Maps.newConcurrentMap();
 
     @Override
-    public int countOnlineNum(GroupSessionKey key) {
+    public int countOnlineNum(ChatRoomSessionKey key) {
         ChatRoomSession chatRoomSession = SESSION_MAP.get(this.getKey(key.getGroupTypeEnum().getType(), key.getSessionId()));
         if (Objects.isNull(chatRoomSession)) {
             return 0;
@@ -34,7 +35,7 @@ public class ChatRoomSessionServiceImpl implements GroupSessionService<ChatRoomS
     }
 
     @Override
-    public boolean closeGroup(GroupSessionKey key) {
+    public boolean closeGroup(ChatRoomSessionKey key) {
         ChatRoomSession chatRoomSession = SESSION_MAP.get(this.getKey(key.getGroupTypeEnum().getType(), key.getSessionId()));
         if (Objects.isNull(chatRoomSession)) {
             return false;
@@ -44,7 +45,7 @@ public class ChatRoomSessionServiceImpl implements GroupSessionService<ChatRoomS
     }
 
     @Override
-    public boolean openGroup(GroupSessionKey key) {
+    public boolean openGroup(ChatRoomSessionKey key) {
         ChatRoomSession chatRoomSession = SESSION_MAP.get(this.getKey(key.getGroupTypeEnum().getType(), key.getSessionId()));
         if (Objects.isNull(chatRoomSession)) {
             return false;
@@ -54,12 +55,17 @@ public class ChatRoomSessionServiceImpl implements GroupSessionService<ChatRoomS
     }
 
     @Override
+    public Set<Long> getGroupMemberSet(ChatRoomSessionKey key) {
+        return null;
+    }
+
+    @Override
     public void save(ChatRoomSession session) {
         SESSION_MAP.put(getKey(GroupTypeEnum.GROUP.getType(), session.getRoomId()), session);
     }
 
     @Override
-    public ChatRoomSession get(GroupSessionKey key) {
+    public ChatRoomSession get(ChatRoomSessionKey key) {
         return SESSION_MAP.get(this.getKey(key.getGroupTypeEnum().getType(), key.getSessionId()));
     }
 
@@ -69,7 +75,7 @@ public class ChatRoomSessionServiceImpl implements GroupSessionService<ChatRoomS
     }
 
     @Override
-    public void remove(GroupSessionKey key) {
+    public void remove(ChatRoomSessionKey key) {
         SESSION_MAP.remove(this.getKey(key.getGroupTypeEnum().getType(), key.getSessionId()));
     }
 
@@ -79,14 +85,14 @@ public class ChatRoomSessionServiceImpl implements GroupSessionService<ChatRoomS
     }
 
     @Override
-    public boolean exist(GroupSessionKey key) {
+    public boolean exist(ChatRoomSessionKey key) {
         return SESSION_MAP.containsKey(this.getKey(key.getGroupTypeEnum().getType(), key.getSessionId()));
     }
 
     @Override
-    public Map<GroupSessionKey, ChatRoomSession> listByKeys(Collection<GroupSessionKey> keys) {
-        Map<GroupSessionKey, ChatRoomSession> map = Maps.newHashMap();
-        for (GroupSessionKey groupSessionKey : keys) {
+    public Map<ChatRoomSessionKey, ChatRoomSession> listByKeys(Collection<ChatRoomSessionKey> keys) {
+        Map<ChatRoomSessionKey, ChatRoomSession> map = Maps.newHashMap();
+        for (ChatRoomSessionKey groupSessionKey : keys) {
             ChatRoomSession chatRoomSession = get(groupSessionKey);
             map.put(groupSessionKey, chatRoomSession);
         }

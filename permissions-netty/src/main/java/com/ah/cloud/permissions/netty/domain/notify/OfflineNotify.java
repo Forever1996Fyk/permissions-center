@@ -1,7 +1,7 @@
 package com.ah.cloud.permissions.netty.domain.notify;
 
 import com.ah.cloud.permissions.enums.netty.OfflineReasonEnum;
-import com.ah.cloud.permissions.netty.domain.session.SingleSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.SingleSessionKey;
 import com.ah.cloud.permissions.netty.domain.session.SingleSession;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +23,7 @@ public class OfflineNotify implements BaseNotify {
     /**
      * session map
      */
-    private SingleSessionKey singleSessionKey;
+    private SingleSessionKey sessionKey;
 
     /**
      * session

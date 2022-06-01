@@ -1,19 +1,17 @@
 package com.ah.cloud.permissions.netty.infrastructure.service.client;
 
-import com.ah.cloud.permissions.biz.application.helper.RedisKeyHelper;
-import com.ah.cloud.permissions.biz.application.manager.ThreadPoolManager;
 import com.ah.cloud.permissions.biz.application.strategy.cache.impl.RedisCacheHandleStrategy;
 import com.ah.cloud.permissions.biz.infrastructure.util.AppUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
+import com.ah.cloud.permissions.domain.common.ImResult;
 import com.ah.cloud.permissions.enums.common.IMErrorCodeEnum;
 import com.ah.cloud.permissions.netty.application.helper.SessionHelper;
 import com.ah.cloud.permissions.netty.application.manager.MessageStoreManager;
 import com.ah.cloud.permissions.netty.application.manager.SessionManager;
 import com.ah.cloud.permissions.netty.domain.dto.AckDTO;
 import com.ah.cloud.permissions.netty.domain.message.body.MessageBody;
-import com.ah.cloud.permissions.netty.domain.session.DistributionSession;
 import com.ah.cloud.permissions.netty.domain.session.ServerSession;
-import com.ah.cloud.permissions.netty.domain.session.SingleSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.SessionKey;
 import com.ah.cloud.permissions.netty.infrastructure.exception.IMBizException;
 import com.ah.cloud.permissions.netty.infrastructure.task.MsgAckTimerTask;
 import com.google.common.base.Throwables;
@@ -26,12 +24,11 @@ import io.netty.util.concurrent.Future;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -44,22 +41,28 @@ import java.util.function.Consumer;
  **/
 @Slf4j
 @Component
-public abstract class AbstractSendClientService<S extends ServerSession> implements SendClientService, AckClientService, ComplexSendClientService<S> {
+public abstract class AbstractSendClientService<K extends SessionKey, S extends ServerSession> implements SendClientService<K, S>, AckClientService, ComplexSendClientService<K, S> {
 
-    @Value(value = "${im.ack.duration}")
-    private Integer duration;
+    /**
+     * 默认 ack执行周期
+     */
+    private final static Integer DEFAULT_ACK_DURATION = 30;
 
-    @Value(value = "${im.ack.retry}")
-    private Integer retry;
+    /**
+     * 默认 ack重试次数
+     */
+    private final static Integer DEFAULT_ACK_RETRY = 5;
 
-    @Resource
-    private SessionHelper sessionHelper;
 
-    @Resource
-    private MessageStoreManager messageStoreManager;
+    /**
+     * ack 执行周期
+     */
+    private Integer duration = DEFAULT_ACK_DURATION;
 
-    @Resource
-    private RedisCacheHandleStrategy redisCacheHandleStrategy;
+    /**
+     * ack 重试次数
+     */
+    private Integer retry = DEFAULT_ACK_RETRY;
 
     /**
      * 发消息ack 时间轮
@@ -80,79 +83,55 @@ public abstract class AbstractSendClientService<S extends ServerSession> impleme
             , false);
 
     @Override
-    public <T> void sendAndAck(final ImmutableTriple<SingleSessionKey, ServerSession, ServerSession> triple, final MessageBody<T> body, Consumer<MessageBody<T>> afterHandle) {
+    public <T> void sendAndAck(final ImmutableTriple<K, S, Channel> triple, final MessageBody<T> body, Consumer<MessageBody<T>> afterHandle) {
         if (Objects.isNull(triple)) {
             log.error("{}[send] pair data error is empty", getLogMark());
             return;
         }
-        SingleSessionKey singleSessionKey = triple.getLeft();
-        if (Objects.isNull(singleSessionKey)) {
+        K sessionKey = triple.getLeft();
+        if (Objects.isNull(sessionKey)) {
             log.error("{}[send] session key is empty", getLogMark());
             return;
         }
-        ServerSession session = triple.getMiddle();
-        if (Objects.isNull(session)) {
+        S toSession = triple.getMiddle();
+        if (Objects.isNull(toSession)) {
             // 分发其他节点
-            dispatchNode(singleSessionKey, body);
-            // 消息ack
-            ack(buildAckDTO(triple.getRight().getChannel(), body));
-            return;
+            if (dispatchNode(sessionKey, body)) {
+                // 消息ack
+                ack(buildAckDTO(triple.getRight(), body));
+                return;
+            } else {
+                throw new IMBizException(IMErrorCodeEnum.MSG_SEND_FAILED_SESSION_NOT_EXISTED);
+            }
         }
-        if (Objects.isNull(session.getChannel())) {
-            log.error("{}[send] session not initialize start reconnect, body is {}", getLogMark(), JsonUtils.toJSONString(body));
-            // 如果channel为空，则执行重新连接 todo
-//            reconnect(session);
-        }
-        S s = (S) session;
         int sequenceId = AppUtils.generateSequenceId();
         body.setSequenceId(sequenceId);
         // 消息发送
-        Future<Void> result = doSend(s, body);
+        ImResult<Void> result = doSend(toSession, body);
         // 如果发送成功, 则ack
         if (result != null) {
             //消息发送成功后的操作
             afterHandle.accept(body);
-
             // 消息ack
-            result.addListener(future -> {
-                if (future.isSuccess()) {
-                    ack(buildAckDTO(triple.getRight().getChannel(), body));
-                }
-            });
+            if (result.isSuccess()) {
+                ack(buildAckDTO(triple.getRight(), body));
+            }
         }
     }
 
+
     @Override
-    public <T> void simpleSend(ImmutablePair<SingleSessionKey, ServerSession> pair, MessageBody<T> body) {
-        SingleSessionKey singleSessionKey = pair.getLeft();
-        ServerSession session = pair.getRight();
-        if (Objects.isNull(session)) {
-            dispatchNode(singleSessionKey, body);
+    public <T> void simpleSend(ImmutablePair<K, S> pair, MessageBody<T> body) {
+        K sessionKey = pair.getLeft();
+        S toSession = pair.getRight();
+        if (Objects.isNull(toSession)) {
+            dispatchNode(sessionKey, body);
             return;
         }
         int sequenceId = AppUtils.generateSequenceId();
         body.setSequenceId(sequenceId);
         // 消息发送
-        S s = (S) session;
-        doSend(s, body);
-    }
-
-    /**
-     * 构建ack数据
-     *
-     * @param channel
-     * @param body
-     * @param <T>
-     * @return
-     */
-    private <T> AckDTO<T> buildAckDTO(Channel channel, MessageBody<T> body) {
-        return AckDTO.<T>builder()
-                .body(body)
-                .channel(channel)
-                .retry(retry)
-                .duration(duration)
-                .sequenceId(body.getSequenceId())
-                .build();
+        doSend(toSession, body);
     }
 
     @Override
@@ -166,46 +145,16 @@ public abstract class AbstractSendClientService<S extends ServerSession> impleme
         AckDTO<T> ackDTO = AckDTO.<T>builder()
                 .body(body)
                 .channel(channel)
-                .retry(retry)
-                .duration(duration)
+                .retry(getRetry())
+                .duration(getDuration())
                 .sequenceId(body.getSequenceId())
                 .build();
         ack(ackDTO);
     }
 
-    /**
-     * 分发节点
-     * @param singleSessionKey
-     * @param body
-     * @param <T>
-     */
     @Override
-    public <T> void dispatchNode(SingleSessionKey singleSessionKey, MessageBody<T> body) {
-        /*
-        1. 判断当前用户是否存在其他节点
-            1.1 如果存在则通过监听redis 触发其他节点发送消息
-            1.2 如果不存在则发送消息推送push, 并且存入离线消息列表
-         */
-        DistributionSession distributionSession = redisCacheHandleStrategy.getCacheObject(RedisKeyHelper.getImDistributionSessionKey(singleSessionKey.getSessionId()));
-        if (Objects.isNull(distributionSession)) {
-            if (needThirdPush()) {
-                // 第三方推送 TODO
-
-            }
-            if (needRecordOfflineList()) {
-                // 是否记录离线列表
-                ThreadPoolManager.offlineMessageStoreThreadPool.execute(() -> messageStoreManager.offlineMessageStore(body));
-            }
-        } else {
-            String imListenerNodeKey = RedisKeyHelper.getImListenerNodeKey(distributionSession.getHost(), distributionSession.getPort());
-            redisCacheHandleStrategy.lpush(imListenerNodeKey, sessionHelper.buildMessageNodeDTO(body));
-            log.info("{}[send] message send other node is {}", getLogMark(), imListenerNodeKey);
-        }
-    }
-
-    @Override
-    public <T> void complexSendMessageBodyList(ImmutablePair<SingleSessionKey, S> pair, List<MessageBody<T>> messageBodyList, Consumer<List<MessageBody<T>>> consumer) {
-        ServerSession session = pair.getRight();
+    public <T> void complexSendMessageBodyList(ImmutablePair<K, S> pair, List<MessageBody<T>> messageBodyList, Consumer<List<MessageBody<T>>> consumer) {
+        S session = pair.getRight();
         Channel channel = session.getChannel();
         if (channel.isWritable()) {
             channel.writeAndFlush(messageBodyList);
@@ -229,25 +178,45 @@ public abstract class AbstractSendClientService<S extends ServerSession> impleme
      * @param <T>
      * @return
      */
-    protected abstract <T> Future<Void> doSend(S session, MessageBody<T> body);
-
-    /**
-     * 是否需要第三方推送
-     *
-     * @return
-     */
-    protected abstract boolean needThirdPush();
-
-    /**
-     * 是否需要记录离线列表
-     *
-     * @return
-     */
-    protected abstract boolean needRecordOfflineList();
+    protected abstract <T> ImResult<Void> doSend(S session, MessageBody<T> body);
 
     /**
      * 日志标志
      * @return
      */
     protected abstract String getLogMark();
+
+    /**
+     * 构建ack数据
+     *
+     * @param channel
+     * @param body
+     * @param <T>
+     * @return
+     */
+    private <T> AckDTO<T> buildAckDTO(Channel channel, MessageBody<T> body) {
+        return AckDTO.<T>builder()
+                .body(body)
+                .channel(channel)
+                .retry(getRetry())
+                .duration(getDuration())
+                .sequenceId(body.getSequenceId())
+                .build();
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public Integer getRetry() {
+        return retry;
+    }
+
+    public void setRetry(Integer retry) {
+        this.retry = retry;
+    }
 }

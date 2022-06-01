@@ -1,3 +1,12 @@
+permission:
+  config:
+    msgcenter:
+      umeng:
+        androidAppKey:
+        androidAppMasterSecret:
+        iosAppKey:
+        iosAppMasterSecret:
+
 spring:
   redis:
     ################### redis 单机版 start ##########################
@@ -118,9 +127,13 @@ mq:
       operateChatRoom:
         name: operate-chat-room
       chatRoomNodeListener:
-        name: chatRoomNodeSend
+        name: chat-room-node
       chatRoomNodeListenerPattern:
-        name: chatRoomNodeSend:*
+        name: chat-room-node:*
+      groupChatListenerNode:
+        name: group-chat-Node
+      groupChatListenerNodePattern:
+        name: group-chat-Node:*
 
 
 system:

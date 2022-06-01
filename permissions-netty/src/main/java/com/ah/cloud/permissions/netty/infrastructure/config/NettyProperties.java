@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  **/
 @Data
 @Component
-@ConfigurationProperties(value = "netty")
+@ConfigurationProperties(value = "permission.config.netty")
 public class NettyProperties {
 
     /**

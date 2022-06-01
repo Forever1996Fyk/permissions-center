@@ -10,7 +10,8 @@ import com.ah.cloud.permissions.netty.domain.message.ChatRoomMessage;
 import com.ah.cloud.permissions.netty.domain.message.body.MessageBody;
 import com.ah.cloud.permissions.netty.domain.message.mq.ChatRoomNodeMessage;
 import com.ah.cloud.permissions.netty.domain.session.ChatRoomSession;
-import com.ah.cloud.permissions.netty.domain.session.GroupSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.ChatRoomSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.GroupSessionKey;
 import com.ah.cloud.permissions.netty.infrastructure.service.session.GroupSessionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,9 +47,8 @@ public class ChatRoomNodeListenerConsumer extends AbstractBaseRedisConsumer<Chat
 
     @Override
     protected void doHandleMessage(ChatRoomNodeMessage message) {
-        GroupSessionService<ChatRoomSession, GroupSessionKey> groupSessionService = SessionManager.getChatRoomSessionService();
-        GroupSessionKey groupSessionKey = GroupSessionKey.builder()
-                .groupTypeEnum(GroupTypeEnum.CHAT_ROOM)
+        GroupSessionService<ChatRoomSession, ChatRoomSessionKey> groupSessionService = SessionManager.getChatRoomSessionService();
+        ChatRoomSessionKey groupSessionKey = ChatRoomSessionKey.builder()
                 .sessionId(message.getRoomId())
                 .build();
         ChatRoomSession chatRoomSession = groupSessionService.get(groupSessionKey);

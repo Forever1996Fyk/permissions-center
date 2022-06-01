@@ -5,7 +5,7 @@ import com.ah.cloud.permissions.enums.netty.MsgTypeEnum;
 import com.ah.cloud.permissions.netty.application.manager.SessionManager;
 import com.ah.cloud.permissions.netty.domain.message.body.MessageBody;
 import com.ah.cloud.permissions.netty.domain.message.OfflineMessage;
-import com.ah.cloud.permissions.netty.domain.session.SingleSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.SingleSessionKey;
 import com.ah.cloud.permissions.netty.domain.session.SingleSession;
 import com.ah.cloud.permissions.netty.infrastructure.event.message.AbstractMessageHandler;
 import com.ah.cloud.permissions.netty.infrastructure.event.message.MessageHandler;
@@ -45,7 +45,7 @@ public class OfflineMessageHandler extends AbstractMessageHandler<OfflineMessage
         SingleSessionKey fromSingleSessionKey = SingleSessionKey.builder().msgSourceEnum(body.getMsgSourceEnum()).sessionId(body.getFromId()).build();
         ImmutablePair<SingleSession, SingleSession> pairSession = singleSessionService.getPairSession(ImmutablePair.of(toSingleSessionKey, fromSingleSessionKey));
 
-        singleClientService.sendAndAck(ImmutableTriple.of(toSingleSessionKey, pairSession.getLeft(), pairSession.getRight()), body, message -> {
+        singleClientService.sendAndAck(ImmutableTriple.of(toSingleSessionKey, pairSession.getLeft(), pairSession.getRight().getChannel()), body, message -> {
             singleSessionService.remove(toSingleSessionKey);
         });
     }

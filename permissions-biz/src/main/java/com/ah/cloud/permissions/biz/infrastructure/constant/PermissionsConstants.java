@@ -103,4 +103,9 @@ public class PermissionsConstants {
      * -1L
      */
     public static final Long NEGATIVE_ONE_LONG = -1L;
+
+    /**
+     * map的初始大小
+     */
+    public static final Integer MAP_DEFAULT_SIZE = 16;
 }

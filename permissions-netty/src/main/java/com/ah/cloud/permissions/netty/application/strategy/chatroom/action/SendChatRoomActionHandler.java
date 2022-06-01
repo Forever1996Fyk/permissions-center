@@ -26,8 +26,6 @@ import java.util.Objects;
 @Component
 public class SendChatRoomActionHandler extends AbstractChatRoomActionHandler {
     private final static String LOG_MARK = "SendChatRoomActionHandler";
-    @Resource
-    private ChatRoomNodeListenerProducer chatRoomNodeListenerProducer;
 
     @Override
     public void doHandle(ChatRoomSession chatRoomSession, SingleSession singleSession, MessageBody<ChatRoomMessage> body) {

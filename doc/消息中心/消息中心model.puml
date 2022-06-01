@@ -1,0 +1,105 @@
+@startuml
+'hide members
+package 消息中心{
+
+    object "消息表\n msg_info" as msg_info
+    object "消息事件表\n msg_event" as msg_event
+    object "消息对象表\n msg_target" as msg_target
+    object "消息目标表\n msg_reach" as msg_reach
+    object "账号设备关系表\n msg_account_device" as msg_account_device
+    object "app push记录表\n msg_app_push_log" as msg_app_push_log
+    object "外域调用记录表\n msg_out_call_record" as msg_out_call_record
+
+
+    msg_info "1" -- "N" msg_reach
+    msg_event "1" -- "N" msg_reach
+    msg_info "1" -- "N" msg_target
+    msg_account_device "1" -- "N" msg_target
+    msg_target "500" -- "1" msg_app_push_log
+    msg_out_call_record "1" -- "N"  msg_target
+}
+
+
+object msg_out_call_record{
+id  主键
+event_code 事件编码
+msg_title 消息标题
+content  消息内容
+subject_id   接收人id（非必填）
+
+}
+
+object msg_info{
+id              主键
+msg_code        消息编号
+msg_title       消息标题
+msg_type        消息类型
+push_type       推送方式
+push_time       推送时间
+push_time_type      推送时间类型 1:立即 2：自定义
+msg_status      消息状态
+top_flag        是否app置顶
+reach_all_flag  是否推送全部 1否 2是
+content         消息内容
+res_ids         资源ids
+}
+
+object msg_event{
+    event_code 事件编码
+	event_name 事件名称
+    source_system 所属系统
+    push_type 推送方式：1.站内信 2.App-Push
+    top_flag  是否app置顶 1:否 2：是
+    secret_key 密钥
+    read_flag  读取标识：1：未读 2：已读
+    remind     不再提醒：1：否 2：是
+}
+
+object msg_target{
+ id      主键
+ receiver_account    接受人账号
+ user_id    接受人id
+ place_id    地点id
+ msg_code    消息编码
+ read_flag     读取标识 0未读 1已读
+ remind     不在提醒 0no 1 yes
+ deleted     删除标识 0:否 其他的删除
+ modify_time         修改时间
+ creator      创建人
+ modifier      修改人
+ version      版本号
+ create_time      创建时间
+ unix_key      唯一键 给es的那个主键用
+ msg_type    消息类型
+ real_name    真实姓名
+ top_flag      是否app置顶
+ msg_title    消息标题
+}
+
+object msg_account_device{
+    user_id 接受人账号
+    device_no 设备编号
+    device_type 设备类型：1：安卓 2：ios
+}
+
+object msg_reach{
+    id      主键
+    reach_type    目标类型
+    reach_value    目标值
+    source_id    来源编号来源id（msg_info，mgs_event）
+    source_id_type    来源id类型 1 msg_info 2 msg_event
+    reach_name    对象名称：角色名，用户名等
+    group_id     范围类型id 对应租户id 运营组id 角色id等
+    superior_check_all      上级是否全选 1否 2是
+    group_name varchar(255)    范围名称
+}
+
+object msg_app_push_log {
+    id      主键
+    msg_code    消息编码
+    task_id     友盟返回：任务编号
+    result      友盟返回：推送结果
+    device_no_list 设备号集合（逗号隔开）
+}
+
+@enduml

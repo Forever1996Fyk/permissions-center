@@ -1,4 +1,4 @@
-package com.ah.cloud.permissions.netty.domain.session;
+package com.ah.cloud.permissions.netty.domain.session.key;
 
 import com.ah.cloud.permissions.enums.netty.GroupTypeEnum;
 import lombok.*;
@@ -23,7 +23,15 @@ public class GroupSessionKey implements SessionKey {
     private Long sessionId;
 
     /**
-     * 来源类型
+     * 群名称
      */
-    private GroupTypeEnum groupTypeEnum;
+    private String groupName;
+
+    /**
+     * 聊天室默认chat_room类型
+     * @return
+     */
+    public GroupTypeEnum getGroupTypeEnum() {
+        return GroupTypeEnum.GROUP;
+    }
 }

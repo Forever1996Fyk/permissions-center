@@ -8,11 +8,12 @@ import com.ah.cloud.permissions.netty.application.helper.MessageHandleHelper;
 import com.ah.cloud.permissions.netty.application.manager.SessionManager;
 import com.ah.cloud.permissions.netty.domain.dto.MessageNodeDTO;
 import com.ah.cloud.permissions.netty.domain.message.body.MessageBody;
-import com.ah.cloud.permissions.netty.domain.session.SingleSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.SingleSessionKey;
 import com.ah.cloud.permissions.netty.domain.session.SingleSession;
 import com.ah.cloud.permissions.netty.infrastructure.config.NettyProperties;
 import com.ah.cloud.permissions.netty.infrastructure.service.client.SingleSendClientService;
 import com.ah.cloud.permissions.netty.infrastructure.service.session.SessionService;
+import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.springframework.stereotype.Component;
@@ -39,6 +40,7 @@ public class ImNodeMessageListener {
     private SingleSendClientService singleSendClientService;
     @Resource
     private RedisCacheHandleStrategy redisCacheHandleStrategy;
+
     /**
      * 系统启动时开启
      */
@@ -50,18 +52,26 @@ public class ImNodeMessageListener {
     }
 
     private void consumer() {
-        String imListenerNodeKey = RedisKeyHelper.getImListenerNodeKey(IpUtils.getHost(), nettyProperties.getPort());
-        // redis pop操作是原子操作，所以只会有一个节点获取到数据
-        MessageNodeDTO messageNode = redisCacheHandleStrategy.brpop(imListenerNodeKey, Duration.ofSeconds(Integer.MAX_VALUE));
-        if (!Objects.isNull(messageNode)) {
-            MessageBody<String> body = messageHandleHelper.convertToBody(messageNode);
-            SingleSessionKey toSingleSessionKey = SingleSessionKey.builder().sessionId(messageNode.getToId()).msgSourceEnum(body.getMsgSourceEnum()).build();
-            SingleSessionKey fromSingleSessionKey = SingleSessionKey.builder().sessionId(messageNode.getToId()).msgSourceEnum(body.getMsgSourceEnum()).build();
-            SessionService<SingleSession> singleSessionService = SessionManager.getSingleSessionService();
-            SingleSession toSingleSession = singleSessionService.get(toSingleSessionKey);
-            SingleSession fromSingleSession = singleSessionService.get(fromSingleSessionKey);
+        while (true) {
+            String imListenerNodeKey = RedisKeyHelper.getImListenerNodeKey(IpUtils.getHost(), nettyProperties.getPort());
+            log.info("ImNodeMessageListener[consumer] im node message listener start handle, imListenerNodeKey is {}", imListenerNodeKey);
+            try {
+                // redis pop操作是原子操作，所以只会有一个节点获取到数据
+                MessageNodeDTO messageNode = redisCacheHandleStrategy.brpop(imListenerNodeKey, Duration.ofSeconds(Integer.MAX_VALUE));
+                if (!Objects.isNull(messageNode)) {
+                    MessageBody<String> body = messageHandleHelper.convertToBody(messageNode);
+                    SingleSessionKey toSingleSessionKey = SingleSessionKey.builder().sessionId(messageNode.getToId()).msgSourceEnum(body.getMsgSourceEnum()).build();
+                    SingleSessionKey fromSingleSessionKey = SingleSessionKey.builder().sessionId(messageNode.getToId()).msgSourceEnum(body.getMsgSourceEnum()).build();
+                    SessionService<SingleSession, SingleSessionKey> singleSessionService = SessionManager.getSingleSessionService();
+                    SingleSession toSingleSession = singleSessionService.get(toSingleSessionKey);
+                    SingleSession fromSingleSession = singleSessionService.get(fromSingleSessionKey);
 
-            singleSendClientService.sendAndAck(ImmutableTriple.of(toSingleSessionKey, toSingleSession, fromSingleSession), body, message -> {});
+                    singleSendClientService.sendAndAck(ImmutableTriple.of(toSingleSessionKey, toSingleSession, fromSingleSession.getChannel()), body, message -> {
+                    });
+                }
+            } catch (Exception e) {
+                log.error("ImNodeMessageListener[consumer] im node message listener error with exception, reason is {}", Throwables.getStackTraceAsString(e));
+            }
         }
     }
 }

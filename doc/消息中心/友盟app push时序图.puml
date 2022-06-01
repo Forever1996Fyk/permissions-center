@@ -1,0 +1,41 @@
+@startuml
+
+participant pc as "管理员or外域"
+participant mvc as "IOS/Android"
+participant msg_center as "通知中心"
+participant u_push as "友盟"
+
+
+
+group 登陆设备绑定device-token
+    mvc  -->mvc:获取device-token
+    mvc  -->msg_center :将device-token同account绑定
+    alt device-token记录不存在
+        msg_center -> msg_center : 新增记录
+    else device-token记录存在
+        msg_center -> msg_center : 更新account
+    end
+end
+
+group push流程
+    pc -> msg_center : 发送通知
+    msg_center -> pc : response
+    msg_center -> msg_center : 内部处理（EDI）
+    alt push到所有设备
+        msg_center -> u_push : 发送通知（appKey）
+    else push到单个设备
+        msg_center -> u_push : 发送通知（appKey+device_tokens）
+    end
+    u_push --> mvc :push通知
+end
+
+group 撤回流程
+    pc -> msg_center : 撤回通知
+    msg_center -> pc : response
+    msg_center -> msg_center : 内部处理（EDI）、指定撤回的通知和事件
+    msg_center-->msg_center:更新通知对象数据，取taskId
+    msg_center-->u_push:根据taskId撤销
+    u_push --> mvc :撤销未读通知（仅限于安卓）
+end
+
+@end

@@ -1,0 +1,25 @@
+@startuml
+
+
+participant user as "用户"
+participant admin as "管理员"
+participant app as "app"
+participant msg_center as "后端页面"
+participant subject as "权限中心"
+participant youmeng as "友盟"
+
+group app push
+admin  -->msg_center:选择推送方式为app push
+msg_center -->subject:查询推送对象
+msg_center -->msg_center:关联设备号
+msg_center -->youmeng:发送推送内容和设备号
+youmeng --> app:推送
+app --> app:跳转指定页面
+end
+
+group 设备号收集
+ app --> youmeng:注册设备：获取设备号
+ app -->msg_center:用户登录，上传登录用户和设备号
+end
+
+@enduml

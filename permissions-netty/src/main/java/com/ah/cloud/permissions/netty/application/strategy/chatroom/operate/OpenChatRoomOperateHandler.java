@@ -4,7 +4,8 @@ import com.ah.cloud.permissions.biz.infrastructure.repository.bean.ChatRoom;
 import com.ah.cloud.permissions.enums.ChatRoomStatusEnum;
 import com.ah.cloud.permissions.netty.application.manager.SessionManager;
 import com.ah.cloud.permissions.netty.domain.session.ChatRoomSession;
-import com.ah.cloud.permissions.netty.domain.session.GroupSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.ChatRoomSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.GroupSessionKey;
 import com.ah.cloud.permissions.netty.infrastructure.service.session.GroupSessionService;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
@@ -24,7 +25,7 @@ public class OpenChatRoomOperateHandler extends AbstractChatRoomOperateHandler {
 
     @Override
     protected void doHandle(ChatRoom chatRoom) {
-        GroupSessionService<ChatRoomSession, GroupSessionKey> groupSessionService = SessionManager.getChatRoomSessionService();
+        GroupSessionService<ChatRoomSession, ChatRoomSessionKey> chatRoomSessionService = SessionManager.getChatRoomSessionService();
         DefaultChannelGroup channelGroup = new DefaultChannelGroup(chatRoom.getRoomName(), GlobalEventExecutor.INSTANCE);
         ChatRoomSession chatRoomSession = ChatRoomSession.builder()
                 .roomId(chatRoom.getRoomId())
@@ -32,7 +33,7 @@ public class OpenChatRoomOperateHandler extends AbstractChatRoomOperateHandler {
                 .groupStatus(ChatRoomSession.GroupStatus.ENABLED)
                 .maxSize(chatRoom.getMaxRoomSize())
                 .build();
-        groupSessionService.save(chatRoomSession);
+        chatRoomSessionService.save(chatRoomSession);
     }
 
     @Override

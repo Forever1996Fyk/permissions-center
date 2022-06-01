@@ -25,7 +25,7 @@ public class OfflineNotifyService extends AbstractNotifyService<OfflineNotifyDTO
     protected void doHandle(BaseNotify baseNotify) {
         OfflineNotify offlineNotify = (OfflineNotify) baseNotify;
         notifyClientService.simpleSend(
-                ImmutablePair.of(offlineNotify.getSingleSessionKey(), offlineNotify.getSession()),
+                ImmutablePair.of(offlineNotify.getSessionKey(), offlineNotify.getSession()),
                 buildMessageBody(offlineNotify)
         );
     }

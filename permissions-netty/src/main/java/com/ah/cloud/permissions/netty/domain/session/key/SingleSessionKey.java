@@ -1,4 +1,4 @@
-package com.ah.cloud.permissions.netty.domain.session;
+package com.ah.cloud.permissions.netty.domain.session.key;
 
 import com.ah.cloud.permissions.enums.netty.MsgSourceEnum;
 import lombok.*;

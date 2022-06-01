@@ -47,6 +47,7 @@
         <pingyin.version>2.5.0</pingyin.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
         <jackson.version>2.11.2</jackson.version>
+        <httpclient.version>4.5.13</httpclient.version>
 
         <!-- 三方组件 -->
         <druid.version>1.2.8</druid.version>
@@ -200,6 +201,11 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>easyexcel</artifactId>
                 <version>${easyexcel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
             </dependency>
             <!-- Commons End -->
 

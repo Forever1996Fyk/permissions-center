@@ -17,6 +17,7 @@ import javax.annotation.Resource;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -214,6 +215,17 @@ public class RedisCacheHandleStrategy implements CacheHandleStrategy {
      */
     public <T> Long setRemove(String key, T value) {
         return redisTemplate.opsForSet().remove(key, value);
+    }
+
+    /**
+     * 根据key获取set集合
+     *
+     * @param key
+     * @param <T>
+     * @return
+     */
+    public <T> Set<T> getSet(String key) {
+        return (Set<T>) redisTemplate.opsForSet().members(key);
     }
 
     /**

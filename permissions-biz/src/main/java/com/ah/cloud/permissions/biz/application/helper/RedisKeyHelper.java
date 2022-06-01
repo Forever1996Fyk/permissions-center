@@ -49,4 +49,13 @@ public class RedisKeyHelper {
     public static String getChatRoomKey(Long roomId) {
         return CacheConstants.CHAT_ROOM_PREFIX + roomId;
     }
+
+    /**
+     * 获取群组成员key
+     * @param groupId
+     * @return
+     */
+    public static String getGroupMemberKey(Long groupId) {
+        return CacheConstants.GROUP_MEMBER_KE_PREFIX + groupId;
+    }
 }

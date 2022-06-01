@@ -4,9 +4,7 @@ import com.ah.cloud.permissions.enums.netty.MsgSourceEnum;
 import com.ah.cloud.permissions.netty.infrastructure.constant.SessionConstants;
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 /**
  * @program: permissions-center
@@ -16,6 +14,9 @@ import lombok.Getter;
  **/
 @Getter
 @Builder
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class SingleSession implements ServerSession {
 
     /**

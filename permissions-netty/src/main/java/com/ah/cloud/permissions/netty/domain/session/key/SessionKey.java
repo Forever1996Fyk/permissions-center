@@ -1,4 +1,4 @@
-package com.ah.cloud.permissions.netty.domain.session;
+package com.ah.cloud.permissions.netty.domain.session.key;
 
 /**
  * @program: permissions-center

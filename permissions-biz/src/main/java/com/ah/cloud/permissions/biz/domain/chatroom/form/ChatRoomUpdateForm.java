@@ -30,7 +30,7 @@ public class ChatRoomUpdateForm {
     /**
      * 最大聊天室数量
      */
-    @Min(message = "不能小于0", value = PermissionsConstants.ZERO)
+    @Min(message = "不能小于1", value = 1)
     private Long maxRoomSize;
 
     /**

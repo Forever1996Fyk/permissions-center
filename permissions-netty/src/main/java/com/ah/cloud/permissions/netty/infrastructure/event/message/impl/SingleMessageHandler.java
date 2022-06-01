@@ -7,7 +7,7 @@ import com.ah.cloud.permissions.netty.application.manager.MessageStoreManager;
 import com.ah.cloud.permissions.netty.application.manager.SessionManager;
 import com.ah.cloud.permissions.netty.domain.message.body.MessageBody;
 import com.ah.cloud.permissions.netty.domain.message.SingleMessage;
-import com.ah.cloud.permissions.netty.domain.session.SingleSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.SingleSessionKey;
 import com.ah.cloud.permissions.netty.domain.session.SingleSession;
 import com.ah.cloud.permissions.netty.infrastructure.event.message.AbstractMessageHandler;
 import com.ah.cloud.permissions.netty.infrastructure.event.message.MessageHandler;
@@ -49,7 +49,7 @@ public class SingleMessageHandler extends AbstractMessageHandler<SingleMessage> 
         SingleSessionKey toSingleSessionKey = SingleSessionKey.builder().msgSourceEnum(body.getMsgSourceEnum()).sessionId(singleMessage.getToUserId()).build();
         SingleSessionKey fromSingleSessionKey = SingleSessionKey.builder().msgSourceEnum(body.getMsgSourceEnum()).sessionId(singleMessage.getFromUserId()).build();
         ImmutablePair<SingleSession, SingleSession> pairSession = singleSessionService.getPairSession(ImmutablePair.of(toSingleSessionKey, fromSingleSessionKey));
-        singleClientService.sendAndAck(ImmutableTriple.of(toSingleSessionKey, pairSession.getLeft(), pairSession.getRight()), body, message -> {
+        singleClientService.sendAndAck(ImmutableTriple.of(toSingleSessionKey, pairSession.getLeft(), pairSession.getRight().getChannel()), body, message -> {
             ThreadPoolManager.messageStoreThreadPool.execute(() -> messageStoreManager.saveMessageRecord(body));
         });
     }

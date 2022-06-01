@@ -1,0 +1,29 @@
+@startuml
+
+participant pc as "PC页面"
+participant msg_center as "后端"
+participant subject as "权限中心"
+participant redis as "缓存"
+participant mysql as "数据库"
+
+group PC端新增/编辑消息
+   group 进入页面
+    pc->pc:生成uuid;
+       pc->pc:选择推送类型(角色);
+       pc->msg_center:传msg_code:uuid;
+       msg_center->subject:查询所有角色;
+       msg_center->msg_center:通过msg_code查询msgInfo;
+       msg_center->mysql:msgInfo存在:则查询数据库已经匹配到的角色;
+       msg_center->redis:msgInfo不存在:则查询缓存中暂存的角色;
+   end
+   group 勾选/去除角色后选择确定
+        pc->msg_center:传msg_code:uuid和角色id;
+        msg_center->msg_center:保存到redis;
+   end
+   group 消息主页面确定
+           pc->msg_center:传msg_code:uuid和消息主体;
+           msg_center->msg_center:保存redis数据到数据库,编辑情况下直接覆盖;
+   end
+end
+
+@enduml

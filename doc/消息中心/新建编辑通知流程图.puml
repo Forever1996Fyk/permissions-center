@@ -1,0 +1,28 @@
+@startuml
+start
+repeat:新增编辑通知、事件;
+backward :重新编辑;
+repeat while (内容检测通过?) is (否) not (是)
+    split
+    :消息通知;
+        :保存通知草稿;
+        repeat:发送验证码;
+        backward :重新获取验证码;
+        repeat while (验证码正确?) is (否) not (是)
+         :草稿变为正常通知;
+         repeat :发送通知;
+         backward :延时发送;
+         repeat while (立即发送?) is (否) not (是)
+         :通知立即发送;
+        stop;
+    split again
+        :消息事件;
+        :保存消息事件;
+                repeat:发送验证码;
+                backward :重新获取验证码;
+                repeat while (验证码正确?) is (否) not (是)
+                 :事件保存成功;
+                 stop;
+    end split
+
+@enduml

@@ -37,4 +37,9 @@ public class CacheConstants {
      * 聊天室 前缀
      */
     public static final String CHAT_ROOM_PREFIX = "online:chatroom:";
+
+    /**
+     * 群组成员 前缀
+     */
+    public static final String GROUP_MEMBER_KE_PREFIX = "group:member:";
 }

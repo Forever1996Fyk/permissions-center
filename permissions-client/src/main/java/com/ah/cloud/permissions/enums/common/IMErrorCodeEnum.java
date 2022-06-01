@@ -19,6 +19,7 @@ public enum IMErrorCodeEnum implements ErrorCode  {
 
 
     MSG_SEND_FAILED(3_10_0_001, "消息发送失败"),
+    MSG_SEND_FAILED_SESSION_NOT_EXISTED(3_10_0_002, "消息发送失败, 当前session不存在"),
 
     CLIENT_CONNECT_FAILED_SESSION_NULL(3_10_1_001, "客户端连接失败, session为空"),
     BIND_SERVER_FAILED_TOKEN_ERROR(3_10_1_002, "绑定服务端失败, 当前token错误"),
@@ -34,6 +35,9 @@ public enum IMErrorCodeEnum implements ErrorCode  {
     CHAT_ROOM_NOT_EXISTED(3_12_0_003, "[%s]聊天室不存在"),
     CHAT_ROOM_MAX_SIZE(3_12_0_004, "[%s]聊天室已达到最大容量"),
     CHAT_ROOM_BANNED_CHAT(3_12_0_005, "[%s]聊天室已禁言"),
+
+
+    GROUP_CHAT_FAILED_MEMBER_IS_EMPTY(3_13_0_001, "当前群里[%s]没有成员"),
 
     ;
 

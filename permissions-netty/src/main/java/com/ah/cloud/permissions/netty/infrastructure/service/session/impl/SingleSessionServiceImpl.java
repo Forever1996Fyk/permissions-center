@@ -6,7 +6,7 @@ import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.SpringUtils;
 import com.ah.cloud.permissions.netty.domain.session.DistributionSession;
-import com.ah.cloud.permissions.netty.domain.session.SingleSessionKey;
+import com.ah.cloud.permissions.netty.domain.session.key.SingleSessionKey;
 import com.ah.cloud.permissions.netty.domain.session.SingleSession;
 import com.ah.cloud.permissions.netty.infrastructure.constant.SessionConstants;
 import com.ah.cloud.permissions.netty.infrastructure.service.session.SessionService;
@@ -89,6 +89,6 @@ public class SingleSessionServiceImpl implements SessionService<SingleSession, S
 
     @Override
     public String getKey(String type, Long sessionId) {
-        return sessionId + PermissionsConstants.COLON_SEPARATOR + type;
+        return String.valueOf(sessionId);
     }
 }

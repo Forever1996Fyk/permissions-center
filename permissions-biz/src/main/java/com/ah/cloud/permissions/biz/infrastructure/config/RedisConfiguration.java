@@ -74,7 +74,7 @@ public class RedisConfiguration {
 
         // 设置 hash key 和 value 序列化模式
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
-        redisTemplate.setHashKeySerializer(jackson2JsonRedisSerializer);
+        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
 
         // 如果不设置上述四个属性，需要初始化默认的序列化，即调用 afterPropertiesSet()
         redisTemplate.afterPropertiesSet();

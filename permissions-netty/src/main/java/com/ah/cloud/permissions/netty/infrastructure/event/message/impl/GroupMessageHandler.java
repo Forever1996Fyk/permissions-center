@@ -44,7 +44,6 @@ public class GroupMessageHandler extends AbstractMessageHandler<GroupMessage> {
 
     @Override
     protected GroupMessage convert(String message) {
-        int i = 1;
         return JsonUtils.toBean(message, GroupMessage.class);
     }
 

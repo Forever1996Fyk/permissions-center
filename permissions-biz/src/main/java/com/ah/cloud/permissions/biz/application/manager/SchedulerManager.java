@@ -168,4 +168,13 @@ public class SchedulerManager {
             throw new BizException(ErrorCodeEnum.QUARTZ_JOB_PAUSE_FAILED, String.valueOf(job.getJobId()));
         }
     }
+
+    /**
+     * 清除所有定时任务
+     *
+     * @throws SchedulerException
+     */
+    public void clearAllJob() throws SchedulerException {
+        scheduler.clear();
+    }
 }

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -127,5 +128,13 @@ public class DateUtils {
     public static boolean afterDate(Date expireTime) {
         Date date = new Date();
         return date.after(expireTime);
+    }
+
+    /**
+     * 获取当前时间戳 (秒)
+     * @return
+     */
+    public static Long getCurrentSeconds() {
+        return LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
     }
 }

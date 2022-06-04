@@ -1,8 +1,6 @@
 package com.ah.cloud.permissions.server.config;
 
 import com.ah.cloud.permissions.biz.application.helper.QuartzJobHelper;
-import com.ah.cloud.permissions.biz.application.helper.ScheduleHelper;
-import com.ah.cloud.permissions.biz.application.manager.QuartzJobManager;
 import com.ah.cloud.permissions.biz.application.manager.SchedulerManager;
 import com.ah.cloud.permissions.biz.application.service.QuartzJobService;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.QuartzJob;

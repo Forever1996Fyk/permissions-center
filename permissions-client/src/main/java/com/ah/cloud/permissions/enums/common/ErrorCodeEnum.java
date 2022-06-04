@@ -30,6 +30,8 @@ public enum ErrorCodeEnum implements ErrorCode {
      */
     BUSINESS_FAIL(100_2_001,"业务处理异常"),
     DATE_CANNOT_ACROSS_THE_MONTH(100_2_002, "日期不能跨月"),
+    ALARM_PUSH_FAILED(100_2_003, "告警推送异常"),
+    ALARM_PUSH_FAILED_MSG_MAX_SIZE(100_2_004, "告警推送异常, 超过最大字数[%s]"),
 
     /**
      * 公共操作异常
@@ -46,7 +48,7 @@ public enum ErrorCodeEnum implements ErrorCode {
     PERMISSION_DENY(200_0_002,"权限不足, 拒绝访问"),
     AUTHORITY_API_DISABLED(200_1_001, "当前接口已被禁用,无法访问"),
     AUTHORITY_API_NOT_OPEN(200_1_002, "当前接口未公开, 无法访问"),
-    VALIDATE_CODE_USER_IS_NULL(500_0_001, "短信认证失败, 用户不存在"),
+    VALIDATE_CODE_USER_IS_NULL(200_0_001, "短信认证失败, 用户不存在"),
 
     /**
      * 认证相关响应码
@@ -117,6 +119,11 @@ public enum ErrorCodeEnum implements ErrorCode {
     QUARTZ_JOB_TRIGGER_FAILED(1000_0_005, "当前定时任务[%s]执行失败"),
     QUARTZ_JOB_RESUME_FAILED(1000_0_006, "当前定时任务[%s]恢复失败"),
     QUARTZ_JOB_PAUSE_FAILED(1000_0_007, "当前定时任务[%s]暂停失败"),
+
+    /**
+     * 飞书机器人
+     */
+    FEISHU_BOT_SECRET_ERROR(1001_0_001, "飞书机器人秘钥错误[%s]")
     ;
 
     private int code;

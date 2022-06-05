@@ -26,14 +26,9 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
@@ -54,9 +49,6 @@ import java.util.*;
  * @create: 2022-05-31 15:56
  **/
 @Slf4j
-@Component
-@Configuration
-@ConditionalOnClass(value = {RestTemplate.class, CloseableHttpClient.class})
 public class HttpClientUtils {
     private static final int DEFAULT_POOL_MAX_TOTAL = 200;
     private static final int DEFAULT_POOL_MAX_PER_ROUTE = 200;
@@ -76,44 +68,12 @@ public class HttpClientUtils {
      */
     private int keepAliveTime = 60;
 
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
-
-    /**
-     * 创建HTTP 客户端工厂
-     */
-    @Bean(name = "clientHttpRequestFactory")
-    public ClientHttpRequestFactory clientHttpRequestFactory() {
-        /**
-         *  maxTotalConnection 和 maxConnectionPerRoute 必须要配
-         */
-        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory(httpClient());
-        // 连接超时
-        clientHttpRequestFactory.setConnectTimeout(DEFAULT_CONNECT_TIMEOUT);
-        // 数据读取超时时间，即SocketTimeout
-        clientHttpRequestFactory.setReadTimeout(DEFAULT_SOCKET_TIMEOUT);
-        // 从连接池获取请求连接的超时时间，不宜过长，必须设置，比如连接不够用时，时间过长将是灾难性的
-        clientHttpRequestFactory.setConnectionRequestTimeout(DEFAULT_CONNECT_REQUEST_TIMEOUT);
-        return clientHttpRequestFactory;
-    }
-
-    /**
-     * 初始化RestTemplate,并加入spring的Bean工厂，由spring统一管理
-     */
-    @Bean(name = "httpClientTemplate")
-    public RestTemplate restTemplate(ClientHttpRequestFactory factory) {
-        return createRestTemplate(factory);
-    }
-
     /**
      * 配置httpClient
      *
      * @return
      */
-    @Bean
-    public CloseableHttpClient httpClient() {
+    public static CloseableHttpClient httpClient() {
         HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
         try {
             //设置信任ssl访问
@@ -156,7 +116,7 @@ public class HttpClientUtils {
      * @return
      * @throws Exception
      */
-    public HttpClientResult doGet(String url) throws Exception {
+    public static HttpClientResult doGet(String url) throws Exception {
         return doGet(url, null, null);
     }
 
@@ -181,7 +141,7 @@ public class HttpClientUtils {
      * @return
      * @throws Exception
      */
-    public HttpClientResult doGet(String url, Map<String, String> headers, Map<String, String> params) throws Exception {
+    public static HttpClientResult doGet(String url, Map<String, String> headers, Map<String, String> params) throws Exception {
         // 创建httpClient对象
         CloseableHttpClient httpClient = httpClient();
 
@@ -242,7 +202,7 @@ public class HttpClientUtils {
      * @return
      * @throws Exception
      */
-    public HttpClientResult doPost(String url, Map<String, String> params, String requestBody) throws Exception {
+    public static HttpClientResult doPost(String url, Map<String, String> params, String requestBody) throws Exception {
         return doPost(url, null, params, requestBody);
     }
 
@@ -255,7 +215,7 @@ public class HttpClientUtils {
      * @return
      * @throws Exception
      */
-    public HttpClientResult doPost(String url, Map<String, String> headers, Map<String, String> params, String requestBody) throws Exception {
+    public static HttpClientResult doPost(String url, Map<String, String> headers, Map<String, String> params, String requestBody) throws Exception {
         // 创建httpClient对象
         CloseableHttpClient httpClient = httpClient();
 
@@ -356,7 +316,7 @@ public class HttpClientUtils {
      * @param params
      * @param httpMethod
      */
-    public void packageHeader(Map<String, String> params, HttpRequestBase httpMethod) {
+    public static void packageHeader(Map<String, String> params, HttpRequestBase httpMethod) {
         // 封装请求头
         if (params != null) {
             Set<Map.Entry<String, String>> entrySet = params.entrySet();
@@ -374,7 +334,7 @@ public class HttpClientUtils {
      * @param httpMethod
      * @throws UnsupportedEncodingException
      */
-    public void packageParam(Map<String, String> params, HttpEntityEnclosingRequestBase httpMethod)
+    public static void packageParam(Map<String, String> params, HttpEntityEnclosingRequestBase httpMethod)
             throws UnsupportedEncodingException {
         // 封装请求参数
         if (params != null) {
@@ -398,7 +358,7 @@ public class HttpClientUtils {
      * @return
      * @throws Exception
      */
-    public HttpClientResult getHttpClientResult(CloseableHttpResponse httpResponse,
+    public static HttpClientResult getHttpClientResult(CloseableHttpResponse httpResponse,
                                                 CloseableHttpClient httpClient, HttpRequestBase httpMethod) throws Exception {
         // 执行请求 httpResponse的资源释放将放在外层调用函数处，
         // 无需在此进行释放操作
@@ -426,7 +386,7 @@ public class HttpClientUtils {
      *
      * @param response
      */
-    private void release(CloseableHttpResponse response) {
+    private static void release(CloseableHttpResponse response) {
         if (response != null) {
             try {
                 response.close();
@@ -442,7 +402,7 @@ public class HttpClientUtils {
      *
      * @return
      */
-    private List<Header> getDefaultHeaders() {
+    private static List<Header> getDefaultHeaders() {
         List<Header> headers = new ArrayList<>();
         headers.add(new BasicHeader("User-Agent",
                 "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.16 Safari/537.36"));
@@ -471,7 +431,7 @@ public class HttpClientUtils {
      *
      * @param restTemplate
      */
-    private void modifyDefaultCharset(RestTemplate restTemplate) {
+    private static void modifyDefaultCharset(RestTemplate restTemplate) {
         List<HttpMessageConverter<?>> converterList = restTemplate.getMessageConverters();
         HttpMessageConverter<?> converterTarget = null;
         for (HttpMessageConverter<?> item : converterList) {

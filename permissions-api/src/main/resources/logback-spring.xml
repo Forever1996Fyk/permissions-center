@@ -6,7 +6,9 @@
     <property name="PATH" value="./logs/permissions-api"/>
     <property name="STDOUT_PATTERN" value="%d [%t] %5p %c - %m%n"/>
 
-    <springProperty scope="context" name="appName" source="spring.application.name"/>
+    <!-- Spring yaml 配置是在logback-spring加载之后的，所有在appender中无法获取yaml配置，必须要在springProperty中指定配置-->
+    <springProperty scope="context" name="APPLICATION_NAME" source="spring.application.name"/>
+    <springProperty scope="context" name="ACTIVE" source="spring.profiles.active"/>
 
     <!-- 控制台输出，注意这里不需要加自定义encoder，不需要输出为JSON格式, Docker Logging Driver会帮我们处理 -->
     <appender class="ch.qos.logback.core.ConsoleAppender" name="STDOUT">
@@ -31,8 +33,14 @@
         </triggeringPolicy>
     </appender>
 
+    <!-- 错误日志告警 -->
+    <appender name="AbstractAlarmAppender"
+              class="com.ah.cloud.permissions.biz.infrastructure.log.AbstractAlarmAppender">
+    </appender>
+
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="BIZ_LOG"/>
+        <appender-ref ref="AbstractAlarmAppender"/>
     </root>
 </configuration>

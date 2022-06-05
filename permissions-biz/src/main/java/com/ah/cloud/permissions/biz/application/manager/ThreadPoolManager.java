@@ -88,4 +88,15 @@ public class ThreadPoolManager {
             TimeUnit.SECONDS,
             new ResizeLinkedBlockingQueue<>(DEFAULT_QUEUE_SIZE),
             r -> new Thread(r, "pushMsgThreadPool-" + r.hashCode()));
+
+    /**
+     * 错误日志告警
+     */
+    public static ThreadPoolExecutor errorLogAlarmPool = new ThreadPoolExecutor(
+            30,
+            50,
+            60L,
+            TimeUnit.SECONDS,
+            new ResizeLinkedBlockingQueue<>(DEFAULT_QUEUE_SIZE),
+            r -> new Thread(r, "errorLogAlarmPool-" + r.hashCode()));
 }

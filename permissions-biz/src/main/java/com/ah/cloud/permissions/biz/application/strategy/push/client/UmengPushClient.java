@@ -41,9 +41,6 @@ public class UmengPushClient implements PushClient<UmengNotification, String> {
      */
     protected static final String POST_PATH = "/api/send";
 
-    @Resource
-    private HttpClientUtils httpClientUtils;
-
     @Override
     public String send(UmengNotification msg) throws Exception {
         String timestamp = Integer.toString((int)(System.currentTimeMillis() / 1000));
@@ -57,7 +54,7 @@ public class UmengPushClient implements PushClient<UmengNotification, String> {
         header.put("User-Agent", USER_AGENT);
         StringEntity se = new StringEntity(postBody, "UTF-8");
         post.setEntity(se);
-        HttpClientResult httpClientResult = httpClientUtils.doPost(url, header, postBody);
+        HttpClientResult httpClientResult = HttpClientUtils.doPost(url, header, postBody);
         int status = httpClientResult.getCode();
         log.info("PushClient [send]  Response Code:{}",status);
         String result = httpClientResult.getContent();

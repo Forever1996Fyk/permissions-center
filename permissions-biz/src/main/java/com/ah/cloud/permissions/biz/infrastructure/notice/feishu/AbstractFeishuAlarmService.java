@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * @program: permissions-center
@@ -21,7 +19,6 @@ import java.security.NoSuchAlgorithmException;
  * @create: 2022-06-02 21:39
  **/
 @Slf4j
-@Component
 public abstract class AbstractFeishuAlarmService extends AbstractAlarmService {
 
 

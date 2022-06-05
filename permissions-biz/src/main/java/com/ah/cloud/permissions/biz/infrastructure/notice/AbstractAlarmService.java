@@ -9,9 +9,7 @@ import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.Objects;
 
 /**
@@ -21,17 +19,14 @@ import java.util.Objects;
  * @create: 2022-06-02 15:21
  **/
 @Slf4j
-@Component
 public abstract class AbstractAlarmService implements AlarmService {
-    @Resource
-    private HttpClientUtils httpClientUtils;
 
     @Override
     public void sendNotice(AlarmParam alarmParam) {
         // 参数校验
         String content = checkParamAndReturnContent(alarmParam);
         try {
-            HttpClientResult httpClientResult = httpClientUtils.doPost(alarmParam.getWebHook(), alarmParam.getExtraParams(), content);
+            HttpClientResult httpClientResult = HttpClientUtils.doPost(alarmParam.getWebHook(), alarmParam.getExtraParams(), content);
             System.out.println(JsonUtils.toJSONString(httpClientResult));
         } catch (Exception e) {
             log.error("{}[sendNotice] send failed http client error, params is {}, reason is {}", getLogMark(), JsonUtils.toJSONString(alarmParam), Throwables.getStackTraceAsString(e));

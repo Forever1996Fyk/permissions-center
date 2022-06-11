@@ -50,6 +50,6 @@ public class OperateChatRoomConsumer extends AbstractBaseRedisConsumer<OperateCh
 
     @Override
     protected OperateChatRoomMessage convert(byte[] bytes) {
-        return JsonUtils.toBean(bytes, OperateChatRoomMessage.class);
+        return JsonUtils.byteToBean(bytes, OperateChatRoomMessage.class);
     }
 }

@@ -1,9 +1,7 @@
 package com.ah.cloud.permissions.biz.application.manager.login;
 
 import com.ah.cloud.permissions.biz.domain.login.LoginForm;
-import com.ah.cloud.permissions.biz.domain.token.AccessToken;
 import com.ah.cloud.permissions.biz.domain.token.Token;
-import com.baomidou.mybatisplus.extension.api.R;
 
 /**
  * @program: permissions-center

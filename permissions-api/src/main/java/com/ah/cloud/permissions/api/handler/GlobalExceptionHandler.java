@@ -65,17 +65,6 @@ public class GlobalExceptionHandler {
         return response;
     }
 
-//    @SecurityExceptionHandler(Exception.class)
-//    public ResponseErrorResult handleException(Exception e) {
-//        log.error(e.getMessage(), e);
-//        ResponseErrorResult response = new ResponseErrorResult();
-//        response.setCode(ErrorCodeEnum.UNKNOWN_ERROR.getCode());
-//        response.setMsg(ErrorCodeEnum.UNKNOWN_ERROR.getMsg());
-//        response.setSubCode(e.getClass().getName());
-//        response.setSubMsg(e.getMessage());
-//        return response;
-//    }
-
     @Data
     private class ResponseErrorResult{
         private int code;

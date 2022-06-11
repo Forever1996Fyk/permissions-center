@@ -26,57 +26,12 @@ public class BizException extends RuntimeException {
 
     private String errorMessage;
 
-    public BizException(ErrorCodeEnum errorCode) {
+    public BizException(ErrorCode errorCode) {
         super(errorCode.getMsg());
         this.errorCode = errorCode;
     }
 
-    public BizException(RedisErrorCodeEnum errorCode) {
-        super(errorCode.getMsg());
-        this.errorCode = errorCode;
-    }
-
-    public BizException(FileErrorCodeEnum errorCode) {
-        super(errorCode.getMsg());
-        this.errorCode = errorCode;
-    }
-
-    public BizException(ChatRoomErrorCodeEnum errorCode) {
-        super(errorCode.getMsg());
-        this.errorCode = errorCode;
-    }
-
-
-    public BizException(PushErrorCode errorCode) {
-        super(errorCode.getMsg());
-        this.errorCode = errorCode;
-    }
-
-    public BizException(FileErrorCodeEnum errorCode, String...args) {
-        super(AppUtils.getErrorMsg(errorCode, args));
-        this.errorMessage = AppUtils.getErrorMsg(errorCode, args);
-        this.errorCode = errorCode;
-    }
-
-    public BizException(RedisErrorCodeEnum errorCode, String...args) {
-        super(AppUtils.getErrorMsg(errorCode, args));
-        this.errorMessage = AppUtils.getErrorMsg(errorCode, args);
-        this.errorCode = errorCode;
-    }
-
-    public BizException(ChatRoomErrorCodeEnum errorCode, String...args) {
-        super(AppUtils.getErrorMsg(errorCode, args));
-        this.errorMessage = AppUtils.getErrorMsg(errorCode, args);
-        this.errorCode = errorCode;
-    }
-
-    public BizException(ErrorCodeEnum errorCode, String... args) {
-        super(AppUtils.getErrorMsg(errorCode, args));
-        this.errorMessage = AppUtils.getErrorMsg(errorCode, args);
-        this.errorCode = errorCode;
-    }
-
-    public BizException(PushErrorCode errorCode, String... args) {
+    public BizException(ErrorCode errorCode, String... args) {
         super(AppUtils.getErrorMsg(errorCode, args));
         this.errorMessage = AppUtils.getErrorMsg(errorCode, args);
         this.errorCode = errorCode;

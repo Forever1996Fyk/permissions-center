@@ -48,8 +48,8 @@ public class RedisAuthenticationTokenFilter extends OncePerRequestFilter {
     /**
      * 验证码校验失败处理器
      */
-//    @Resource
-//    private AuthenticationFailureHandler authenticationFailureHandler;
+    @Resource
+    private AuthenticationFailureHandler authenticationFailureHandler;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -81,7 +81,7 @@ public class RedisAuthenticationTokenFilter extends OncePerRequestFilter {
             }
         }  catch (AuthenticationException e) {
             log.error("RedisAuthenticationTokenFilter[doFilterInternal] 根据token认证用户信息异常 exception:{}", Throwables.getStackTraceAsString(e));
-//            authenticationFailureHandler.onAuthenticationFailure(request, response, e);
+            authenticationFailureHandler.onAuthenticationFailure(request, response, e);
             return;
         }
         filterChain.doFilter(request, response);

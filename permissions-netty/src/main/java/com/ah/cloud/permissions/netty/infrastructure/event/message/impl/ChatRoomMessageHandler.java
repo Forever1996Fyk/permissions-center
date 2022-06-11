@@ -2,14 +2,12 @@ package com.ah.cloud.permissions.netty.infrastructure.event.message.impl;
 
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.enums.common.IMErrorCodeEnum;
-import com.ah.cloud.permissions.enums.netty.GroupTypeEnum;
 import com.ah.cloud.permissions.enums.netty.MsgTypeEnum;
 import com.ah.cloud.permissions.netty.application.manager.SessionManager;
 import com.ah.cloud.permissions.netty.domain.message.ChatRoomMessage;
 import com.ah.cloud.permissions.netty.domain.message.body.MessageBody;
 import com.ah.cloud.permissions.netty.domain.session.ChatRoomSession;
 import com.ah.cloud.permissions.netty.domain.session.key.ChatRoomSessionKey;
-import com.ah.cloud.permissions.netty.domain.session.key.GroupSessionKey;
 import com.ah.cloud.permissions.netty.domain.session.SingleSession;
 import com.ah.cloud.permissions.netty.domain.session.key.SingleSessionKey;
 import com.ah.cloud.permissions.netty.infrastructure.event.message.AbstractMessageHandler;
@@ -42,7 +40,7 @@ public class ChatRoomMessageHandler extends AbstractMessageHandler<ChatRoomMessa
 
     @Override
     protected ChatRoomMessage convert(String message) {
-        return JsonUtils.toBean(message, ChatRoomMessage.class);
+        return JsonUtils.stringToBean(message, ChatRoomMessage.class);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,6 +39,28 @@ public class DateUtils {
      */
     public static String getStrCurrentTime() {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern(pattern0));
+    }
+
+    /**
+     * 日期格式化
+     * @param date
+     * @return
+     */
+    public static String format(Date date) {
+        return format(date, pattern0);
+    }
+
+    /**
+     * 日期格式化
+     * @param date
+     * @return
+     */
+    public static String format(Date date, String pattern) {
+        if (date == null) {
+            return "";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        return sdf.format(date);
     }
 
     /**

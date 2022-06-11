@@ -34,7 +34,7 @@ public class OfflineMessageHandler extends AbstractMessageHandler<OfflineMessage
 
     @Override
     protected OfflineMessage convert(String message) {
-        return JsonUtils.toBean(message, OfflineMessage.class);
+        return JsonUtils.stringToBean(message, OfflineMessage.class);
     }
 
     @Override

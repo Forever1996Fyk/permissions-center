@@ -1,6 +1,7 @@
 package com.ah.cloud.permissions.biz.infrastructure.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +48,7 @@ public class JsonUtils {
      * @param <T>
      * @return
      */
-    public static <T> T toBean(String json, Class<T> tClass) {
+    public static <T> T stringToBean(String json, Class<T> tClass) {
         if (StringUtils.isEmpty(json)) {
             return null;
         }
@@ -68,7 +69,7 @@ public class JsonUtils {
      * @param <T>
      * @return
      */
-    public static <T> T toBean(byte[] bytes, Class<T> clazz) {
+    public static <T> T byteToBean(byte[] bytes, Class<T> clazz) {
         if (bytes == null || bytes.length == 0) {
             return null;
         }
@@ -77,6 +78,21 @@ public class JsonUtils {
             return OBJECT_MAPPER.readValue(bytes, clazz);
         } catch (IOException e) {
             log.error("jackson bytes to object  error, bytes:{}, className:{}, exception:{}", bytes, clazz.getName(), Throwables.getStackTraceAsString(e));
+            return null;
+        }
+    }
+
+    /**
+     * byte转为JsonNode
+     *
+     * @param bytes
+     * @return
+     */
+    public static JsonNode byteToReadTree(byte[] bytes) {
+        try {
+            return OBJECT_MAPPER.readTree(bytes);
+        } catch (IOException e) {
+            log.error("jackson bytes read tree convert JsonNode  error, bytes:{}, exception:{}", bytes, Throwables.getStackTraceAsString(e));
             return null;
         }
     }

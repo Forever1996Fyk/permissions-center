@@ -10,7 +10,7 @@ import org.flowable.engine.impl.bpmn.parser.factory.DefaultActivityBehaviorFacto
 
 /**
  * @program: permissions-center
- * @description:
+ * @description: 行为工厂, 如果有自定义的行为, 必须要用行为工厂, 否则flowable会用默认的DefaultActivityBehaviorFactory, 不会加载自定义行为
  * @author: YuKai Fan
  * @create: 2022-06-30 16:01
  **/

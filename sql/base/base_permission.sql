@@ -5,7 +5,10 @@ create table sys_user
     user_id       bigint                                  not null comment '用户id',
     name          varchar(32)                             not null comment '用户姓名',
     account       varchar(20)   default ''                not null comment '登录账号',
-    nick_name     varchar(8)    default ''                not null comment '昵称',
+    nick_name     varchar(16)   default ''                not null comment '昵称',
+    tenant_id     varchar(64)   default ''                not null comment '租户id',
+    post_code     varchar(16)   default ''                not null comment '岗位编码',
+    dept_code     varchar(16)   default ''                not null comment '部门编码',
     password      varchar(100)  default ''                not null comment '登录密码',
     phone         varchar(11)   default ''                not null comment '手机号',
     email         varchar(50)   default ''                not null comment '邮箱',
@@ -238,5 +241,3 @@ create table resource_meta_data
     extension     varchar(2048) default ''                not null comment '拓展字段',
     deleted       bigint        default 0                 not null comment '是否删除'
 ) DEFAULT CHARSET = utf8mb4 COMMENT '资源元数据表';
-
-

@@ -25,6 +25,11 @@ public class SysUserVo {
     private Long id;
 
     /**
+     * 用户id
+     */
+    private Long userId;
+
+    /**
      * 登录账号
      */
     private String account;

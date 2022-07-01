@@ -3,6 +3,7 @@ package com.ah.cloud.permissions.workflow.application.helper;
 import com.ah.cloud.permissions.biz.application.service.ext.SysUserExtService;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUser;
 import com.ah.cloud.permissions.biz.infrastructure.util.DateUtils;
+import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
 import com.ah.cloud.permissions.enums.workflow.ProcessInstanceStateEnum;
 import com.ah.cloud.permissions.workflow.domain.instance.query.InstanceQuery;
@@ -95,6 +96,22 @@ public class ProcessInstanceHelper {
         }
         return ProcessInstanceStateEnum.ACTIVATE;
 
+    }
+
+    /**
+     * 数据转换
+     * @param processInstanceList
+     * @param count
+     * @param query
+     * @return
+     */
+    public PageResult<ProcessInstanceVo> convertToVoPageResult(List<ProcessInstance> processInstanceList, long count, InstanceQuery query) {
+        PageResult<ProcessInstanceVo> pageResult = new PageResult<>();
+        pageResult.setPageNum(query.getPageNum());
+        pageResult.setPageSize(query.getPageSize());
+        pageResult.setRows(this.convertToVoList(processInstanceList));
+        pageResult.setTotal(count);
+        return pageResult;
     }
 
     @Mapper

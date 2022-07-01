@@ -1,5 +1,8 @@
 package com.ah.cloud.permissions.workflow.domain.model.form;
 
+import com.ah.cloud.permissions.biz.infrastructure.annotation.EnumValid;
+import com.ah.cloud.permissions.enums.workflow.BusinessCategoryEnum;
+import com.ah.cloud.permissions.enums.workflow.WorkflowTypeEnum;
 import com.ah.cloud.permissions.workflow.domain.model.dto.ModelMetaInfoDTO;
 import lombok.Data;
 
@@ -34,4 +37,16 @@ public class ModelAddForm {
      * 模型版本
      */
     private Integer version;
+
+    /**
+     * 模型bpmn的xml字符串
+     */
+    @NotEmpty(message = "bpmn文件不能为空")
+    private String modelBpmnXml;
+
+    /**
+     * 流程类别
+     */
+    @EnumValid(enumClass = BusinessCategoryEnum.class, enumMethod = "isValid")
+    private String processCategory;
 }

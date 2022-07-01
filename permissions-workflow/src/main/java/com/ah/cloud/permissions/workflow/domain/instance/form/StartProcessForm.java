@@ -18,4 +18,14 @@ public class StartProcessForm {
      */
     @NotEmpty(message = "流程部署id不能为空")
     private String deploymentId;
+
+    /**
+     * 启动名称
+     */
+    private String processName;
+
+    /**
+     * 业务key
+     */
+    private String businessKey;
 }

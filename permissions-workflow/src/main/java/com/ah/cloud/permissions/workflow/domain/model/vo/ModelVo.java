@@ -47,4 +47,9 @@ public class ModelVo {
      */
     private String lastUpdateTime;
 
+    /**
+     *
+     */
+    private String bpmnXml;
+
 }

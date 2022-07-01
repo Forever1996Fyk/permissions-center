@@ -1,0 +1,17 @@
+@startuml
+skinparam handwritten true
+skinparam backgroundColor #EEEBDC
+skinparam actorStyle hollow
+
+start
+: 创建流程模型 model;
+: 部署流程模型;
+note left
+    1、获取流程部署模型 deployment
+    2、创建流程定义  ProcessDefinition
+end note
+: 设计流程图;
+note left: 更新deployment source字段
+
+end
+@enduml

@@ -160,4 +160,20 @@ public class DateUtils {
     public static Long getCurrentSeconds() {
         return LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
     }
+
+    /**
+     * 获取当前date日期
+     * @return
+     */
+    public static Date getCurrentDateTime() {
+        return new Date();
+    }
+
+    /**
+     * 获取当前LocalDateTime
+     * @return
+     */
+    public static LocalDateTime getCurrentLocalDateTime() {
+        return LocalDateTime.now();
+    }
 }

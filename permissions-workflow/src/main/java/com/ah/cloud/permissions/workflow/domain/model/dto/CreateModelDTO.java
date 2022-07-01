@@ -1,9 +1,13 @@
 package com.ah.cloud.permissions.workflow.domain.model.dto;
 
+import com.ah.cloud.permissions.biz.infrastructure.annotation.EnumValid;
+import com.ah.cloud.permissions.enums.workflow.BusinessCategoryEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotEmpty;
 
 /**
  * @program: permissions-center
@@ -28,7 +32,12 @@ public class CreateModelDTO {
     private String modelKey;
 
     /**
-     * 模型元信息
+     * 模型描述
      */
-    private ModelMetaInfoDTO metaInfo;
+    private String modelDesc;
+
+    /**
+     * 流程类别
+     */
+    private BusinessCategoryEnum processCategory;
 }

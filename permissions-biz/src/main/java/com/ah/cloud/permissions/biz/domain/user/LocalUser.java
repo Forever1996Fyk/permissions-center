@@ -47,10 +47,6 @@ public class LocalUser implements UserDetails {
     private DeviceInfo deviceInfo;
 
     /**
-     * 用户登录设备信息
-     */
-
-    /**
      * 当前用户的登录token
      */
     private String accessToken;

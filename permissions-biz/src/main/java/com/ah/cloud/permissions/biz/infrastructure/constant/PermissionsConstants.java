@@ -108,4 +108,8 @@ public class PermissionsConstants {
      * map的初始大小
      */
     public static final Integer MAP_DEFAULT_SIZE = 16;
+    /**
+     * map的初始大小
+     */
+    public static final String UTF_8 = "UTF-8";
 }

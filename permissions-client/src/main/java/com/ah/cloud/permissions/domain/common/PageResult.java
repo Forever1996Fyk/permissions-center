@@ -36,4 +36,12 @@ public class PageResult<T> {
      * 分页数据
      */
     private List<T> rows;
+
+    public int getPages() {
+        if (this.pages == 0) {
+            return (int) (total / pageSize + ((total % pageSize == 0) ? 0 : 1));
+        } else {
+            return this.pages;
+        }
+    }
 }

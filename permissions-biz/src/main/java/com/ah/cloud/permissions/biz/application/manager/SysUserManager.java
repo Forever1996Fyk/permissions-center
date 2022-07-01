@@ -3,24 +3,26 @@ package com.ah.cloud.permissions.biz.application.manager;
 import com.ah.cloud.permissions.biz.application.checker.SysUserChecker;
 import com.ah.cloud.permissions.biz.application.helper.SysUserHelper;
 import com.ah.cloud.permissions.biz.application.service.SysRoleMenuService;
-import com.ah.cloud.permissions.biz.application.service.SysUserService;
 import com.ah.cloud.permissions.biz.application.service.ext.SysUserApiExtService;
+import com.ah.cloud.permissions.biz.application.service.ext.SysUserExtService;
 import com.ah.cloud.permissions.biz.application.service.ext.SysUserMenuExtService;
 import com.ah.cloud.permissions.biz.application.service.ext.SysUserRoleExtService;
 import com.ah.cloud.permissions.biz.domain.menu.vo.RouterVo;
+import com.ah.cloud.permissions.biz.domain.user.dto.SelectSysUserDTO;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserAddForm;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserApiAddForm;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserMenuAddForm;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserRoleAddForm;
 import com.ah.cloud.permissions.biz.domain.user.query.SysUserQuery;
+import com.ah.cloud.permissions.biz.domain.user.vo.SelectSysUserVo;
 import com.ah.cloud.permissions.biz.domain.user.vo.SysUserVo;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.*;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
+import com.ah.cloud.permissions.enums.UserStatusEnum;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
-import com.ah.cloud.permissions.enums.common.FileErrorCodeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.PageInfo;
@@ -57,9 +59,9 @@ public class SysUserManager {
     @Resource
     private SysMenuManager sysMenuManager;
     @Resource
-    private SysUserService sysUserService;
-    @Resource
     private ResourceManager resourceManager;
+    @Resource
+    private SysUserExtService sysUserExtService;
     @Resource
     private SysRoleMenuService sysRoleMenuService;
     @Resource
@@ -83,7 +85,7 @@ public class SysUserManager {
         /*
         判断用户手机号是否已存在
          */
-        List<SysUser> sysUsers = sysUserService.list(
+        List<SysUser> sysUsers = sysUserExtService.list(
                 new QueryWrapper<SysUser>().lambda()
                         .eq(SysUser::getPhone, form.getPhone())
                         .eq(SysUser::getDeleted, DeletedEnum.NO.value)
@@ -99,7 +101,7 @@ public class SysUserManager {
         /*
         保存用户信息
          */
-        sysUserService.save(sysUser);
+        sysUserExtService.save(sysUser);
     }
 
     /**
@@ -111,7 +113,7 @@ public class SysUserManager {
         /*
         获取当前用户
          */
-        SysUser sysUser = sysUserService.getById(id);
+        SysUser sysUser = sysUserExtService.getById(id);
         if (Objects.isNull(sysUser)) {
             throw new BizException(ErrorCodeEnum.USER_NOT_EXIST);
         }
@@ -120,7 +122,7 @@ public class SysUserManager {
          */
         sysUser.setDeleted(id);
         sysUser.setModifier(String.valueOf(SecurityUtils.getBaseUserInfo().getUserId()));
-        sysUserService.updateById(sysUser);
+        sysUserExtService.updateById(sysUser);
 
         /*
         逻辑删除用户角色 todo
@@ -139,7 +141,7 @@ public class SysUserManager {
      * @return
      */
     public SysUserVo findSysUserById(Long id) {
-        SysUser sysUser = sysUserService.getById(id);
+        SysUser sysUser = sysUserExtService.getById(id);
         if (Objects.isNull(sysUser)) {
             throw new BizException(ErrorCodeEnum.USER_NOT_EXIST);
         }
@@ -155,7 +157,7 @@ public class SysUserManager {
     public PageResult<SysUserVo> pageSysUsers(SysUserQuery query) {
         PageInfo<SysUser> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
                 .doSelectPageInfo(
-                        () -> sysUserService.list(
+                        () -> sysUserExtService.list(
                                 new QueryWrapper<SysUser>().lambda()
                                         .like(
                                                 !StringUtils.isEmpty(query.getNickName()),
@@ -314,7 +316,7 @@ public class SysUserManager {
         SysUser updateSysUser = new SysUser();
         updateSysUser.setUserId(userId);
         updateSysUser.setAvatar(url);
-        boolean updateResult = sysUserService.update(
+        boolean updateResult = sysUserExtService.update(
                 updateSysUser,
                 new UpdateWrapper<SysUser>().lambda()
                         .eq(SysUser::getUserId, userId)
@@ -324,5 +326,61 @@ public class SysUserManager {
             throw new BizException(ErrorCodeEnum.USER_AVATAR_UPLOAD_FAILED);
         }
         return url;
+    }
+
+    /**
+     * 根据用户id集合获取系统用户
+     * @param userIds
+     * @return
+     */
+    public List<SysUser> listSysUserByUserIds(Collection<Long> userIds) {
+        return sysUserExtService.list(
+                new QueryWrapper<SysUser>().lambda()
+                        .in(SysUser::getUserId, userIds)
+                        .eq(SysUser::getDeleted, DeletedEnum.NO.value)
+        );
+    }
+
+    /**
+     * 根据用户id获取当前部门负责人id
+     * @param proposerId
+     * @return
+     */
+    public SysUser findLeaderL1ByUserId(Long proposerId) {
+        SysUser sysUser = sysUserExtService.getOneByUserId(proposerId);
+        String deptCode = sysUser.getDeptCode();
+        // 根据部门编码获取部门负责人id
+        Long deptLeaderId = 0L;
+        return Objects.equals(proposerId, deptLeaderId) ? sysUser : sysUserExtService.getOneByUserId(deptLeaderId);
+    }
+
+    /**
+     * 获取用户选择list
+     * @return
+     */
+    public List<SelectSysUserVo> selectSysUserVoList() {
+        List<SysUser> sysUserList = sysUserExtService.list(
+                new QueryWrapper<SysUser>().lambda()
+                        .eq(SysUser::getDeleted, DeletedEnum.NO.value)
+                        .eq(SysUser::getStatus, UserStatusEnum.NORMAL.getStatus())
+        );
+        return sysUserList.stream()
+                .map(sysUser -> SelectSysUserVo.builder().userId(sysUser.getUserId()).name(sysUser.getNickName()).build())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 获取用户选择list
+     * @return
+     */
+    public List<SelectSysUserDTO> selectSysUserDTOList() {
+        List<SysUser> sysUserList = sysUserExtService.list(
+                new QueryWrapper<SysUser>().lambda()
+                        .eq(SysUser::getDeleted, DeletedEnum.NO.value)
+                        .eq(SysUser::getStatus, UserStatusEnum.NORMAL.getStatus())
+        );
+        return sysUserList.stream()
+                .map(sysUser -> SelectSysUserDTO.builder().code(String.valueOf(sysUser.getUserId())).name(sysUser.getNickName()).build())
+                .collect(Collectors.toList());
     }
 }

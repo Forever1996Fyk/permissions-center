@@ -68,6 +68,16 @@ public class SysUser implements Serializable {
     private String avatar;
 
     /**
+     * 部门编码
+     */
+    private String deptCode;
+
+    /**
+     * 岗位编码
+     */
+    private String postCode;
+
+    /**
      * 账号状态(1:正常,2:停用,3:注销)
      */
     private Integer status;

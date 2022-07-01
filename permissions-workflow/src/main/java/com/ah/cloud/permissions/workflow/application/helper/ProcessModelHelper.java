@@ -4,8 +4,10 @@ import com.ah.cloud.permissions.biz.infrastructure.util.DateUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.workflow.domain.model.dto.ModelMetaInfoDTO;
 import com.ah.cloud.permissions.workflow.domain.model.vo.ModelVo;
+import com.ah.cloud.permissions.workflow.domain.model.vo.SelectProcessVo;
 import org.apache.commons.lang3.StringUtils;
 import org.flowable.engine.repository.Model;
+import org.flowable.engine.repository.ProcessDefinition;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -57,5 +59,22 @@ public class ProcessModelHelper {
      */
     public String getDeployKey(String key) {
         return key + ".bpmn";
+    }
+
+    /**
+     * 数据转换
+     * @param processDefinitionList
+     * @return
+     */
+    public List<SelectProcessVo> convertToVoList(List<ProcessDefinition> processDefinitionList) {
+        return processDefinitionList.stream()
+                .map(processDefinition ->
+                        SelectProcessVo.builder()
+                                .name(processDefinition.getName())
+                                .key(processDefinition.getKey())
+                                .processDefinitionId(processDefinition.getId())
+                                .build()
+                )
+                .collect(Collectors.toList());
     }
 }

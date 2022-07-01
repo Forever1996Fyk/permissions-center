@@ -1,24 +1,21 @@
 package com.ah.cloud.permissions.biz.application.manager;
 
 import com.ah.cloud.permissions.biz.application.helper.UserAuthorityHelper;
-import com.ah.cloud.permissions.biz.application.service.SysUserService;
-import com.ah.cloud.permissions.biz.application.strategy.cache.impl.RedisCacheHandleStrategy;
-import com.ah.cloud.permissions.biz.domain.user.LocalUser;
+import com.ah.cloud.permissions.biz.application.service.ext.SysUserExtService;
+import com.ah.cloud.permissions.biz.application.service.ext.SysUserRoleExtService;
 import com.ah.cloud.permissions.biz.domain.user.UserAuthorityDTO;
-import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
+import com.ah.cloud.permissions.biz.domain.user.dto.UserScopeInfoDTO;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.*;
+import com.ah.cloud.permissions.biz.infrastructure.util.CollectionUtils;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.UsesSunMisc;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @program: permissions-center
@@ -31,9 +28,11 @@ import java.util.Set;
 public class UserAuthManager {
 
     @Resource
-    private SysUserService sysUserService;
+    private SysUserExtService sysUserExtService;
     @Resource
     private UserAuthorityHelper userAuthorityHelper;
+    @Resource
+    private SysUserRoleExtService sysUserRoleExtService;
 
     /**
      * 根据用户账号 构造用户权限实体数据
@@ -45,7 +44,7 @@ public class UserAuthManager {
         /*
         1. 根据账号查询用户信息
          */
-        SysUser sysUser = sysUserService.getOne(
+        SysUser sysUser = sysUserExtService.getOne(
                 new QueryWrapper<SysUser>().lambda()
                         .eq(SysUser::getAccount, username)
                         .eq(SysUser::getDeleted, DeletedEnum.NO.value)
@@ -68,11 +67,7 @@ public class UserAuthManager {
         /*
         1. 根据账号查询用户信息
          */
-        SysUser sysUser = sysUserService.getOne(
-                new QueryWrapper<SysUser>().lambda()
-                        .eq(SysUser::getUserId, userId)
-                        .eq(SysUser::getDeleted, DeletedEnum.NO.value)
-        );
+        SysUser sysUser = sysUserExtService.getOneByUserId(userId);
         if (Objects.isNull(sysUser)) {
             log.warn("UserAuthManager[createUserAuthorityByUsername] query SysUser is empty by userId={}", userId);
             throw new BizException(ErrorCodeEnum.AUTHENTICATION_USER_ID_ERROR, String.valueOf(userId));
@@ -97,5 +92,51 @@ public class UserAuthManager {
         return userAuthorityDTO;
     }
 
+    /**
+     * 获取用户数据权限信息
+     * @param userId
+     * @return
+     */
+    public UserScopeInfoDTO getUserRoleInfoByUserId(Long userId) {
+        SysUser sysUser = sysUserExtService.getOneByUserId(userId);
+        return userAuthorityHelper.buildUserScopeInfo(sysUser);
+    }
 
+    /**
+     * 批量获取用户数据权限信息
+     * @param userIds
+     * @return
+     */
+    public List<UserScopeInfoDTO> listUserRoleInfoByUserIds(Collection<Long> userIds) {
+        return userAuthorityHelper.buildUserScopeInfoList(userIds);
+    }
+
+    /**
+     * 根据角色编码获取所有的用户id集合
+     * @param roleCodes
+     * @return
+     */
+    public Set<Long> listUserIdByRoleCodes(Set<String> roleCodes) {
+        if (CollectionUtils.isEmpty(roleCodes)) {
+            return new HashSet<>();
+        }
+        List<SysUserRole> sysUserRoleList = sysUserRoleExtService.list(
+                new QueryWrapper<SysUserRole>().lambda()
+                        .in(SysUserRole::getRoleCode, roleCodes)
+                        .eq(SysUserRole::getDeleted, DeletedEnum.NO.value)
+        );
+        return CollectionUtils.convertSet(sysUserRoleList, SysUserRole::getUserId);
+    }
+
+    /**
+     * 根据部门编码, 获取所有用户集合 todo
+     *
+     * 直接根据部门编码查询即可, 此方法不分部门领导与部门成员
+     *
+     * @param deptCodes
+     * @return
+     */
+    public List<SysUser> listUserIdByDeptCodes(Set<String> deptCodes) {
+        return null;
+    }
 }

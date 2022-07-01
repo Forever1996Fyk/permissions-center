@@ -1,6 +1,8 @@
 package com.ah.cloud.permissions.biz.infrastructure.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
@@ -8,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @program: permissions-center
@@ -23,6 +25,7 @@ public class JsonUtils {
 
     /**
      * 转为json string
+     *
      * @param t
      * @param <T>
      * @return
@@ -43,6 +46,7 @@ public class JsonUtils {
 
     /**
      * json string转为bean
+     *
      * @param json
      * @param tClass
      * @param <T>
@@ -59,6 +63,72 @@ public class JsonUtils {
             log.error("jackson jsonString to object  error, params:{}, exception:{}", json, Throwables.getStackTraceAsString(e));
             return null;
         }
+    }
+
+    /**
+     * json string转为map
+     *
+     * @param json
+     * @param <T>
+     * @return
+     */
+    public static Map<String, Object> stringToMap(String json) {
+        if (StringUtils.isEmpty(json)) {
+            return null;
+        }
+        try {
+            log.info("jackson jsonString to map, params:{}", json);
+            TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {};
+            return OBJECT_MAPPER.readValue(json, typeRef);
+        } catch (JsonProcessingException e) {
+            log.error("jackson jsonString to object  error, params:{}, exception:{}", json, Throwables.getStackTraceAsString(e));
+            return null;
+        }
+    }
+
+    /**
+     * json字符串转成list
+     *
+     * @param jsonString
+     * @param cls
+     * @return
+     */
+    public static <T> List<T> jsonToList(String jsonString, Class<T> cls) {
+        try {
+            return OBJECT_MAPPER.readValue(jsonString, getCollectionType(List.class, cls));
+        } catch (JsonProcessingException e) {
+            String className = cls.getSimpleName();
+            log.error(" parse json [{}] to class [{}] error：{}", jsonString, className, e);
+        }
+        return null;
+    }
+
+    /**
+     * json字符串转成list
+     *
+     * @param jsonString
+     * @param cls
+     * @return
+     */
+    public static <T> Set<T> jsonToSet(String jsonString, Class<T> cls) {
+        try {
+            return OBJECT_MAPPER.readValue(jsonString, getCollectionType(Set.class, cls));
+        } catch (JsonProcessingException e) {
+            String className = cls.getSimpleName();
+            log.error(" parse json [{}] to class [{}] error：{}", jsonString, className, e);
+        }
+        return null;
+    }
+
+    /**
+     * 获取泛型的Collection Type
+     *
+     * @param collectionClass 泛型的Collection
+     * @param elementClasses  实体bean
+     * @return JavaType Java类型
+     */
+    private static JavaType getCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {
+        return OBJECT_MAPPER.getTypeFactory().constructParametricType(collectionClass, elementClasses);
     }
 
     /**
@@ -93,6 +163,21 @@ public class JsonUtils {
             return OBJECT_MAPPER.readTree(bytes);
         } catch (IOException e) {
             log.error("jackson bytes read tree convert JsonNode  error, bytes:{}, exception:{}", bytes, Throwables.getStackTraceAsString(e));
+            return null;
+        }
+    }
+
+    /**
+     * byte转为JsonNode
+     *
+     * @param content
+     * @return
+     */
+    public static JsonNode byteToReadTree(String content) {
+        try {
+            return OBJECT_MAPPER.readTree(content);
+        } catch (IOException e) {
+            log.error("jackson bytes read tree convert JsonNode  error, bytes:{}, exception:{}", content, Throwables.getStackTraceAsString(e));
             return null;
         }
     }

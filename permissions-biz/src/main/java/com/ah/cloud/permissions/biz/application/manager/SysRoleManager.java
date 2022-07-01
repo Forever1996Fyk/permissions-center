@@ -5,11 +5,13 @@ import com.ah.cloud.permissions.biz.application.service.SysRoleService;
 import com.ah.cloud.permissions.biz.application.service.SysUserRoleService;
 import com.ah.cloud.permissions.biz.application.service.ext.SysRoleApiExtService;
 import com.ah.cloud.permissions.biz.application.service.ext.SysRoleMenuExtService;
+import com.ah.cloud.permissions.biz.domain.role.dto.SelectSysRoleDTO;
 import com.ah.cloud.permissions.biz.domain.role.form.SysRoleAddForm;
 import com.ah.cloud.permissions.biz.domain.role.form.SysRoleApiAddForm;
 import com.ah.cloud.permissions.biz.domain.role.form.SysRoleMenuAddForm;
 import com.ah.cloud.permissions.biz.domain.role.form.SysRoleUpdateForm;
 import com.ah.cloud.permissions.biz.domain.role.query.SysRoleQuery;
+import com.ah.cloud.permissions.biz.domain.role.vo.SelectSysRoleVo;
 import com.ah.cloud.permissions.biz.domain.role.vo.SysRoleVO;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
@@ -32,6 +34,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @program: permissions-center
@@ -218,5 +221,33 @@ public class SysRoleManager {
 
         List<SysRoleApi> sysRoleApiList = sysRoleHelper.getSysRoleApiEntityList(form);
         sysRoleApiExtService.saveBatch(sysRoleApiList);
+    }
+
+    /**
+     * 获取角色选择列表
+     * @return
+     */
+    public List<SelectSysRoleVo> selectSysRoleVoList() {
+        List<SysRole> sysRoleList = sysRoleService.list(
+                new QueryWrapper<SysRole>().lambda()
+                        .eq(SysRole::getDeleted, DeletedEnum.NO.value)
+        );
+        return sysRoleList.stream()
+                .map(sysRole -> SelectSysRoleVo.builder().roleCode(sysRole.getRoleCode()).roleName(sysRole.getRoleName()).build())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 获取角色选择列表
+     * @return
+     */
+    public List<SelectSysRoleDTO> selectSysRoleDTOList() {
+        List<SysRole> sysRoleList = sysRoleService.list(
+                new QueryWrapper<SysRole>().lambda()
+                        .eq(SysRole::getDeleted, DeletedEnum.NO.value)
+        );
+        return sysRoleList.stream()
+                .map(sysRole -> SelectSysRoleDTO.builder().code(sysRole.getRoleCode()).name(sysRole.getRoleName()).build())
+                .collect(Collectors.toList());
     }
 }

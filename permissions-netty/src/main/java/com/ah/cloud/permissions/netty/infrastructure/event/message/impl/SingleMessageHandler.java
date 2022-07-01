@@ -39,7 +39,7 @@ public class SingleMessageHandler extends AbstractMessageHandler<SingleMessage> 
 
     @Override
     protected SingleMessage convert(String message) {
-        return JsonUtils.toBean(message, SingleMessage.class);
+        return JsonUtils.stringToBean(message, SingleMessage.class);
     }
 
     @Override

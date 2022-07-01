@@ -56,7 +56,7 @@ public class BindMessageHandler extends AbstractMessageHandler<BindMessage> {
 
     @Override
     protected BindMessage convert(String message) {
-        return JsonUtils.toBean(message, BindMessage.class);
+        return JsonUtils.stringToBean(message, BindMessage.class);
     }
 
     @Override

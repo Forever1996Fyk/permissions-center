@@ -1,0 +1,37 @@
+@startuml
+skinparam handwritten true
+skinparam backgroundColor #EEEBDC
+skinparam actorStyle hollow
+
+actor 用户 as user
+entity 浏览器 as web
+entity 流程模型页面 as model
+entity 流程实例 as instance
+
+group 流程模型
+user -> web : 创建流程模型
+web -> model: 生成model
+model -> model: 新增ACT_RE_MODEL
+user -> web : 设计流程图
+web -> model : 保存流程图
+model -> model: 更新ACT_RE_MODEL的modelEditorSource字段
+end group
+
+group 流程部署
+user -> web : 选择流程模型部署
+web -> model : 部署流程模型
+model -> model: 创建流程部署deployment
+model -> model: 创建流程定义ProcessDefinition
+end group
+
+group 流程实例
+user -> web : 保存业务单
+web -> instance : 创建请假流程实例
+note right
+    疑问:
+    创建流程实例, 需要通过流程定义id或者流程定义key创建, 而流程定义是在流程部署的时候创建的,
+    所以如何根据业务单 找到对应的流程定义? 才能启动流程实例
+end note
+end group
+
+@enduml

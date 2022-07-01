@@ -5,7 +5,6 @@ import com.ah.cloud.permissions.biz.application.strategy.selector.QuartzJobChang
 import com.ah.cloud.permissions.biz.domain.quartz.dto.QuartzJobChangeDTO;
 import com.ah.cloud.permissions.biz.infrastructure.mq.redis.AbstractBaseRedisConsumer;
 import com.ah.cloud.permissions.biz.infrastructure.mq.redis.message.QuartzJobChangeMessage;
-import com.ah.cloud.permissions.biz.infrastructure.mq.redis.producer.QuartzJobChangeProducer;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.connection.MessageListener;
@@ -54,6 +53,6 @@ public class QuartzJobChangeConsumer extends AbstractBaseRedisConsumer<QuartzJob
 
     @Override
     protected QuartzJobChangeMessage convert(byte[] bytes) {
-        return JsonUtils.toBean(bytes, QuartzJobChangeMessage.class);
+        return JsonUtils.byteToBean(bytes, QuartzJobChangeMessage.class);
     }
 }

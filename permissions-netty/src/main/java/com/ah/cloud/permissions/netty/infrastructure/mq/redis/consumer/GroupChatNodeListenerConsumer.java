@@ -2,16 +2,9 @@ package com.ah.cloud.permissions.netty.infrastructure.mq.redis.consumer;
 
 import com.ah.cloud.permissions.biz.infrastructure.mq.redis.AbstractBaseRedisConsumer;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
-import com.ah.cloud.permissions.enums.netty.FormatEnum;
-import com.ah.cloud.permissions.enums.netty.MsgSourceEnum;
 import com.ah.cloud.permissions.netty.application.manager.SessionManager;
 import com.ah.cloud.permissions.netty.domain.dto.MessageNodeDTO;
-import com.ah.cloud.permissions.netty.domain.message.ChatRoomMessage;
-import com.ah.cloud.permissions.netty.domain.message.body.MessageBody;
-import com.ah.cloud.permissions.netty.domain.message.mq.ChatRoomNodeMessage;
-import com.ah.cloud.permissions.netty.domain.session.ChatRoomSession;
 import com.ah.cloud.permissions.netty.domain.session.GroupSession;
-import com.ah.cloud.permissions.netty.domain.session.key.ChatRoomSessionKey;
 import com.ah.cloud.permissions.netty.domain.session.key.GroupSessionKey;
 import com.ah.cloud.permissions.netty.infrastructure.service.session.GroupSessionService;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +54,6 @@ public class GroupChatNodeListenerConsumer extends AbstractBaseRedisConsumer<Mes
 
     @Override
     protected MessageNodeDTO convert(byte[] bytes) {
-        return JsonUtils.toBean(bytes, MessageNodeDTO.class);
+        return JsonUtils.byteToBean(bytes, MessageNodeDTO.class);
     }
 }

@@ -7,7 +7,6 @@ import com.ah.cloud.permissions.biz.domain.code.SendResult;
 import com.ah.cloud.permissions.biz.domain.code.ValidateResult;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
-import com.ah.cloud.permissions.enums.RepositoryModeEnum;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
@@ -52,13 +51,11 @@ public abstract class AbstractValidateCodeProvider implements ValidateCodeProvid
             log.error("AbstractValidateCodeProvider[send] 验证码发送失败 BizException:{}, param:{}",
                     Throwables.getStackTraceAsString(e),
                     JsonUtils.toJSONString(sendMode));
-//            sendResult = SendResult.buildResult(e.getErrorCode());
             throw e;
         } catch (Exception e) {
             log.error("AbstractValidateCodeProvider[send] 验证码发送失败 Exception:{}, param:{}",
                     Throwables.getStackTraceAsString(e),
                     JsonUtils.toJSONString(sendMode));
-//            sendResult = SendResult.buildResult(ErrorCodeEnum.UNKNOWN_ERROR);
             throw new BizException(ErrorCodeEnum.UNKNOWN_ERROR);
         }
         return sendResult;
@@ -86,14 +83,12 @@ public abstract class AbstractValidateCodeProvider implements ValidateCodeProvid
             log.error("AbstractValidateCodeProvider[validate] 验证码发送失败 BizException:{}, param:{}",
                     Throwables.getStackTraceAsString(e),
                     JsonUtils.toJSONString(sendMode));
-//            validateResult = ValidateResult.buildResult(e.getErrorCode());
             throw e;
         } catch (Exception e) {
             log.error("AbstractValidateCodeProvider[validate] 验证码发送失败 Exception:{}, param:{}",
                     Throwables.getStackTraceAsString(e),
                     JsonUtils.toJSONString(sendMode));
             throw new BizException(ErrorCodeEnum.UNKNOWN_ERROR);
-//            validateResult = ValidateResult.buildResult(ErrorCodeEnum.UNKNOWN_ERROR);
         }
         return validateResult;
     }

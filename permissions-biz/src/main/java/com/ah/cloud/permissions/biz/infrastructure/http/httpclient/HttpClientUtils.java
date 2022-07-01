@@ -162,10 +162,6 @@ public class HttpClientUtils {
          * 超时时间，单位毫秒。这个属性是新加的属性，因为目前版本是可以共享连接池的。
          * setSocketTimeout：请求获取数据的超时时间(即响应时间)，单位毫秒。 如果访问一个接口，多少时间内无法返回数据，就直接放弃此次调用。
          */
-       /* RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
-        httpGet.setConfig(requestConfig);*/
-
-        // 设置请求头
         packageHeader(headers, httpGet);
 
         // 创建httpResponse对象
@@ -282,8 +278,6 @@ public class HttpClientUtils {
     public HttpClientResult doDelete(String url) throws Exception {
         CloseableHttpClient httpClient = httpClient();
         HttpDelete httpDelete = new HttpDelete(url);
-        /*RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
-        httpDelete.setConfig(requestConfig);*/
 
         CloseableHttpResponse httpResponse = null;
         try {

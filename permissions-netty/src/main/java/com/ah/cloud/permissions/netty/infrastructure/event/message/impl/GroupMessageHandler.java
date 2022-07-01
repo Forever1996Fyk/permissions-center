@@ -1,9 +1,7 @@
 package com.ah.cloud.permissions.netty.infrastructure.event.message.impl;
 
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
-import com.ah.cloud.permissions.enums.netty.GroupTypeEnum;
 import com.ah.cloud.permissions.enums.netty.MsgTypeEnum;
-import com.ah.cloud.permissions.netty.application.manager.MessageStoreManager;
 import com.ah.cloud.permissions.netty.application.manager.SessionManager;
 import com.ah.cloud.permissions.netty.domain.message.GroupMessage;
 import com.ah.cloud.permissions.netty.domain.message.body.MessageBody;
@@ -14,19 +12,14 @@ import com.ah.cloud.permissions.netty.domain.session.SingleSession;
 import com.ah.cloud.permissions.netty.infrastructure.event.message.AbstractMessageHandler;
 import com.ah.cloud.permissions.netty.infrastructure.event.message.MessageHandler;
 import com.ah.cloud.permissions.netty.infrastructure.service.client.GroupSendClientService;
-import com.ah.cloud.permissions.netty.infrastructure.service.client.SingleSendClientService;
 import com.ah.cloud.permissions.netty.infrastructure.service.session.GroupSessionService;
 import com.ah.cloud.permissions.netty.infrastructure.service.session.SessionService;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @program: permissions-center
@@ -44,7 +37,7 @@ public class GroupMessageHandler extends AbstractMessageHandler<GroupMessage> {
 
     @Override
     protected GroupMessage convert(String message) {
-        return JsonUtils.toBean(message, GroupMessage.class);
+        return JsonUtils.stringToBean(message, GroupMessage.class);
     }
 
     @Override

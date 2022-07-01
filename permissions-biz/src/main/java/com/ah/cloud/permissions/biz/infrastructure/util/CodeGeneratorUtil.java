@@ -27,7 +27,7 @@ public class CodeGeneratorUtil {
     public static void main(String[] args) {
 
         //todo 需要生成的表
-        String[] tables = new String[]{"msg_info","msg_account_device","msg_app_push_log","msg_event","msg_reach","msg_target"};
+        String[] tables = new String[]{"workflow_business_task_form"};
 
 
         //代码生成器
@@ -48,7 +48,7 @@ public class CodeGeneratorUtil {
 
         //数据源配置 //jdbc:mysql://192.168.122.4:3306/ypsx_ofc
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://49.234.219.109:3306/permissions-center?nullCatalogMeansCurrent=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false")
+        dsc.setUrl("jdbc:mysql://49.234.219.109:3306/permission-center?nullCatalogMeansCurrent=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false")
                 .setDriverName("com.mysql.cj.jdbc.Driver")
                 .setUsername("root")
                 .setPassword("root");

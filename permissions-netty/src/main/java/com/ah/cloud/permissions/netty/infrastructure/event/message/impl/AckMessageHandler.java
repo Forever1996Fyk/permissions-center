@@ -28,7 +28,7 @@ public class AckMessageHandler extends AbstractMessageHandler<AckMessage> {
 
     @Override
     protected AckMessage convert(String message) {
-        return JsonUtils.toBean(message, AckMessage.class);
+        return JsonUtils.stringToBean(message, AckMessage.class);
     }
 
     @Override

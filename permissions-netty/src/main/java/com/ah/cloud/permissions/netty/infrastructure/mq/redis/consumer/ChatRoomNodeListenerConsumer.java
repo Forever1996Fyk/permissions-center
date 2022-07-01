@@ -3,7 +3,6 @@ package com.ah.cloud.permissions.netty.infrastructure.mq.redis.consumer;
 import com.ah.cloud.permissions.biz.infrastructure.mq.redis.AbstractBaseRedisConsumer;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.enums.netty.FormatEnum;
-import com.ah.cloud.permissions.enums.netty.GroupTypeEnum;
 import com.ah.cloud.permissions.enums.netty.MsgSourceEnum;
 import com.ah.cloud.permissions.netty.application.manager.SessionManager;
 import com.ah.cloud.permissions.netty.domain.message.ChatRoomMessage;
@@ -11,7 +10,6 @@ import com.ah.cloud.permissions.netty.domain.message.body.MessageBody;
 import com.ah.cloud.permissions.netty.domain.message.mq.ChatRoomNodeMessage;
 import com.ah.cloud.permissions.netty.domain.session.ChatRoomSession;
 import com.ah.cloud.permissions.netty.domain.session.key.ChatRoomSessionKey;
-import com.ah.cloud.permissions.netty.domain.session.key.GroupSessionKey;
 import com.ah.cloud.permissions.netty.infrastructure.service.session.GroupSessionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -74,6 +72,6 @@ public class ChatRoomNodeListenerConsumer extends AbstractBaseRedisConsumer<Chat
 
     @Override
     protected ChatRoomNodeMessage convert(byte[] bytes) {
-        return JsonUtils.toBean(bytes, ChatRoomNodeMessage.class);
+        return JsonUtils.byteToBean(bytes, ChatRoomNodeMessage.class);
     }
 }

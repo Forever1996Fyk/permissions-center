@@ -20,7 +20,7 @@ CREATE TABLE `msg_info`
     `create_time`    timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uniq_msg_no` (`msg_code`) USING BTREE COMMENT '消息编码唯一'
-) DEFAULT CHARSET = utf8mb4 COMMENT = '消息主表'
+) DEFAULT CHARSET = utf8mb4 COMMENT = '消息主表';
 
 CREATE TABLE `msg_account_device`
 (
@@ -57,7 +57,7 @@ CREATE TABLE `msg_app_push_log`
     `create_time`    timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE,
     KEY              `index_source` (`source_code`, `succeed`, `deleted`)
-) DEFAULT CHARSET = utf8mb4 COMMENT = 'app push记录表'
+) DEFAULT CHARSET = utf8mb4 COMMENT = 'app push记录表';
 
 CREATE TABLE `msg_event`
 (
@@ -79,7 +79,7 @@ CREATE TABLE `msg_event`
     `create_time`    timestamp    NOT NULL              DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uniq_msg_event` (`event_code`) USING BTREE COMMENT '消息编码唯一'
-) DEFAULT CHARSET = utf8 COMMENT = '消息事件表'
+) DEFAULT CHARSET = utf8 COMMENT = '消息事件表';
 
 CREATE TABLE `msg_reach`
 (
@@ -100,7 +100,7 @@ CREATE TABLE `msg_reach`
     `create_time`        timestamp   NOT NULL               DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uniq_msg_reach` (`source_id`, `reach_type`, `reach_value`, `deleted`) USING BTREE COMMENT '目标来源唯一'
-) DEFAULT CHARSET = utf8 COMMENT = '消息目标表'
+) DEFAULT CHARSET = utf8 COMMENT = '消息目标表';
 
 CREATE TABLE `msg_target`
 (

@@ -65,7 +65,7 @@ public class AbstractAlarmAppender extends UnsynchronizedAppenderBase<LoggingEve
                     .append("\n");
             log.info("AbstractAlarmAppender[append] log alarm content is {}", content);
             ErrorLogAlarmService errorLogAlarmService = new ErrorLogAlarmService();
-            errorLogAlarmService.send(content.toString());
+//            errorLogAlarmService.send(content.toString());
         } catch (Exception e) {
             addError("error log alarm error, reason is {}", e);
         }

@@ -27,7 +27,7 @@ import java.util.Objects;
 
 /**
  * @program: permissions-center
- * @description: 用户任务行为
+ * @description: 用户任务行为, 自定义用户任务节点, 这里只做对用户任务处理人的设置做自定义chuli
  * @author: YuKai Fan
  * @create: 2022-06-30 16:05
  **/

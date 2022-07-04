@@ -27,7 +27,7 @@ public class CodeGeneratorUtil {
     public static void main(String[] args) {
 
         //todo 需要生成的表
-        String[] tables = new String[]{"workflow_business_task_form"};
+        String[] tables = new String[]{"cfg_encrypt"};
 
 
         //代码生成器

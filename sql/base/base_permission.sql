@@ -241,3 +241,22 @@ create table resource_meta_data
     extension     varchar(2048) default ''                not null comment '拓展字段',
     deleted       bigint        default 0                 not null comment '是否删除'
 ) DEFAULT CHARSET = utf8mb4 COMMENT '资源元数据表';
+
+create table cfg_encrypt
+(
+    id            bigint auto_increment comment '主键id'
+        primary key,
+    cipher_text   varchar(255)  default ''                not null comment '密文',
+    private_key   varchar(2048) default ''                not null comment '私钥',
+    public_key    varchar(2048) default ''                not null comment '公钥',
+    original      varchar(255) default ''                not null comment '原文',
+    type          varchar(32)   default ''                not null comment '加密方式',
+    creator       varchar(64)                             not null comment '行记录创建者',
+    modifier      varchar(64)                             not null comment '行记录最近更新人',
+    created_time  timestamp     default CURRENT_TIMESTAMP not null comment '行记录创建时间',
+    modified_time timestamp     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '行记录最近修改时间',
+    version       tinyint unsigned default 0 not null comment '行版本号',
+    extension     varchar(2048) default ''                not null comment '拓展字段',
+    deleted       bigint        default 0                 not null comment '是否删除',
+    unique key uniq_cipher(cipher_text, original)
+) DEFAULT CHARSET = utf8mb4 COMMENT '加密数据配置表';

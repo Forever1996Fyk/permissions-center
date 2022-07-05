@@ -5,7 +5,7 @@ server:
 # SpringBoot的相关配置
 spring:
   profiles:
-    active: prod
+    active: dev
   application:
     name: permissions-api
   mvc:

@@ -13,9 +13,9 @@ permission:
 spring:
   redis:
     ################### redis 单机版 start ##########################
-    host: dev-ip
+    host: localhost
     port: 3306
-    password: dev-pw
+    password:
     timeout: 6000
     database: 0
     lettuce:
@@ -36,27 +36,27 @@ spring:
       permissions0:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://dev-ip:dev-port/permission-center?serverTimezone=GMT%2B8&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
-        username: dev-username
-        password: dev-pw
+        url: jdbc:mysql://localhost:3306/permission-center?serverTimezone=GMT%2B8&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+        username: root
+        password: root
       leaf0:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://dev-ip:dev-port/leaf?serverTimezone=GMT%2B8&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
-        username: dev-username
-        password: dev-pw
+        url: jdbc:mysql://localhost:3306/leaf?serverTimezone=GMT%2B8&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+        username: root
+        password: root
       edi0:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://dev-ip:dev-port/edi?serverTimezone=GMT%2B8&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
-        username: dev-username
-        password: dev-pw
+        url: jdbc:mysql://localhost:3306/edi?serverTimezone=GMT%2B8&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+        username: root
+        password: root
       workflow0:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://dev-ip:dev-port/workflow?serverTimezone=GMT%2B8&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
-        username: dev-username
-        password: dev-pw
+        url: jdbc:mysql://localhost:3306/workflow?serverTimezone=GMT%2B8&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+        username: root
+        password: root
     props:
       sql:
         show: true

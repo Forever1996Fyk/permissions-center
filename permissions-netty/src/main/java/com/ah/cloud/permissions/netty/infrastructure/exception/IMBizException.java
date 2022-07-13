@@ -1,7 +1,7 @@
 package com.ah.cloud.permissions.netty.infrastructure.exception;
 
 import com.ah.cloud.permissions.biz.infrastructure.util.AppUtils;
-import com.ah.cloud.permissions.enums.common.IMErrorCodeEnum;
+import com.ah.cloud.permissions.enums.netty.IMErrorCodeEnum;
 import com.ah.cloud.permissions.exception.ErrorCode;
 
 /**

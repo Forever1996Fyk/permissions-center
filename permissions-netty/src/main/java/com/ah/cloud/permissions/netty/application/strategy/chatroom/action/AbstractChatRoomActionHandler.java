@@ -1,7 +1,7 @@
 package com.ah.cloud.permissions.netty.application.strategy.chatroom.action;
 
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
-import com.ah.cloud.permissions.enums.common.IMErrorCodeEnum;
+import com.ah.cloud.permissions.enums.netty.IMErrorCodeEnum;
 import com.ah.cloud.permissions.netty.domain.message.ChatRoomMessage;
 import com.ah.cloud.permissions.netty.domain.message.body.MessageBody;
 import com.ah.cloud.permissions.netty.domain.message.mq.ChatRoomNodeMessage;

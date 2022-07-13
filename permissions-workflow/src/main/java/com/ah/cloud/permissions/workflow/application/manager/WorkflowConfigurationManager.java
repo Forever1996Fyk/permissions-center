@@ -5,10 +5,9 @@ import com.ah.cloud.permissions.biz.application.service.ext.WorkflowFormModelExt
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.WorkflowFormModel;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.WorkflowFormProcess;
-import com.ah.cloud.permissions.biz.infrastructure.util.CollectionUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
-import com.ah.cloud.permissions.enums.common.WorkflowErrorCodeEnum;
+import com.ah.cloud.permissions.enums.workflow.WorkflowErrorCodeEnum;
 import com.ah.cloud.permissions.workflow.application.helper.WorkflowConfigurationHelper;
 import com.ah.cloud.permissions.workflow.domain.configuration.form.ProcessFormConfigurationAddForm;
 import com.ah.cloud.permissions.workflow.domain.configuration.form.ProcessFormConfigurationUpdateForm;
@@ -22,9 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * @program: permissions-center

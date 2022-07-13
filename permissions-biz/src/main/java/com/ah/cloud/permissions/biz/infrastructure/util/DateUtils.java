@@ -5,11 +5,9 @@ import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -75,6 +73,29 @@ public class DateUtils {
      */
     public static LocalDate str2LocalDate(String datetimeStr, String pattern) {
         return LocalDate.parse(datetimeStr, DateTimeFormatter.ofPattern(pattern));
+    }
+
+
+    /**
+     * 将时间字串转为 LocalDate，时间字串的格式请用 pattern 指定
+     */
+    public static LocalDate str2LocalDate(String datetimeStr) {
+        LocalDate localDate = str2LocalDate(datetimeStr, pattern0);
+        if (localDate == null) {
+            localDate = str2LocalDate(datetimeStr, pattern4);
+        }
+        return localDate;
+    }
+
+
+    /**
+     * 将 java.time.LocalDateTime 转为指定格式的时间字串
+     */
+    public static String localDate2Str(LocalDate localDate, String pattern) {
+        if (localDate == null || StringUtils.isBlank(pattern)) {
+            return "";
+        }
+        return DateTimeFormatter.ofPattern(pattern).format(localDate);
     }
 
     /**
@@ -175,5 +196,28 @@ public class DateUtils {
      */
     public static LocalDateTime getCurrentLocalDateTime() {
         return LocalDateTime.now();
+    }
+
+    /**
+     * 获取上月日期
+     * @param date
+     * @return
+     */
+    public static Date getLastMonthDate(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(2, -1);
+        return c.getTime();
+    }
+
+    /**
+     * 当前时间 前多少分钟 的时间
+     * @param minutes
+     * @return
+     */
+    public static String getDateBeforeMin(int minutes) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime minutesBefore = now.minusMinutes(minutes);
+        return localDateTime2Str(minutesBefore, pattern0);
     }
 }

@@ -6,7 +6,7 @@ import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUser;
 import com.ah.cloud.permissions.biz.infrastructure.util.CollectionUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.domain.dto.SelectEntity;
-import com.ah.cloud.permissions.enums.common.WorkflowErrorCodeEnum;
+import com.ah.cloud.permissions.enums.workflow.WorkflowErrorCodeEnum;
 import com.ah.cloud.permissions.workflow.domain.candidate.dto.GetTaskCandidateDTO;
 import com.ah.cloud.permissions.workflow.domain.candidate.dto.TaskCandidateDTO;
 import com.ah.cloud.permissions.workflow.domain.task.vo.SelectAssignRuleOptionsVo;

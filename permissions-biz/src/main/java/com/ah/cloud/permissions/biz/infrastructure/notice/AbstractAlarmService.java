@@ -10,6 +10,7 @@ import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -31,6 +32,13 @@ public abstract class AbstractAlarmService implements AlarmService {
         } catch (Exception e) {
             log.error("{}[sendNotice] send failed http client error, params is {}, reason is {}", getLogMark(), JsonUtils.toJSONString(alarmParam), Throwables.getStackTraceAsString(e));
             throw new BizException(ErrorCodeEnum.ALARM_PUSH_FAILED);
+        }
+    }
+
+    @Override
+    public void batchSendNotice(List<AlarmParam> list) {
+        for (AlarmParam alarmParam : list) {
+            this.sendNotice(alarmParam);
         }
     }
 

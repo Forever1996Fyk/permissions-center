@@ -4,7 +4,7 @@ import com.ah.cloud.permissions.biz.application.manager.TokenManager;
 import com.ah.cloud.permissions.biz.domain.user.DeviceInfo;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
-import com.ah.cloud.permissions.enums.common.IMErrorCodeEnum;
+import com.ah.cloud.permissions.enums.netty.IMErrorCodeEnum;
 import com.ah.cloud.permissions.enums.netty.MsgTypeEnum;
 import com.ah.cloud.permissions.enums.netty.OfflineReasonEnum;
 import com.ah.cloud.permissions.netty.application.helper.SessionHelper;

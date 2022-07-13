@@ -7,7 +7,7 @@ import com.ah.cloud.permissions.biz.infrastructure.util.CollectionUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
-import com.ah.cloud.permissions.enums.common.WorkflowErrorCodeEnum;
+import com.ah.cloud.permissions.enums.workflow.WorkflowErrorCodeEnum;
 import com.ah.cloud.permissions.workflow.application.helper.WorkflowTaskFormHelper;
 import com.ah.cloud.permissions.workflow.domain.business.vo.BusinessVariablesFormVo;
 import com.ah.cloud.permissions.workflow.infrastructure.constant.WorkflowConstants;

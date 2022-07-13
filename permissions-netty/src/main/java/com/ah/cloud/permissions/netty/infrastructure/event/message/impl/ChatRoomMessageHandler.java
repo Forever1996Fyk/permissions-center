@@ -1,7 +1,7 @@
 package com.ah.cloud.permissions.netty.infrastructure.event.message.impl;
 
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
-import com.ah.cloud.permissions.enums.common.IMErrorCodeEnum;
+import com.ah.cloud.permissions.enums.netty.IMErrorCodeEnum;
 import com.ah.cloud.permissions.enums.netty.MsgTypeEnum;
 import com.ah.cloud.permissions.netty.application.manager.SessionManager;
 import com.ah.cloud.permissions.netty.domain.message.ChatRoomMessage;

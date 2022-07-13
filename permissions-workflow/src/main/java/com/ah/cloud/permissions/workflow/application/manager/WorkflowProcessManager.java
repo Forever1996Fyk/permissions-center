@@ -9,7 +9,7 @@ import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.enums.YesOrNoEnum;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
-import com.ah.cloud.permissions.enums.common.WorkflowErrorCodeEnum;
+import com.ah.cloud.permissions.enums.workflow.WorkflowErrorCodeEnum;
 import com.ah.cloud.permissions.workflow.application.helper.WorkflowProcessHelper;
 import com.ah.cloud.permissions.workflow.application.service.ProcessDefinitionService;
 import com.ah.cloud.permissions.workflow.domain.model.dto.*;

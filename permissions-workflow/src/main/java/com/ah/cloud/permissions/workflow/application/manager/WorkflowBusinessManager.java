@@ -1,6 +1,5 @@
 package com.ah.cloud.permissions.workflow.application.manager;
 
-import com.ah.cloud.permissions.biz.application.service.WorkflowBusinessService;
 import com.ah.cloud.permissions.biz.application.service.ext.WorkflowBusinessExtService;
 import com.ah.cloud.permissions.biz.application.service.ext.WorkflowProcessExtService;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
@@ -10,7 +9,7 @@ import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
-import com.ah.cloud.permissions.enums.common.WorkflowErrorCodeEnum;
+import com.ah.cloud.permissions.enums.workflow.WorkflowErrorCodeEnum;
 import com.ah.cloud.permissions.enums.workflow.WorkFlowStatusEnum;
 import com.ah.cloud.permissions.workflow.application.helper.WorkflowBusinessHelper;
 import com.ah.cloud.permissions.workflow.application.service.ProcessInstanceService;

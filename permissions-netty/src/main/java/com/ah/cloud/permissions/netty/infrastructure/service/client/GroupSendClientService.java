@@ -8,7 +8,7 @@ import com.ah.cloud.permissions.biz.domain.msg.push.dto.MsgAppPushUserDTO;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.domain.common.ImResult;
 import com.ah.cloud.permissions.enums.PushMsgModeEnum;
-import com.ah.cloud.permissions.enums.common.IMErrorCodeEnum;
+import com.ah.cloud.permissions.enums.netty.IMErrorCodeEnum;
 import com.ah.cloud.permissions.enums.netty.MsgSourceEnum;
 import com.ah.cloud.permissions.netty.application.helper.SessionHelper;
 import com.ah.cloud.permissions.netty.application.manager.MessageStoreManager;

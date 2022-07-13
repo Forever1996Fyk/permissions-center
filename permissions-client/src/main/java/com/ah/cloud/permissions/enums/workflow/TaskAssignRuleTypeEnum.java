@@ -45,7 +45,7 @@ public enum TaskAssignRuleTypeEnum {
      *
      * 也就是当前申请人所在部门的负责人
      */
-    PROPOSER_LEADER_L1(60, "自定义脚本"),
+    PROPOSER_LEADER_L1(60, "当前申请人的领导"),
     ;
 
     private final int type;

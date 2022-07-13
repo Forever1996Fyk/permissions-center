@@ -11,6 +11,7 @@
         <module>permissions-task</module>
         <module>permissions-netty</module>
         <module>permissions-workflow</module>
+        <module>permissions-edi</module>
     </modules>
 
     <parent>
@@ -103,6 +104,11 @@
             <dependency>
                 <groupId>com.ah.cloud</groupId>
                 <artifactId>permissions-workflow</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ah.cloud</groupId>
+                <artifactId>permissions-edi</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

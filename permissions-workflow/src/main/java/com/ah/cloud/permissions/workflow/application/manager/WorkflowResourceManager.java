@@ -5,7 +5,7 @@ import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.WorkflowBusiness;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
-import com.ah.cloud.permissions.enums.common.WorkflowErrorCodeEnum;
+import com.ah.cloud.permissions.enums.workflow.WorkflowErrorCodeEnum;
 import com.ah.cloud.permissions.workflow.application.service.ProcessDefinitionService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;

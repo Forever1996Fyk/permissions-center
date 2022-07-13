@@ -5,7 +5,7 @@ import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.WorkflowProcessListener;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
-import com.ah.cloud.permissions.enums.common.WorkflowErrorCodeEnum;
+import com.ah.cloud.permissions.enums.workflow.WorkflowErrorCodeEnum;
 import com.ah.cloud.permissions.workflow.application.helper.WorkflowListenerHelper;
 import com.ah.cloud.permissions.workflow.domain.listener.form.ProcessListenerAddForm;
 import com.ah.cloud.permissions.workflow.domain.listener.form.ProcessListenerUpdateForm;

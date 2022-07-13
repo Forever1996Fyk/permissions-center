@@ -1,6 +1,6 @@
 package com.ah.cloud.permissions.domain.common;
 
-import com.ah.cloud.permissions.enums.common.IMErrorCodeEnum;
+import com.ah.cloud.permissions.enums.netty.IMErrorCodeEnum;
 import lombok.Data;
 
 /**

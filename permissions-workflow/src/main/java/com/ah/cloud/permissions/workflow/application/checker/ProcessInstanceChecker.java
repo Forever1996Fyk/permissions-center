@@ -1,7 +1,7 @@
 package com.ah.cloud.permissions.workflow.application.checker;
 
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
-import com.ah.cloud.permissions.enums.common.WorkflowErrorCodeEnum;
+import com.ah.cloud.permissions.enums.workflow.WorkflowErrorCodeEnum;
 import com.ah.cloud.permissions.workflow.domain.instance.dto.StartProcessDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;

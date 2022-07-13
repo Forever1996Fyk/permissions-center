@@ -1,7 +1,7 @@
 package com.ah.cloud.permissions.netty.infrastructure.service.client;
 
 import com.ah.cloud.permissions.domain.common.ImResult;
-import com.ah.cloud.permissions.enums.common.IMErrorCodeEnum;
+import com.ah.cloud.permissions.enums.netty.IMErrorCodeEnum;
 import com.ah.cloud.permissions.enums.netty.ChatRoomActionEnum;
 import com.ah.cloud.permissions.netty.application.strategy.chatroom.action.ChatRoomActionHandler;
 import com.ah.cloud.permissions.netty.application.strategy.selector.ChatRoomActionHandleSelector;
@@ -10,10 +10,8 @@ import com.ah.cloud.permissions.netty.domain.message.ChatRoomMessage;
 import com.ah.cloud.permissions.netty.domain.message.body.MessageBody;
 import com.ah.cloud.permissions.netty.domain.session.*;
 import com.ah.cloud.permissions.netty.domain.session.key.ChatRoomSessionKey;
-import com.ah.cloud.permissions.netty.domain.session.key.GroupSessionKey;
 import com.ah.cloud.permissions.netty.infrastructure.exception.IMBizException;
 import io.netty.channel.Channel;
-import io.netty.util.concurrent.Future;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;

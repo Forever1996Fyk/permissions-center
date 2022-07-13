@@ -1,19 +1,17 @@
 package com.ah.cloud.permissions.netty.application.strategy.chatroom.action;
 
-import com.ah.cloud.permissions.enums.common.IMErrorCodeEnum;
+import com.ah.cloud.permissions.enums.netty.IMErrorCodeEnum;
 import com.ah.cloud.permissions.enums.netty.ChatRoomActionEnum;
 import com.ah.cloud.permissions.netty.domain.message.ChatRoomMessage;
 import com.ah.cloud.permissions.netty.domain.message.body.MessageBody;
 import com.ah.cloud.permissions.netty.domain.session.ChatRoomSession;
 import com.ah.cloud.permissions.netty.domain.session.SingleSession;
 import com.ah.cloud.permissions.netty.infrastructure.exception.IMBizException;
-import com.ah.cloud.permissions.netty.infrastructure.mq.redis.producer.ChatRoomNodeListenerProducer;
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.Objects;
 
 /**

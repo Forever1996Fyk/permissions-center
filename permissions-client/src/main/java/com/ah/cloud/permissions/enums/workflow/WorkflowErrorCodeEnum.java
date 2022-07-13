@@ -1,4 +1,4 @@
-package com.ah.cloud.permissions.enums.common;
+package com.ah.cloud.permissions.enums.workflow;
 
 import com.ah.cloud.permissions.exception.ErrorCode;
 

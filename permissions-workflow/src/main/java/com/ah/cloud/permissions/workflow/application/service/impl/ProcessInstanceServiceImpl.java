@@ -3,7 +3,7 @@ package com.ah.cloud.permissions.workflow.application.service.impl;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
-import com.ah.cloud.permissions.enums.common.WorkflowErrorCodeEnum;
+import com.ah.cloud.permissions.enums.workflow.WorkflowErrorCodeEnum;
 import com.ah.cloud.permissions.enums.workflow.ProcessInstanceStateEnum;
 import com.ah.cloud.permissions.workflow.application.checker.ProcessInstanceChecker;
 import com.ah.cloud.permissions.workflow.application.helper.ProcessInstanceHelper;

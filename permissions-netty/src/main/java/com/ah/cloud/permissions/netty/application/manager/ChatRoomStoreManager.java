@@ -2,7 +2,7 @@ package com.ah.cloud.permissions.netty.application.manager;
 
 import com.ah.cloud.permissions.biz.application.helper.RedisKeyHelper;
 import com.ah.cloud.permissions.biz.application.strategy.cache.impl.RedisCacheHandleStrategy;
-import com.ah.cloud.permissions.enums.common.IMErrorCodeEnum;
+import com.ah.cloud.permissions.enums.netty.IMErrorCodeEnum;
 import com.ah.cloud.permissions.netty.infrastructure.exception.IMBizException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

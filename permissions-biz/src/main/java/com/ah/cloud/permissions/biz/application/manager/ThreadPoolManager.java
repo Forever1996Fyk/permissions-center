@@ -2,6 +2,7 @@ package com.ah.cloud.permissions.biz.application.manager;
 
 import com.ah.cloud.permissions.biz.infrastructure.threadpool.ResizeLinkedBlockingQueue;
 
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -99,4 +100,51 @@ public class ThreadPoolManager {
             TimeUnit.SECONDS,
             new ResizeLinkedBlockingQueue<>(DEFAULT_QUEUE_SIZE),
             r -> new Thread(r, "errorLogAlarmPool-" + r.hashCode()));
+
+    /**
+     * 重试线程池
+     */
+    public static ThreadPoolExecutor retryThreadPool = new ThreadPoolExecutor(
+            20,
+            20,
+            0L,
+            TimeUnit.SECONDS,
+            new ResizeLinkedBlockingQueue<>(DEFAULT_QUEUE_SIZE),
+            r -> new Thread(r, "retryThread-" + r.hashCode()));
+
+    /**
+     * 慢线程处理
+     */
+    public static ThreadPoolExecutor retrySlowThreadPool = new ThreadPoolExecutor(
+            10,
+            20,
+            60L,
+            TimeUnit.SECONDS,
+            new ResizeLinkedBlockingQueue<>(20000),
+            r -> new Thread(r, "retrySlowThread-" + r.hashCode()),
+            new ThreadPoolExecutor.CallerRunsPolicy());
+
+    /**
+     * 快线程处理
+     */
+    public static ThreadPoolExecutor retryFastThreadPool = new ThreadPoolExecutor(
+            10,
+            20,
+            60L,
+            TimeUnit.SECONDS,
+            new ResizeLinkedBlockingQueue<>(20000),
+            r -> new Thread(r, "retryFastThread-" + r.hashCode()),
+            new ThreadPoolExecutor.CallerRunsPolicy());
+
+    /**
+     * 重试单个线程
+     */
+    public static ThreadPoolExecutor retrySingleThreadPool = new ThreadPoolExecutor(
+            1,
+            1,
+            60L,
+            TimeUnit.SECONDS,
+            new ResizeLinkedBlockingQueue<>(20000),
+            r -> new Thread(r, "retrySingleThread" + r.hashCode()),
+            new ThreadPoolExecutor.CallerRunsPolicy());
 }

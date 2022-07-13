@@ -1,36 +1,9 @@
 package com.ah.cloud.permissions.workflow.application.service.impl;
 
-import com.ah.cloud.permissions.biz.application.manager.UserAuthManager;
-import com.ah.cloud.permissions.biz.application.service.WorkflowFormProcessService;
-import com.ah.cloud.permissions.biz.application.service.ext.WorkflowFormModelExtService;
-import com.ah.cloud.permissions.biz.domain.user.dto.RoleDTO;
-import com.ah.cloud.permissions.biz.domain.user.dto.UserScopeInfoDTO;
-import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.WorkflowBusinessTaskForm;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.WorkflowFormModel;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.WorkflowFormProcess;
-import com.ah.cloud.permissions.biz.infrastructure.util.CollectionUtils;
-import com.ah.cloud.permissions.biz.infrastructure.util.DateUtils;
-import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
-import com.ah.cloud.permissions.domain.common.PageResult;
-import com.ah.cloud.permissions.enums.common.DeletedEnum;
-import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
-import com.ah.cloud.permissions.enums.common.WorkflowErrorCodeEnum;
 import com.ah.cloud.permissions.workflow.application.helper.ProcessTaskHelper;
-import com.ah.cloud.permissions.workflow.application.manager.WorkflowTaskFormManager;
 import com.ah.cloud.permissions.workflow.application.service.ProcessTaskService;
 import com.ah.cloud.permissions.workflow.domain.task.dto.CompleteTaskDTO;
-import com.ah.cloud.permissions.workflow.domain.task.form.CompleteTaskForm;
 import com.ah.cloud.permissions.workflow.domain.task.query.MyTaskQuery;
-import com.ah.cloud.permissions.workflow.domain.task.vo.DoneTaskVo;
-import com.ah.cloud.permissions.workflow.domain.task.vo.TaskFormVo;
-import com.ah.cloud.permissions.workflow.domain.task.vo.ToDoTaskVo;
-import com.ah.cloud.permissions.workflow.domain.task.vo.detail.BaseTaskInfo;
-import com.ah.cloud.permissions.workflow.domain.task.vo.detail.TaskAssigneeInfo;
-import com.ah.cloud.permissions.workflow.domain.task.vo.detail.TaskFormInfo;
-import com.ah.cloud.permissions.workflow.domain.task.vo.detail.TaskInstanceDetailVo;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -41,14 +14,9 @@ import org.flowable.task.api.TaskQuery;
 import org.flowable.task.api.history.HistoricTaskInstance;
 import org.flowable.task.api.history.HistoricTaskInstanceQuery;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @program: permissions-center

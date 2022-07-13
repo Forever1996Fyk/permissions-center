@@ -1,6 +1,6 @@
 package com.ah.cloud.permissions.netty.infrastructure.server;
 
-import com.ah.cloud.permissions.enums.common.IMErrorCodeEnum;
+import com.ah.cloud.permissions.enums.netty.IMErrorCodeEnum;
 import com.ah.cloud.permissions.netty.domain.session.ServerSession;
 import com.ah.cloud.permissions.netty.infrastructure.exception.IMBizException;
 import com.ah.cloud.permissions.netty.infrastructure.init.WebSocketInitializer;

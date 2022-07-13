@@ -1,14 +1,8 @@
 package com.ah.cloud.permissions.biz.infrastructure.exception;
 
 import com.ah.cloud.permissions.biz.infrastructure.util.AppUtils;
-import com.ah.cloud.permissions.enums.common.ChatRoomErrorCodeEnum;
-import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
-import com.ah.cloud.permissions.enums.common.FileErrorCodeEnum;
-import com.ah.cloud.permissions.enums.common.RedisErrorCodeEnum;
-import com.ah.cloud.permissions.enums.common.push.PushErrorCode;
 import com.ah.cloud.permissions.exception.ErrorCode;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * @Description 业务异常

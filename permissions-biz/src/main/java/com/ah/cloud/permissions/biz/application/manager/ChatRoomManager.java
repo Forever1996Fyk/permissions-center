@@ -1,7 +1,6 @@
 package com.ah.cloud.permissions.biz.application.manager;
 
 import com.ah.cloud.permissions.biz.application.helper.ChatRoomHelper;
-import com.ah.cloud.permissions.biz.application.helper.RedisKeyHelper;
 import com.ah.cloud.permissions.biz.application.service.ChatRoomService;
 import com.ah.cloud.permissions.biz.domain.chatroom.form.ChatRoomAddForm;
 import com.ah.cloud.permissions.biz.domain.chatroom.form.ChatRoomUpdateForm;
@@ -10,7 +9,7 @@ import com.ah.cloud.permissions.biz.infrastructure.mq.redis.producer.OperateChat
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.ChatRoom;
 import com.ah.cloud.permissions.domain.message.OperateChatRoomMessage;
 import com.ah.cloud.permissions.enums.ChatRoomStatusEnum;
-import com.ah.cloud.permissions.enums.common.ChatRoomErrorCodeEnum;
+import com.ah.cloud.permissions.enums.netty.ChatRoomErrorCodeEnum;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

@@ -23,6 +23,7 @@ public class FileUtils {
 
     /**
      * 上传本地文件
+     *
      * @param inputStream
      * @param path
      * @param fileName
@@ -133,6 +134,7 @@ public class FileUtils {
 
     /**
      * 删除文件
+     *
      * @param filePath
      * @return
      */
@@ -145,5 +147,29 @@ public class FileUtils {
             flag = true;
         }
         return flag;
+    }
+
+    /**
+     * 根据文件地址获取流
+     * @param fileName
+     * @param filePath
+     * @return
+     * @throws FileNotFoundException
+     */
+    public static InputStream getInputStream(String fileName, String filePath) throws FileNotFoundException {
+        if (StringUtils.isEmpty(filePath)) {
+            return null;
+        }
+        //1.得到数据文件
+        File file = new File(filePath);
+        FileInputStream fileInputStream;
+        try {
+            //2.创建流对象
+            fileInputStream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            log.error("File not found path[{}] name[{}]", filePath, fileName, e);
+            throw e;
+        }
+        return fileInputStream;
     }
 }

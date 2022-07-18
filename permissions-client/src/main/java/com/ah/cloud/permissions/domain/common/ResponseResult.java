@@ -67,4 +67,11 @@ public class ResponseResult<T> {
         return result;
     }
 
+    public static <T> ResponseResult<T> newResponseArgs(ErrorCodeEnum errorCodeEnum, String... args) {
+        ResponseResult<T> result = new ResponseResult<T>();
+        result.setCode(errorCodeEnum.getCode());
+        result.setMsg(String.format(errorCodeEnum.getMsg(), args));
+        return result;
+    }
+
 }

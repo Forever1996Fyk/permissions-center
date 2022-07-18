@@ -249,7 +249,7 @@ create table cfg_encrypt
     cipher_text   varchar(255)  default ''                not null comment '密文',
     private_key   varchar(2048) default ''                not null comment '私钥',
     public_key    varchar(2048) default ''                not null comment '公钥',
-    original      varchar(255) default ''                not null comment '原文',
+    original      varchar(255)  default ''                not null comment '原文',
     type          varchar(32)   default ''                not null comment '加密方式',
     creator       varchar(64)                             not null comment '行记录创建者',
     modifier      varchar(64)                             not null comment '行记录最近更新人',
@@ -260,3 +260,57 @@ create table cfg_encrypt
     deleted       bigint        default 0                 not null comment '是否删除',
     unique key uniq_cipher(cipher_text, original)
 ) DEFAULT CHARSET = utf8mb4 COMMENT '加密数据配置表';
+
+-- auto-generated definition
+create table sys_import_export_task
+(
+    id            bigint auto_increment comment 'id'
+        primary key,
+    task_no       varchar(64) default ''                not null comment '任务号',
+    status        int                                   not null comment '任务状态 1 - 待处理 2 - 处理中 3 - 处理成功 4 - 处理失败 5 - 部分成功',
+    param         mediumtext                            null comment '参数',
+    file_name     varchar(256)                          null comment '文件名称',
+    file_url      varchar(256)                          null comment '文件地址',
+    ref_file_name varchar(256)                          null comment '关联文件名称',
+    ref_file_url  varchar(256)                          null comment '关联文件地址',
+    task_type     int                                   not null comment '任务类型 1 - 导入， 2 - 导出',
+    biz_type      varchar(64)                           not null comment '详细业务类型',
+    error_reason  text                                  null comment '错误原因',
+    begin_time    datetime                              null comment '任务开始时间',
+    finish_time   datetime                              null comment '任务结束时间',
+    env           varchar(64) default ''                not null comment '环境标示',
+    creator       varchar(64)                           not null comment '操作人',
+    creator_id    bigint                                not null comment '操作人id',
+    create_time   timestamp   default CURRENT_TIMESTAMP not null comment '创建时间',
+    modify_time   timestamp   default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '修改时间',
+    version       int         default 0                 not null comment '版本号',
+    modifier      varchar(64) default ''                not null comment '更新人'
+)
+    comment '导入导出任务表' charset = utf8mb4;
+
+create index idx_created_time
+    on sys_import_export_task (create_time);
+
+create index idx_task_no
+    on sys_import_export_task (task_no);
+
+create index idx_task_type
+    on sys_import_export_task (task_type, creator_id);
+
+
+CREATE TABLE `sys_import_template_info`
+(
+    `id`            bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `template_name` varchar(64) NOT NULL DEFAULT '' COMMENT '模板名称',
+    `template_url`  varchar(64) NOT NULL DEFAULT '' COMMENT '模板路径',
+    `biz_type`      varchar(64) NOT NULL COMMENT '详细业务类型',
+    `status`        int(11) NOT NULL DEFAULT '1' COMMENT '模板状态 1 - 启用 2 - 禁用',
+    `creator`       varchar(64) NOT NULL DEFAULT '' COMMENT '创建人',
+    `create_time`   timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `modify_time`   timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    `modifier`      varchar(64) NOT NULL DEFAULT '' COMMENT '更新人',
+    `version`       int(11) NOT NULL DEFAULT '0' COMMENT '版本号',
+    `deleted`       bigint(20) NOT NULL DEFAULT '0' COMMENT '是否删除',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uniq_biz_type` (`biz_type`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '导入模板信息';

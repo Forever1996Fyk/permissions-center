@@ -29,14 +29,4 @@ public class SysUserChecker {
      */
     public void checkSysUserAddForm(SysUserAddForm form) {
     }
-
-    public void checkBatchSysUserList(List<SysUser> sysUserList) {
-
-    }
-
-    public void checkSysUser(SysUser sysUser) {
-        if (StringUtils.isBlank(sysUser.getAccount())) {
-            throw new BizException();
-        }
-    }
 }

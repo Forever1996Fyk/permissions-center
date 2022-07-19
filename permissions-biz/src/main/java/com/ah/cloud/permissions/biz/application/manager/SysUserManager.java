@@ -106,11 +106,6 @@ public class SysUserManager {
         sysUserExtService.save(sysUser);
     }
 
-    public void importBatchSysUserList(List<SysUser> sysUserList) {
-        // 校验数据是否正确
-        sysUserChecker.checkBatchSysUserList(sysUserList);
-    }
-
     /**
      * 逻辑删除用户
      * 记录操作日志 TODO

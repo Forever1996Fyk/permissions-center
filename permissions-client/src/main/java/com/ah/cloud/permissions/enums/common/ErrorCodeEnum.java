@@ -130,6 +130,14 @@ public enum ErrorCodeEnum implements ErrorCode {
      */
     DEPT_CODE_IS_EXISTED(1002_0_001, "当前部门编码[%s]已存在"),
     DEPT_NOT_EXISTED(1002_0_002, "当前部门不存在"),
+
+    /**
+     * 字典相关错误码
+     */
+    DICT_CODE_IS_EXISTED(1003_0_001, "当前字典编码[%s]已存在"),
+    DICT_NOT_EXISTED(1003_0_002, "当前字典不存在"),
+    DICT_DETAIL_CODE_IS_EXISTED(1003_0_003, "当前字典编码[%s]下的详情编码[%s]已存在"),
+    DICT_DETAIL_NOT_EXISTED(1003_0_004, "当前详情编码不存在"),
     ;
 
     private int code;

@@ -1,13 +1,12 @@
 package com.ah.cloud.permissions.biz.infrastructure.repository.mapper.ext;
 
-import com.ah.cloud.permissions.biz.application.manager.SysUserManager;
 import com.ah.cloud.permissions.biz.domain.user.query.SysUserExportQuery;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUser;
 import com.ah.cloud.permissions.biz.infrastructure.repository.mapper.SysUserMapper;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.session.ResultHandler;
-import org.mapstruct.Mapper;
 
 /**
  * @program: permissions-center

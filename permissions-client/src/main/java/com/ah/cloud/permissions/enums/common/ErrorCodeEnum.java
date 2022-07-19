@@ -123,7 +123,13 @@ public enum ErrorCodeEnum implements ErrorCode {
     /**
      * 飞书机器人
      */
-    FEISHU_BOT_SECRET_ERROR(1001_0_001, "飞书机器人秘钥错误[%s]")
+    FEISHU_BOT_SECRET_ERROR(1001_0_001, "飞书机器人秘钥错误[%s]"),
+
+    /**
+     * 部门相关错误码
+     */
+    DEPT_CODE_IS_EXISTED(1002_0_001, "当前部门编码[%s]已存在"),
+    DEPT_NOT_EXISTED(1002_0_002, "当前部门不存在"),
     ;
 
     private int code;

@@ -9,6 +9,7 @@ create table sys_user
     tenant_id     varchar(64)   default ''                not null comment '租户id',
     post_code     varchar(16)   default ''                not null comment '岗位编码',
     dept_code     varchar(16)   default ''                not null comment '部门编码',
+    data_scope    tinyint(3) default 0 not null comment '数据权限类型',
     password      varchar(100)  default ''                not null comment '登录密码',
     phone         varchar(11)   default ''                not null comment '手机号',
     email         varchar(50)   default ''                not null comment '邮箱',
@@ -38,6 +39,7 @@ create table sys_role
         primary key,
     role_code     varchar(16)   default ''                not null comment '角色编码',
     role_name     varchar(32)   default ''                not null comment '角色名称',
+    data_scope    tinyint(3) default 0 not null comment '数据权限类型',
     remark        varchar(200)  default ''                not null comment '备注',
     creator       varchar(64)                             not null comment '行记录创建者',
     modifier      varchar(64)                             not null comment '行记录最近更新人',
@@ -268,16 +270,16 @@ create table sys_import_export_task
         primary key,
     task_no       varchar(64) default ''                not null comment '任务号',
     status        int                                   not null comment '任务状态 1 - 待处理 2 - 处理中 3 - 处理成功 4 - 处理失败 5 - 部分成功',
-    param         mediumtext                            null comment '参数',
-    file_name     varchar(256)                          null comment '文件名称',
-    file_url      varchar(256)                          null comment '文件地址',
-    ref_file_name varchar(256)                          null comment '关联文件名称',
-    ref_file_url  varchar(256)                          null comment '关联文件地址',
+    param         mediumtext null comment '参数',
+    file_name     varchar(256) null comment '文件名称',
+    file_url      varchar(256) null comment '文件地址',
+    ref_file_name varchar(256) null comment '关联文件名称',
+    ref_file_url  varchar(256) null comment '关联文件地址',
     task_type     int                                   not null comment '任务类型 1 - 导入， 2 - 导出',
     biz_type      varchar(64)                           not null comment '详细业务类型',
-    error_reason  text                                  null comment '错误原因',
-    begin_time    datetime                              null comment '任务开始时间',
-    finish_time   datetime                              null comment '任务结束时间',
+    error_reason  text null comment '错误原因',
+    begin_time    datetime null comment '任务开始时间',
+    finish_time   datetime null comment '任务结束时间',
     env           varchar(64) default ''                not null comment '环境标示',
     creator       varchar(64)                           not null comment '操作人',
     creator_id    bigint                                not null comment '操作人id',
@@ -285,8 +287,7 @@ create table sys_import_export_task
     modify_time   timestamp   default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '修改时间',
     version       int         default 0                 not null comment '版本号',
     modifier      varchar(64) default ''                not null comment '更新人'
-)
-    comment '导入导出任务表' charset = utf8mb4;
+) comment '导入导出任务表' charset = utf8mb4;
 
 create index idx_created_time
     on sys_import_export_task (create_time);
@@ -314,3 +315,40 @@ CREATE TABLE `sys_import_template_info`
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq_biz_type` (`biz_type`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '导入模板信息';
+
+create table sys_dept
+(
+    id               bigint auto_increment comment '主键id'
+        primary key,
+    dept_code        varchar(16)   default ''                not null comment '部门编码',
+    parent_id        bigint        default 0                 not null comment '父id',
+    parent_dept_code varchar(16)   default ''                not null comment '父部门编码',
+    name             varchar(32)   default ''                not null comment '权部门名称',
+    dept_order       tinyint(3) default 0 not null comment '部门序号',
+    remark           varchar(200)  default ''                not null comment '备注',
+    creator          varchar(64)                             not null comment '行记录创建者',
+    modifier         varchar(64)                             not null comment '行记录最近更新人',
+    created_time     timestamp     default CURRENT_TIMESTAMP not null comment '行记录创建时间',
+    modified_time    timestamp     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '行记录最近修改时间',
+    version          tinyint unsigned default 0 not null comment '行版本号',
+    extension        varchar(2048) default ''                not null comment '拓展字段',
+    deleted          bigint        default 0                 not null comment '是否删除',
+    UNIQUE KEY uniq_dept_code(dept_code)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '系统部门表';
+
+create table sys_dept_relation
+(
+    id              bigint auto_increment comment '主键id'
+        primary key,
+    ancestor_code   varchar(16)   default ''                not null comment '父部门编码',
+    descendant_code varchar(16)   default ''                not null comment '子部门编码',
+    remark          varchar(200)  default ''                not null comment '备注',
+    creator         varchar(64)                             not null comment '行记录创建者',
+    modifier        varchar(64)                             not null comment '行记录最近更新人',
+    created_time    timestamp     default CURRENT_TIMESTAMP not null comment '行记录创建时间',
+    modified_time   timestamp     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '行记录最近修改时间',
+    version         tinyint unsigned default 0 not null comment '行版本号',
+    extension       varchar(2048) default ''                not null comment '拓展字段',
+    deleted         bigint        default 0                 not null comment '是否删除',
+    UNIQUE KEY uniq_code(ancestor_code, descendant_code)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '系统部门关系表';

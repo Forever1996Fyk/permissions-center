@@ -11,16 +11,16 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 系统角色表
+ * 系统部门关系表
  * </p>
  *
  * @author auto_generation
- * @since 2022-04-26
+ * @since 2022-07-18
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("sys_role")
-public class SysRole implements Serializable {
+@TableName("sys_dept_relation")
+public class SysDeptRelation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,24 +31,19 @@ public class SysRole implements Serializable {
     private Long id;
 
     /**
-     * 角色编码
+     * 父部门编码
      */
-    private String roleCode;
+    private String ancestorCode;
 
     /**
-     * 角色名称
+     * 子部门编码
      */
-    private String roleName;
+    private String descendantCode;
 
     /**
      * 备注
      */
     private String remark;
-
-    /**
-     * 数据权限
-     */
-    private Integer dataScope;
 
     /**
      * 行记录创建者

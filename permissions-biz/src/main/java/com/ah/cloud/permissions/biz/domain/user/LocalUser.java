@@ -51,7 +51,6 @@ public class LocalUser implements UserDetails {
      */
     private String accessToken;
 
-
     /**
      * 认证是否过期
      */

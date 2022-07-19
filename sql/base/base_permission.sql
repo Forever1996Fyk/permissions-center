@@ -352,3 +352,38 @@ create table sys_dept_relation
     deleted         bigint        default 0                 not null comment '是否删除',
     UNIQUE KEY uniq_code(ancestor_code, descendant_code)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '系统部门关系表';
+
+create table sys_dict
+(
+    id            bigint auto_increment comment '主键id'
+        primary key,
+    dict_code     varchar(16)  default ''                not null comment '字典编码',
+    dict_name     varchar(64)  default ''                not null comment '字典名称',
+    type          tinyint(3) default 1 not null comment '类型:系统/业务',
+    is_change     tinyint(3) default 1 not null comment '是否可变',
+    remark        varchar(200) default ''                not null comment '备注',
+    creator       varchar(64)                            not null comment '行记录创建者',
+    modifier      varchar(64)                            not null comment '行记录最近更新人',
+    created_time  timestamp    default CURRENT_TIMESTAMP not null comment '行记录创建时间',
+    modified_time timestamp    default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '行记录最近修改时间',
+    deleted       bigint       default 0                 not null comment '是否删除',
+    UNIQUE KEY uniq_code(dict_code, deleted)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '系统字典表';
+
+create table sys_dict_detail
+(
+    id               bigint auto_increment comment '主键id'
+        primary key,
+    dict_code        varchar(16)  default ''                not null comment '字典编码',
+    dict_detail_code varchar(32)  default ''                not null comment '字典详情编码',
+    dict_detail_desc varchar(64)  default ''                not null comment '字典详情名称',
+    detail_order     tinyint(3) default 0 not null comment '排序',
+    is_edit          tinyint(3) default 1 not null comment '是否可编辑',
+    remark           varchar(200) default ''                not null comment '备注',
+    creator          varchar(64)                            not null comment '行记录创建者',
+    modifier         varchar(64)                            not null comment '行记录最近更新人',
+    created_time     timestamp    default CURRENT_TIMESTAMP not null comment '行记录创建时间',
+    modified_time    timestamp    default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '行记录最近修改时间',
+    deleted          bigint       default 0                 not null comment '是否删除',
+    UNIQUE KEY uniq_code(dict_code, dict_detail_code, deleted)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '系统字典详情表';

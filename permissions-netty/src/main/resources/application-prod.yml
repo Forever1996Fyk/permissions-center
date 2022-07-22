@@ -32,7 +32,7 @@ spring:
   # sharding-jdbc 数据源配置
   shardingsphere:
     datasource:
-      names: permissions0, leaf0, edi0, workflow0
+      names: permissions0, leaf0, workflow0
       permissions0:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
@@ -43,12 +43,6 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: p(uCPLsGCT/Lq92qzJYzT0hHW9wQWW5YQWlKKVeiH0xBM3BbHwb4u4Z7tBey5JrtlT8obgckPWkWktcF/EevcW2IM7qmQB3q1HgvU3jBvmArlRMk4zp7bxHSV987g5ff1oE511yP3V+uIN1pXSErhDwguYs8XWu1bijjNCwmKJbYKJ7yfbca+Ca8/lZEFHOYMF53ThX7TZTt1g7/h0+KujcdlcjfJSPkSVLmS8biYpaVkykYbSv7A/Ig1yJdskqDioXvtNbNfl7rA=)
-        username: p(cGjOBN6vq5pdJKq7vWsw5g==)
-        password: p(gYrMfK4xVuhzzoveGLRJwlaxEZTtnH3Zb9bzkYa1Ty4=)
-      edi0:
-        type: com.alibaba.druid.pool.DruidDataSource
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: p(y3W0YRXgJpwulto5cW1sEcE3wiViNptRoWwhvZtgmcCURbAWjYs4JCCFK8KISslv5S1Q+HfYF8P7ApLhVvcGCt7twb+Th7fGqIZmZ5azjcKQMu+oWBWRu753VmQ5uAPg9lw87G4cukE2DCFpkJFSTWjkZCQRBjxutGvchlc0X1NUGxB3gvCSTdwX2G+6ZkI9NGo5Z7NpIZ3xfwuLdKyPw4GrvN+VQnM+stemnB8/85Af+63CGAKo3ckIIpSr7MJAMwyLbCdWcIw=)
         username: p(cGjOBN6vq5pdJKq7vWsw5g==)
         password: p(gYrMfK4xVuhzzoveGLRJwlaxEZTtnH3Zb9bzkYa1Ty4=)
       workflow0:
@@ -69,47 +63,6 @@ spring:
         none:
           any:
       tables:
-        # EDI
-        edi_cfg_biz_retry:
-          actual-data-nodes: edi0.edi_cfg_biz_retry
-        edi_biz_retry_record:
-          actual-data-nodes: edi0.edi_biz_retry_record_$->{2022..2023}$->{['01','02','03','04','05','06','07','08','09','10','11','12']}_$->{0..3}
-          table-strategy:
-            standard:
-              sharding-column: sharding_key
-              precise-algorithm-class-name: com.ah.cloud.permissions.biz.infrastructure.edi.core.BizRetryShardingAlgorithm
-        retry_biz_record_task:
-          actual-data-nodes: edi0.edi_biz_retry_record_$->{2022..2023}$->{['01','02','03','04','05','06','07','08','09','10','11','12']}_$->{0..3}
-          database-strategy:
-            hint:
-              algorithm-class-name: com.ah.cloud.permissions.biz.infrastructure.edi.core.BizRetryTaskShardingHintAlgorithm
-          table-strategy:
-            hint:
-              algorithm-class-name: com.ah.cloud.permissions.biz.infrastructure.edi.core.BizRetryTaskShardingHintAlgorithm
-        # TECH-EDI
-        edi_cfg_tech_biz_retry:
-          actual-data-nodes: edi0.edi_cfg_tech_biz_retry
-        edi_tech_biz_retry_record:
-          actual-data-nodes: edi0.edi_tech_biz_retry_record_$->{2022..2023}$->{['01','02','03','04','05','06','07','08','09','10','11','12']}_$->{0..3}
-          key-generator:
-            type: SNOWFLAKE
-            column: id
-            props:
-              worker.id: 0
-              max.tolerate.time.difference.milliseconds: 0
-              max.vibration.offset: 1000
-          table-strategy:
-            standard:
-              sharding-column: sharding_key
-              precise-algorithm-class-name: com.ah.cloud.permissions.biz.infrastructure.edi.core.TechBizRetryShardingAlgorithm
-        retry_tech_biz_record_task:
-          actual-data-nodes: edi0.edi_tech_biz_retry_record_$->{2022..2023}$->{['01','02','03','04','05','06','07','08','09','10','11','12']}_$->{0..3}
-          database-strategy:
-            hint:
-              algorithm-class-name: com.ah.cloud.permissions.biz.infrastructure.edi.core.BizRetryTaskShardingHintAlgorithm
-          table-strategy:
-            hint:
-              algorithm-class-name: com.ah.cloud.permissions.biz.infrastructure.edi.core.BizRetryTaskShardingHintAlgorithm
         leaf:
           actual-data-nodes: leaf0.leaf_alloc
         thread_pool_data:

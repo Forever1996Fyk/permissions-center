@@ -42,4 +42,9 @@ public class EdiConstants {
      * 限制一条记录sql
      */
     public final static String LIMIT_SQL = "limit 1";
+
+    /**
+     * 下划线
+     */
+    public static final String SEPARATOR_UNDERLINE = "_";
 }

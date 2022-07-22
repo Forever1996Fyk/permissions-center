@@ -1,4 +1,4 @@
-package com.ah.cloud.permissions.biz.infrastructure.edi.core;
+package com.ah.cloud.permissions.edi.infrastructure.shard.algorithm;
 
 import org.apache.shardingsphere.api.sharding.hint.HintShardingAlgorithm;
 import org.apache.shardingsphere.api.sharding.hint.HintShardingValue;

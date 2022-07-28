@@ -78,6 +78,11 @@ public class SysUser implements Serializable {
     private String postCode;
 
     /**
+     * 数据权限
+     */
+    private Integer dataScope;
+
+    /**
      * 账号状态(1:正常,2:停用,3:注销)
      */
     private Integer status;

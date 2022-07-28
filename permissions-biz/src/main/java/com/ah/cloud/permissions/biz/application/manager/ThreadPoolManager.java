@@ -147,4 +147,38 @@ public class ThreadPoolManager {
             new ResizeLinkedBlockingQueue<>(20000),
             r -> new Thread(r, "retrySingleThread" + r.hashCode()),
             new ThreadPoolExecutor.CallerRunsPolicy());
+
+    /**
+     * 导入导出，按照逻辑数据源列表处理
+     */
+    public static ThreadPoolExecutor importExportTaskLogicThreadPool = new ThreadPoolExecutor(
+            2,
+            2,
+            0L,
+            TimeUnit.SECONDS,
+            new ResizeLinkedBlockingQueue<Runnable>(DEFAULT_QUEUE_SIZE),
+            r -> new Thread(r, "ImportExportTaskLogicThreadPool-" + r.hashCode()));
+
+    /**
+     * 查询出待执行导入导出任务之后，放入线程池执行任务
+     */
+    public static ThreadPoolExecutor exportTaskThreadPool = new ThreadPoolExecutor(
+            5,
+            5,
+            0L,
+            TimeUnit.SECONDS,
+            new ResizeLinkedBlockingQueue<Runnable>(DEFAULT_QUEUE_SIZE),
+            r -> new Thread(r, "ExportTaskThreadPool-" + r.hashCode()));
+
+    /**
+     * 查询出待执行导入导出任务之后，放入线程池执行任务
+     */
+    public static ThreadPoolExecutor importTaskThreadPool = new ThreadPoolExecutor(
+            10,
+            10,
+            0L,
+            TimeUnit.SECONDS,
+            new ResizeLinkedBlockingQueue<Runnable>(DEFAULT_QUEUE_SIZE),
+            r -> new Thread(r, "ImportTaskThreadPool-" + r.hashCode()));
+
 }

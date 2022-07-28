@@ -46,6 +46,11 @@ public class SysRole implements Serializable {
     private String remark;
 
     /**
+     * 数据权限
+     */
+    private Integer dataScope;
+
+    /**
      * 行记录创建者
      */
     private String creator;

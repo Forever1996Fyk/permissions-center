@@ -1,7 +1,9 @@
 package com.ah.cloud.permissions.biz.application.service.ext;
 
+import com.ah.cloud.permissions.biz.domain.user.query.SysUserExportQuery;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.session.ResultHandler;
 
 import java.util.Collection;
 import java.util.List;
@@ -28,4 +30,11 @@ public interface SysUserExtService extends IService<SysUser> {
      * @return
      */
     Set<SysUser> listByUserId(Collection<Long> userIds);
+
+    /**
+     * 游标查询导出列表
+     * @param query
+     * @param resultHandler
+     */
+    void streamQueryForExport(SysUserExportQuery query, ResultHandler<SysUser> resultHandler);
 }

@@ -44,6 +44,11 @@ public class PermissionsConstants {
     public static final String DEFAULT_PASSWORD = "123456";
 
     /**
+     * 用户默认头像
+     */
+    public static final String DEFAULT_AVATAR = "";
+
+    /**
      * 默认生成验证码长度
      */
     public static final Integer DEFAULT_GENERATE_CODE_LENGTH = 6;

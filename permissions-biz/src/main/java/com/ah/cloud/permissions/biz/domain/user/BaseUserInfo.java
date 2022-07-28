@@ -28,4 +28,9 @@ public class BaseUserInfo implements Serializable {
      * 用户名称
      */
     private String name;
+
+    /**
+     * 当前部门编码
+     */
+    private String deptCode;
 }

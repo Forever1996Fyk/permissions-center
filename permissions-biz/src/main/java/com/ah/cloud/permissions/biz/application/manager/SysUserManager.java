@@ -13,6 +13,7 @@ import com.ah.cloud.permissions.biz.domain.user.form.SysUserAddForm;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserApiAddForm;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserMenuAddForm;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserRoleAddForm;
+import com.ah.cloud.permissions.biz.domain.user.query.SysUserExportQuery;
 import com.ah.cloud.permissions.biz.domain.user.query.SysUserQuery;
 import com.ah.cloud.permissions.biz.domain.user.vo.SelectSysUserVo;
 import com.ah.cloud.permissions.biz.domain.user.vo.SysUserVo;
@@ -29,6 +30,7 @@ import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.ResultHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -382,5 +384,22 @@ public class SysUserManager {
         return sysUserList.stream()
                 .map(sysUser -> SelectSysUserDTO.builder().code(String.valueOf(sysUser.getUserId())).name(sysUser.getNickName()).build())
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 流式查询用户导出列表
+     * @param query
+     * @param resultHandler
+     */
+    public void listSysUserForExport(SysUserExportQuery query, ResultHandler<SysUser> resultHandler) {
+        sysUserExtService.streamQueryForExport(query, resultHandler);
+    }
+
+    /**
+     * 批量导入用户数据
+     * @param sysUserList
+     */
+    public void batchImportSysUser(List<SysUser> sysUserList) {
+        sysUserExtService.saveBatch(sysUserList);
     }
 }

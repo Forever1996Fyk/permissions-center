@@ -12,6 +12,11 @@ import java.util.Objects;
  **/
 @Getter
 public enum UserStatusEnum {
+
+    /**
+     * 未知
+     */
+    UNKNOWN(-1, "未知"),
     /**
      * 正常
      */
@@ -53,6 +58,6 @@ public enum UserStatusEnum {
                 return e;
             }
         }
-        return null;
+        return UNKNOWN;
     }
 }

@@ -1,8 +1,13 @@
 # permissions-center
 
+## 前言
+本项目是单体项目功能丰富，但没有拆分服务，后面会再开始一个新的分布式项目。
+
+项目文档: [https://www.yuque.com/u2194782/fvfgnd](permissions-center)
+
 ## 介绍
 
-功能丰富且强大后台系统
+功能丰富且强大后台管理系统
 
 - 主要语言: Java
 
@@ -10,18 +15,24 @@
 
 - NoSQL: Redis
 
-- 技术栈: `SpringBoot`, `MyBatis`, `Netty`, `RocketMQ`, `KafKa`, `ShardingJdbc`, `ElasticsSearch`
+- 技术栈: `SpringBoot`, `MyBatis`, `Netty`, `ShardingJdbc`, `flowable`, `Quartz`, `Spring Security`
 
-核心功能:
+### 背景
+
+作为程序员就是要不断学习，逐步提升的。所以当学习到某个知识点就会在gitee或github上，想找一些对应的开源项目来看。
+可惜国内的开源精神并不是很好， 比如，工作流，很难找到代码既开源又优雅的项目。
+最终才有了自己搭建框架，把从公司学到的开发规范与对应的技术结合上，真正的实现一个可扩展，功能多，可读性强且直接可以投入生产环境的开源项目。
+
+## 核心功能
 
 1. 完整的权限管理 (√)
 2. 动态线程池监控 (√)
-3. 基于quartz实现的定时任务功能 (...)
+3. 基于quartz实现的定时任务功能 (√)
 4. ShardingJdbc动态切换数据源, 分库分表 (√)
-5. Netty的即时通讯
-6. ES数据检索
-7. JavaCV视频监控
-8. MySQL binlog数据订阅
-9. 多方式文件上传下载
-10. 大数据excel导入导出
-11. RocketMQ接入
+5. Netty的即时通讯 (√)
+6. 多方式文件上传下载 (√)
+7. 大数据excel导入导出 (√)
+8. 完整的工作流功能 (√)
+9. 自主研发的异步处理框架EDI (√)
+
+具体的功能开发与技术文档在，项目文档中有说明！！！

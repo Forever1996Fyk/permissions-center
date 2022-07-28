@@ -64,6 +64,7 @@ public class SecurityUtils {
             return PermissionsConstants.OPERATOR_SYSTEM;
         }
     }
+
     /**
      * 获取当前登录人id
      *
@@ -75,6 +76,20 @@ public class SecurityUtils {
             return baseUserInfo.getUserId();
         } catch (Throwable throwable) {
             return PermissionsConstants.ZERO;
+        }
+    }
+
+    /**
+     * 获取当前登录人部门编码
+     *
+     * @return
+     */
+    public static String getDeptCodeBySession() {
+        try {
+            BaseUserInfo baseUserInfo = getBaseUserInfo();
+            return baseUserInfo.getDeptCode();
+        } catch (Throwable throwable) {
+            return PermissionsConstants.ZERO_STR;
         }
     }
 }

@@ -77,15 +77,15 @@ spring:
           table-strategy:
             standard:
               sharding-column: sharding_key
-              precise-algorithm-class-name: com.ah.cloud.permissions.biz.infrastructure.edi.core.BizRetryShardingAlgorithm
+              precise-algorithm-class-name: com.ah.cloud.permissions.edi.infrastructure.shard.algorithm.BizRetryShardingAlgorithm
         retry_biz_record_task:
           actual-data-nodes: edi0.edi_biz_retry_record_$->{2022..2023}$->{['01','02','03','04','05','06','07','08','09','10','11','12']}_$->{0..3}
           database-strategy:
             hint:
-              algorithm-class-name: com.ah.cloud.permissions.biz.infrastructure.edi.core.BizRetryTaskShardingHintAlgorithm
+              algorithm-class-name: com.ah.cloud.permissions.edi.infrastructure.shard.algorithm.BizRetryTaskShardingHintAlgorithm
           table-strategy:
             hint:
-              algorithm-class-name: com.ah.cloud.permissions.biz.infrastructure.edi.core.BizRetryTaskShardingHintAlgorithm
+              algorithm-class-name: com.ah.cloud.permissions.edi.infrastructure.shard.algorithm.BizRetryTaskShardingHintAlgorithm
         # TECH-EDI
         edi_cfg_tech_biz_retry:
           actual-data-nodes: edi0.edi_cfg_tech_biz_retry
@@ -101,15 +101,15 @@ spring:
           table-strategy:
             standard:
               sharding-column: sharding_key
-              precise-algorithm-class-name: com.ah.cloud.permissions.biz.infrastructure.edi.core.TechBizRetryShardingAlgorithm
+              precise-algorithm-class-name: com.ah.cloud.permissions.edi.infrastructure.shard.algorithm.TechBizRetryShardingAlgorithm
         retry_tech_biz_record_task:
           actual-data-nodes: edi0.edi_tech_biz_retry_record_$->{2022..2023}$->{['01','02','03','04','05','06','07','08','09','10','11','12']}_$->{0..3}
           database-strategy:
             hint:
-              algorithm-class-name: com.ah.cloud.permissions.biz.infrastructure.edi.core.BizRetryTaskShardingHintAlgorithm
+              algorithm-class-name: com.ah.cloud.permissions.edi.infrastructure.shard.algorithm.BizRetryTaskShardingHintAlgorithm
           table-strategy:
             hint:
-              algorithm-class-name: com.ah.cloud.permissions.biz.infrastructure.edi.core.BizRetryTaskShardingHintAlgorithm
+              algorithm-class-name: com.ah.cloud.permissions.edi.infrastructure.shard.algorithm.BizRetryTaskShardingHintAlgorithm
         leaf:
           actual-data-nodes: leaf0.leaf_alloc
         thread_pool_data:

@@ -58,7 +58,7 @@ public class SysMenuController {
      * @return
      */
     @ApiMethodLog
-    @PostMapping("/delete/{id}")
+    @PostMapping("/deleteById/{id}")
     public ResponseResult<Void> delete(@PathVariable(value = "id") Long id) {
         sysMenuManager.deleteSysMenuById(id);
         return ResponseResult.ok();
@@ -76,7 +76,7 @@ public class SysMenuController {
     }
 
     /**
-     * 获取菜单树列表 todo 待办
+     * 获取菜单树列表
      * @param query
      * @return
      */

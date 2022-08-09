@@ -1,7 +1,6 @@
 package com.ah.cloud.permissions.biz.application.manager;
 
 import com.ah.cloud.permissions.biz.application.helper.SysDictHelper;
-import com.ah.cloud.permissions.biz.application.service.SysDictService;
 import com.ah.cloud.permissions.biz.application.service.ext.SysDictExtService;
 import com.ah.cloud.permissions.biz.domain.dict.form.SysDictAddForm;
 import com.ah.cloud.permissions.biz.domain.dict.form.SysDictUpdateForm;
@@ -114,7 +113,7 @@ public class SysDictManager {
      * @return
      */
     public PageResult<SysDictVo> pageSysDictList(SysDictQuery query) {
-        PageInfo<SysDict> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<SysDict> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(
                         () -> sysDictExtService.list(
                                 new QueryWrapper<SysDict>().lambda()

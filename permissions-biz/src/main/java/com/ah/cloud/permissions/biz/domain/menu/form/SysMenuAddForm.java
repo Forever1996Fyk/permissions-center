@@ -16,7 +16,6 @@ public class SysMenuAddForm {
     /**
      * 父菜单id
      */
-    @NotNull(message = "父菜单id不能为空")
     private Long parentId;
 
     /**
@@ -34,7 +33,7 @@ public class SysMenuAddForm {
     /**
      * 菜单类型
      */
-    @NotNull(message = "菜单类型")
+    @NotNull(message = "菜单类型不能为空")
     private Integer menuType;
 
     /**
@@ -45,12 +44,12 @@ public class SysMenuAddForm {
     /**
      * 组件路径
      */
-    @NotEmpty(message = "组件路径不能为空")
     private String component;
 
     /**
      * 菜单url
      */
+    @NotEmpty(message = "菜单路径不能为空")
     private String menuPath;
 
     /**

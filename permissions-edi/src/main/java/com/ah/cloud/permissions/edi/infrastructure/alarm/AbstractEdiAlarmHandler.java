@@ -76,7 +76,7 @@ public abstract class AbstractEdiAlarmHandler extends AbstractFeishuAlarmService
     protected List<AlarmParam> buildAlarmParamList(List<EdiAlarmInfo> ediAlarmInfoList) {
         List<AlarmParam> alarmParamList = Lists.newArrayList();
         long timestampSeconds = DateUtils.getCurrentSeconds();
-        String sign = genSign(retryConfiguration.getSecret(), timestampSeconds);
+        String sign = genSign(retryConfiguration.getAlarmSecret(), timestampSeconds);
         for (EdiAlarmInfo ediAlarmInfo : ediAlarmInfoList) {
             StringBuilder content = new StringBuilder()
                     .append("### [").append(env).append("] ").append(getTitle()).append("\n")

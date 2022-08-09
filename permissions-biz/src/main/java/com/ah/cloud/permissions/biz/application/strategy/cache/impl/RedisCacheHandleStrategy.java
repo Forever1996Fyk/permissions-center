@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.time.Duration;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -114,6 +115,40 @@ public class RedisCacheHandleStrategy implements CacheHandleStrategy {
         return Optional
                 .ofNullable((T) redisTemplate.opsForHash().get(key, hKey))
                 .orElseThrow(() -> new BizException(RedisErrorCodeEnum.OPS_GET_VALUE_ERROR));
+    }
+
+    /**
+     * 根据key获取所有的hash value
+     * @param key
+     * @param <T>
+     * @return
+     */
+    public <T> List<T> getCacheHashValues(final String key) {
+        if (StringUtils.isEmpty(key)) {
+            throw new BizException(RedisErrorCodeEnum.OPS_KEY_NOT_NULL);
+        }
+        return Optional
+                .ofNullable((List<T>) redisTemplate.opsForHash().values(key))
+                .orElseThrow(() -> new BizException(RedisErrorCodeEnum.OPS_GET_VALUE_ERROR));
+    }
+
+    /**
+     * 删除hash值
+     * @param key
+     * @param hkey
+     * @return
+     */
+    public Long deleteCacheHashByKey(final String key, final String hkey) {
+        return redisTemplate.opsForHash().delete(key, hkey);
+    }
+
+    /**
+     * 移除hash列表
+     * @param key
+     * @return
+     */
+    public Boolean removeCacheHashByKey(final String key) {
+        return redisTemplate.opsForHash().getOperations().delete(key);
     }
 
     /**

@@ -107,7 +107,7 @@ public class ProcessInstanceHelper {
      */
     public PageResult<ProcessInstanceVo> convertToVoPageResult(List<ProcessInstance> processInstanceList, long count, InstanceQuery query) {
         PageResult<ProcessInstanceVo> pageResult = new PageResult<>();
-        pageResult.setPageNum(query.getPageNum());
+        pageResult.setPageNum(query.getPageNo());
         pageResult.setPageSize(query.getPageSize());
         pageResult.setRows(this.convertToVoList(processInstanceList));
         pageResult.setTotal(count);

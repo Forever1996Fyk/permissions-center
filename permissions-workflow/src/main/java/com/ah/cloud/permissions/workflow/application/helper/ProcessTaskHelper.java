@@ -1,17 +1,14 @@
 package com.ah.cloud.permissions.workflow.application.helper;
 
-import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.util.DateUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.workflow.domain.task.query.MyTaskQuery;
 import com.ah.cloud.permissions.workflow.domain.task.vo.DoneTaskVo;
 import com.ah.cloud.permissions.workflow.domain.task.vo.ToDoTaskVo;
-import com.ah.cloud.permissions.workflow.infrastructure.constant.ProcessVariableConstants;
 import com.ah.cloud.permissions.workflow.infrastructure.util.FlowableUtils;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.flowable.task.api.Task;
 import org.flowable.task.api.TaskQuery;
@@ -21,8 +18,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -88,7 +83,7 @@ public class ProcessTaskHelper {
         List<ToDoTaskVo> list = this.convertToDoTaskVoList(taskList, query);
         PageResult<ToDoTaskVo> pageResult = new PageResult<>();
         pageResult.setPageSize(query.getPageSize());
-        pageResult.setPageNum(query.getPageNum());
+        pageResult.setPageNum(query.getPageNo());
         pageResult.setTotal(total);
         pageResult.setRows(list);
         return pageResult;
@@ -106,7 +101,7 @@ public class ProcessTaskHelper {
         List<DoneTaskVo> list = this.convertDoneTaskVoList(historicTaskList, query);
         PageResult<DoneTaskVo> pageResult = new PageResult<>();
         pageResult.setPageSize(query.getPageSize());
-        pageResult.setPageNum(query.getPageNum());
+        pageResult.setPageNum(query.getPageNo());
         pageResult.setTotal(total);
         pageResult.setRows(list);
         return pageResult;

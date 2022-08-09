@@ -17,15 +17,15 @@ public class PageQuery {
     /**
      * 当前页数
      */
-    private Integer pageNum;
+    private Integer pageNo;
 
     /**
      * 每页数量
      */
     private Integer pageSize;
 
-    public Integer getPageNum() {
-        return Objects.isNull(pageNum) ? PageConstants.DEFAULT_PAGE_NUM : pageNum;
+    public Integer getPageNo() {
+        return Objects.isNull(pageNo) ? PageConstants.DEFAULT_PAGE_NUM : pageNo;
     }
 
     public Integer getPageSize() {

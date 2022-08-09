@@ -80,7 +80,7 @@ public class QuartzJobTaskManager {
      * @return
      */
     public PageResult<QuartzJobTaskVo> pageQuartzJobTaskList(QuartzJobTaskQuery query) {
-        PageInfo<QuartzJobTask> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<QuartzJobTask> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(
                         () -> quartzJobTaskService.list(
                                 new QueryWrapper<QuartzJobTask>().lambda()

@@ -42,6 +42,11 @@ public enum ApiStatusEnum {
         this.desc = desc;
     }
 
+    public static boolean isValid(Integer status) {
+        ApiStatusEnum apiStatusEnum = valueOf(status);
+        return !Objects.equals(apiStatusEnum, UNKNOWN);
+    }
+
     /**
      * 根据value找到对应的枚举
      *

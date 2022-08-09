@@ -7,13 +7,10 @@ import com.ah.cloud.permissions.biz.domain.api.form.SysApiAddForm;
 import com.ah.cloud.permissions.biz.domain.api.form.SysApiUpdateForm;
 import com.ah.cloud.permissions.biz.domain.api.query.SysApiQuery;
 import com.ah.cloud.permissions.biz.domain.api.vo.SysApiVo;
-import com.ah.cloud.permissions.biz.domain.user.query.SysUserQuery;
-import com.ah.cloud.permissions.biz.domain.user.vo.SysUserVo;
-import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysApi;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUser;
 import com.ah.cloud.permissions.biz.infrastructure.security.loader.ResourceLoader;
+import com.ah.cloud.permissions.biz.infrastructure.util.AppUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.enums.ApiStatusEnum;
@@ -22,11 +19,13 @@ import com.ah.cloud.permissions.enums.YesOrNoEnum;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -54,6 +53,7 @@ public class SysApiManager {
      *
      * @param form
      */
+    @Transactional(rollbackFor = Exception.class)
     public void addSysApi(SysApiAddForm form) {
         // 接口编码必须唯一
         List<SysApi> sysApiList = sysApiService.list(
@@ -74,6 +74,7 @@ public class SysApiManager {
                             .apiTypeEnum(SysApiTypeEnum.getByType(form.getApiType()))
                             .auth(Objects.equals(YesOrNoEnum.YES.getType(), form.getAuth()))
                             .open(Objects.equals(YesOrNoEnum.YES.getType(), form.getOpen()))
+                            .uri(form.getApiUrl())
                             .build()
             );
         }
@@ -84,6 +85,7 @@ public class SysApiManager {
      *
      * @param form
      */
+    @Transactional(rollbackFor = Exception.class)
     public void updateSysApi(SysApiUpdateForm form) {
         SysApi existSysApi = sysApiService.getOne(
                 new QueryWrapper<SysApi>().lambda()
@@ -109,6 +111,7 @@ public class SysApiManager {
                         .apiTypeEnum(SysApiTypeEnum.getByType(form.getApiType()))
                         .auth(Objects.equals(YesOrNoEnum.YES.getType(), form.getAuth()))
                         .open(Objects.equals(YesOrNoEnum.YES.getType(), form.getOpen()))
+                        .uri(form.getApiUrl())
                         .build()
         );
 
@@ -132,7 +135,6 @@ public class SysApiManager {
         deleteSysApi.setVersion(existSysApi.getVersion());
         deleteSysApi.setDeleted(id);
         deleteSysApi.setId(id);
-        // todo 当前用户信息
         deleteSysApi.setModifier(SecurityUtils.getUserNameBySession());
         boolean deleteResult = sysApiService.updateById(deleteSysApi);
         if (!deleteResult) {
@@ -179,13 +181,17 @@ public class SysApiManager {
      * @return
      */
     public PageResult<SysApiVo> pageSysApiList(SysApiQuery query) {
-        PageInfo<SysApi> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<SysApi> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(
                         () -> sysApiService.list(
                                 new QueryWrapper<SysApi>().lambda()
+                                        .orderByDesc(SysApi::getCreatedTime)
                                         .like(
                                                 !StringUtils.isEmpty(query.getApiName()),
                                                 SysApi::getApiName, query.getApiName())
+                                        .like(
+                                                StringUtils.isNotBlank(query.getApiUrl()),
+                                                SysApi::getApiUrl, query.getApiUrl())
                                         .eq(
                                                 !StringUtils.isEmpty(query.getApiCode()),
                                                 SysApi::getApiCode, query.getApiCode())
@@ -194,11 +200,11 @@ public class SysApiManager {
                                                 SysApi::getApiType, query.getApiType())
                                         .eq(
                                                 query.getOpen() != null,
-                                                SysApi::getIsOpen, query.getOpen()
+                                                SysApi::getOpen, query.getOpen()
                                         )
                                         .eq(
                                                 query.getAuth() != null,
-                                                SysApi::getIsAuth, query.getAuth()
+                                                SysApi::getAuth, query.getAuth()
                                         )
                                         .eq(
                                                 query.getStatus() != null,
@@ -209,5 +215,143 @@ public class SysApiManager {
                                                 DeletedEnum.NO.value)
                         ));
         return sysApiHelper.convertToPageResult(pageInfo);
+    }
+
+    /**
+     * 变更api状态
+     *
+     * @param id
+     * @param status
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void changeApiStatus(Long id, Integer status) {
+        ApiStatusEnum apiStatusEnum = ApiStatusEnum.valueOf(status);
+        if (Objects.equals(apiStatusEnum, ApiStatusEnum.UNKNOWN)) {
+            throw new BizException(ErrorCodeEnum.PARAM_ILLEGAL_FIELD, "status");
+        }
+        SysApi sysApi = sysApiService.getOne(
+                new QueryWrapper<SysApi>().lambda()
+                        .eq(SysApi::getId, id)
+                        .eq(SysApi::getDeleted, DeletedEnum.NO.value)
+        );
+        if (Objects.isNull(sysApi)) {
+            throw new BizException(ErrorCodeEnum.API_INFO_IS_NOT_EXISTED);
+        }
+        if (YesOrNoEnum.getByType(sysApi.getChangeable()).isNo()) {
+            throw new BizException(ErrorCodeEnum.API_STATUS_AUTH_OPEN_CANNOT_CHANGEABLE);
+        }
+        SysApi updateSysApi = new SysApi();
+        updateSysApi.setId(id);
+        updateSysApi.setStatus(apiStatusEnum.getStatus());
+        updateSysApi.setVersion(sysApi.getVersion());
+        boolean updateResult = sysApiService.update(
+                updateSysApi,
+                new UpdateWrapper<SysApi>().lambda()
+                        .eq(SysApi::getId, id)
+                        .eq(SysApi::getVersion, sysApi.getVersion())
+        );
+        if (!updateResult) {
+            throw new BizException(ErrorCodeEnum.VERSION_ERROR);
+        }
+        resourceLoader.updateResourceMap(
+                AuthorityApiDTO.builder()
+                        .apiCode(sysApi.getApiCode())
+                        .apiStatusEnum(apiStatusEnum)
+                        .apiTypeEnum(SysApiTypeEnum.getByType(sysApi.getApiType()))
+                        .auth(AppUtils.convertIntToBool(sysApi.getAuth()))
+                        .open(AppUtils.convertIntToBool(sysApi.getOpen()))
+                        .uri(sysApi.getApiUrl())
+                        .build()
+        );
+    }
+
+    /**
+     * 变更api权限
+     *
+     * @param id
+     * @param auth
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void changeApiAuth(Long id, Integer auth) {
+        YesOrNoEnum yesOrNoEnum = YesOrNoEnum.getByType(auth);
+        SysApi sysApi = sysApiService.getOne(
+                new QueryWrapper<SysApi>().lambda()
+                        .eq(SysApi::getId, id)
+                        .eq(SysApi::getDeleted, DeletedEnum.NO.value)
+        );
+        if (Objects.isNull(sysApi)) {
+            throw new BizException(ErrorCodeEnum.API_INFO_IS_NOT_EXISTED);
+        }
+        if (YesOrNoEnum.getByType(sysApi.getChangeable()).isNo()) {
+            throw new BizException(ErrorCodeEnum.API_STATUS_AUTH_OPEN_CANNOT_CHANGEABLE);
+        }
+        SysApi updateSysApi = new SysApi();
+        updateSysApi.setId(id);
+        updateSysApi.setAuth(yesOrNoEnum.getType());
+        updateSysApi.setVersion(sysApi.getVersion());
+        boolean updateResult = sysApiService.update(
+                updateSysApi,
+                new UpdateWrapper<SysApi>().lambda()
+                        .eq(SysApi::getId, id)
+                        .eq(SysApi::getVersion, sysApi.getVersion())
+        );
+        if (!updateResult) {
+            throw new BizException(ErrorCodeEnum.VERSION_ERROR);
+        }
+        resourceLoader.updateResourceMap(
+                AuthorityApiDTO.builder()
+                        .apiCode(sysApi.getApiCode())
+                        .apiStatusEnum(ApiStatusEnum.valueOf(sysApi.getStatus()))
+                        .apiTypeEnum(SysApiTypeEnum.getByType(sysApi.getApiType()))
+                        .auth(AppUtils.convertIntToBool(yesOrNoEnum.getType()))
+                        .open(AppUtils.convertIntToBool(sysApi.getOpen()))
+                        .uri(sysApi.getApiUrl())
+                        .build()
+        );
+    }
+
+    /**
+     * 变更api开放类型
+     *
+     * @param id
+     * @param open
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void changeApiOpen(Long id, Integer open) {
+        YesOrNoEnum yesOrNoEnum = YesOrNoEnum.getByType(open);
+        SysApi sysApi = sysApiService.getOne(
+                new QueryWrapper<SysApi>().lambda()
+                        .eq(SysApi::getId, id)
+                        .eq(SysApi::getDeleted, DeletedEnum.NO.value)
+        );
+        if (Objects.isNull(sysApi)) {
+            throw new BizException(ErrorCodeEnum.API_INFO_IS_NOT_EXISTED);
+        }
+        if (YesOrNoEnum.getByType(sysApi.getChangeable()).isNo()) {
+            throw new BizException(ErrorCodeEnum.API_STATUS_AUTH_OPEN_CANNOT_CHANGEABLE);
+        }
+        SysApi updateSysApi = new SysApi();
+        updateSysApi.setId(id);
+        updateSysApi.setOpen(yesOrNoEnum.getType());
+        updateSysApi.setVersion(sysApi.getVersion());
+        boolean updateResult = sysApiService.update(
+                updateSysApi,
+                new UpdateWrapper<SysApi>().lambda()
+                        .eq(SysApi::getId, id)
+                        .eq(SysApi::getVersion, sysApi.getVersion())
+        );
+        if (!updateResult) {
+            throw new BizException(ErrorCodeEnum.VERSION_ERROR);
+        }
+        resourceLoader.updateResourceMap(
+                AuthorityApiDTO.builder()
+                        .apiCode(sysApi.getApiCode())
+                        .apiStatusEnum(ApiStatusEnum.valueOf(sysApi.getStatus()))
+                        .apiTypeEnum(SysApiTypeEnum.getByType(sysApi.getApiType()))
+                        .auth(AppUtils.convertIntToBool(sysApi.getAuth()))
+                        .open(AppUtils.convertIntToBool(yesOrNoEnum.getType()))
+                        .uri(sysApi.getApiUrl())
+                        .build()
+        );
     }
 }

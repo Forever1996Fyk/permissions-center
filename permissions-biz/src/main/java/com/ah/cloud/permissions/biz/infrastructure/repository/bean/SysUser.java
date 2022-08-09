@@ -1,5 +1,7 @@
 package com.ah.cloud.permissions.biz.infrastructure.repository.bean;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.Version;
@@ -25,6 +27,7 @@ public class SysUser implements Serializable {
     /**
      * 主键id
      */
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
@@ -36,6 +39,11 @@ public class SysUser implements Serializable {
      * 登录账号
      */
     private String account;
+
+    /**
+     * 用户名
+     */
+    private String name;
 
     /**
      * 昵称

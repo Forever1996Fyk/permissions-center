@@ -2,7 +2,6 @@ package com.ah.cloud.permissions.biz.application.provider.access;
 
 import com.ah.cloud.permissions.biz.domain.api.dto.AuthorityApiDTO;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
-import com.ah.cloud.permissions.biz.infrastructure.config.ApiProperties;
 import com.ah.cloud.permissions.biz.infrastructure.exception.ApiAuthorityErrorException;
 import com.ah.cloud.permissions.biz.infrastructure.security.loader.ResourceLoader;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
@@ -20,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @program: permissions-center
@@ -31,14 +31,9 @@ import java.util.Objects;
 @Component
 public abstract class AbstractAccessProvider implements AccessProvider {
     @Resource
-    protected ApiProperties apiProperties;
-    @Resource
     protected ResourceLoader resourceLoader;
 
-    /**
-     * 路径匹配器
-     */
-    protected final static AntPathMatcher PATH_MATCHER = new AntPathMatcher();
+    private static final AntPathMatcher PATH_MATCHER = new AntPathMatcher();
 
     @Override
     public boolean access(HttpServletRequest request, Authentication authentication) {
@@ -48,17 +43,12 @@ public abstract class AbstractAccessProvider implements AccessProvider {
         String uri = request.getRequestURI();
 
         /*
-        判断当前uri是否可放行
-         */
-        if (checkUriIsPermit(uri)) {
-            return Boolean.TRUE;
-        }
-
-        /*
         根据uri匹配对应的apiCode
          */
         Map<String, AuthorityApiDTO> apiCodeMap = resourceLoader.getUriAndApiCodeMap();
-        AuthorityApiDTO authorityApiDTO = apiCodeMap.get(uri);
+        Set<String> apiCodeSet = apiCodeMap.keySet();
+        String apiCodeKey = apiCodeSet.stream().filter(apiCode -> PATH_MATCHER.match(apiCode, uri)).findAny().orElse(null);
+        AuthorityApiDTO authorityApiDTO = apiCodeMap.get(apiCodeKey);
 
         /*
         如果没有匹配到apiCode则直接返回false
@@ -87,17 +77,6 @@ public abstract class AbstractAccessProvider implements AccessProvider {
      * @return
      */
     protected abstract String getLogMark();
-
-    /**
-     * 校验uri是否可放行
-     *
-     * @param uri
-     * @return
-     */
-    private boolean checkUriIsPermit(String uri) {
-        return apiProperties.getPermitAll().stream()
-                .anyMatch(item -> PATH_MATCHER.match(item, uri));
-    }
 
     /**
      * 验证api状态

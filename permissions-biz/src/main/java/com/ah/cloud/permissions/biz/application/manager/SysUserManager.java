@@ -8,17 +8,17 @@ import com.ah.cloud.permissions.biz.application.service.ext.SysUserExtService;
 import com.ah.cloud.permissions.biz.application.service.ext.SysUserMenuExtService;
 import com.ah.cloud.permissions.biz.application.service.ext.SysUserRoleExtService;
 import com.ah.cloud.permissions.biz.domain.menu.vo.RouterVo;
+import com.ah.cloud.permissions.biz.domain.user.LocalUser;
 import com.ah.cloud.permissions.biz.domain.user.dto.SelectSysUserDTO;
-import com.ah.cloud.permissions.biz.domain.user.form.SysUserAddForm;
-import com.ah.cloud.permissions.biz.domain.user.form.SysUserApiAddForm;
-import com.ah.cloud.permissions.biz.domain.user.form.SysUserMenuAddForm;
-import com.ah.cloud.permissions.biz.domain.user.form.SysUserRoleAddForm;
+import com.ah.cloud.permissions.biz.domain.user.form.*;
 import com.ah.cloud.permissions.biz.domain.user.query.SysUserExportQuery;
 import com.ah.cloud.permissions.biz.domain.user.query.SysUserQuery;
+import com.ah.cloud.permissions.biz.domain.user.vo.GetUserInfoVo;
 import com.ah.cloud.permissions.biz.domain.user.vo.SelectSysUserVo;
 import com.ah.cloud.permissions.biz.domain.user.vo.SysUserVo;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.*;
+import com.ah.cloud.permissions.biz.infrastructure.util.CollectionUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.enums.UserStatusEnum;
@@ -33,7 +33,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.ResultHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -157,7 +156,7 @@ public class SysUserManager {
      * @return
      */
     public PageResult<SysUserVo> pageSysUsers(SysUserQuery query) {
-        PageInfo<SysUser> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<SysUser> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(
                         () -> sysUserExtService.list(
                                 new QueryWrapper<SysUser>().lambda()
@@ -174,8 +173,7 @@ public class SysUserManager {
                                                 SysUser::getDeleted,
                                                 DeletedEnum.NO.value)
                         ));
-        PageResult<SysUserVo> result = sysUserHelper.convert2PageResult(pageInfo);
-        return result;
+        return sysUserHelper.convert2PageResult(pageInfo);
     }
 
     /**
@@ -253,20 +251,22 @@ public class SysUserManager {
         Set<String> roleSet = sysUserRoleList.stream()
                 .map(SysUserRole::getRoleCode)
                 .collect(Collectors.toSet());
-        List<SysRoleMenu> sysRoleMenuList = sysRoleMenuService.list(
-                new QueryWrapper<SysRoleMenu>().lambda()
-                        .in(SysRoleMenu::getRoleCode, roleSet)
-                        .eq(SysRoleMenu::getDeleted, DeletedEnum.NO.value)
-        );
 
         Set<Long> userMenuSet = sysUserMenuList.stream()
                 .map(SysUserMenu::getMenuId)
                 .collect(Collectors.toSet());
 
-        Set<Long> roleMenuSet = sysRoleMenuList.stream()
-                .map(SysRoleMenu::getMenuId)
-                .collect(Collectors.toSet());
-        userMenuSet.addAll(roleMenuSet);
+        if (CollectionUtils.isNotEmpty(roleSet)) {
+            List<SysRoleMenu> sysRoleMenuList = sysRoleMenuService.list(
+                    new QueryWrapper<SysRoleMenu>().lambda()
+                            .in(SysRoleMenu::getRoleCode, roleSet)
+                            .eq(SysRoleMenu::getDeleted, DeletedEnum.NO.value)
+            );
+            Set<Long> roleMenuSet = sysRoleMenuList.stream()
+                    .map(SysRoleMenu::getMenuId)
+                    .collect(Collectors.toSet());
+            userMenuSet.addAll(roleMenuSet);
+        }
         return sysMenuManager.assembleMenuRouteByUser(userMenuSet);
     }
 
@@ -401,5 +401,34 @@ public class SysUserManager {
      */
     public void batchImportSysUser(List<SysUser> sysUserList) {
         sysUserExtService.saveBatch(sysUserList);
+    }
+
+    /**
+     * 获取当前登录人信息
+     * @return
+     */
+    public GetUserInfoVo getCurrentUserInfo() {
+        LocalUser localUser = SecurityUtils.getLocalUser();
+        if (Objects.isNull(localUser)) {
+            throw new BizException(ErrorCodeEnum.LOGIN_INVALID);
+        }
+        return sysUserHelper.convertToGetUserInfo(localUser);
+    }
+
+    /**
+     * 更新用户
+     * @param form
+     */
+    public void updateSysUser(SysUserUpdateForm form) {
+        SysUser existSysUser = sysUserExtService.getOne(
+                new QueryWrapper<SysUser>().lambda()
+                        .eq(SysUser::getId, form.getId())
+                        .eq(SysUser::getDeleted, DeletedEnum.NO.value)
+        );
+        if (Objects.isNull(existSysUser)) {
+            throw new BizException(ErrorCodeEnum.USER_NOT_EXIST);
+        }
+        SysUser updateSysUser = sysUserHelper.convertToEntity(form);
+        sysUserExtService.updateById(updateSysUser);
     }
 }

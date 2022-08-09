@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -19,7 +20,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthorityInfo {
+public class AuthorityInfo implements Serializable {
 
     /**
      * 用户权限集合

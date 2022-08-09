@@ -34,6 +34,6 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
                 .print(JsonUtils.toJSONString(
                         ResponseResult.newResponse(errorCodeEnum)
                 ));
-        log.error("[权限端点异常处理] ==> [异常信息为:{}]", Throwables.getStackTraceAsString(e));
+        log.error("[权限端点异常处理] ==> [请求地址为: {}, 异常信息为:{}]", request.getRequestURI(), Throwables.getStackTraceAsString(e));
     }
 }

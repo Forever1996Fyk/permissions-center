@@ -7,7 +7,6 @@ import com.ah.cloud.permissions.biz.domain.dict.form.SysDictDetailUpdateForm;
 import com.ah.cloud.permissions.biz.domain.dict.query.SysDictDetailQuery;
 import com.ah.cloud.permissions.biz.domain.dict.vo.SelectDictLabelVo;
 import com.ah.cloud.permissions.biz.domain.dict.vo.SysDictDetailVo;
-import com.ah.cloud.permissions.biz.domain.dict.vo.SysDictVo;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysDictDetail;
 import com.ah.cloud.permissions.biz.infrastructure.util.CollectionUtils;
@@ -23,7 +22,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -138,7 +136,7 @@ public class SysDictDetailManager {
         if (StringUtils.isBlank(query.getDictCode())) {
             throw new BizException(ErrorCodeEnum.PARAM_MISS, "字典编码");
         }
-        PageInfo<SysDictDetail> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<SysDictDetail> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(
                         () -> sysDictDetailService.list(
                                 new QueryWrapper<SysDictDetail>().lambda()

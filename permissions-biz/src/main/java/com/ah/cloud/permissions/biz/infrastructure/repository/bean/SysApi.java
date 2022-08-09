@@ -1,10 +1,8 @@
 package com.ah.cloud.permissions.biz.infrastructure.repository.bean;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.util.Date;
-import com.baomidou.mybatisplus.annotation.Version;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,6 +39,11 @@ public class SysApi implements Serializable {
     private String apiName;
 
     /**
+     * 读写类型
+     */
+    private Integer readOrWrite;
+
+    /**
      * 接口类型
      */
     private Integer apiType;
@@ -63,12 +66,14 @@ public class SysApi implements Serializable {
     /**
      * 是否认证
      */
-    private Integer isAuth;
+    @TableField("is_auth")
+    private Integer auth;
 
     /**
      * 是否公开
      */
-    private Integer isOpen;
+    @TableField("is_open")
+    private Integer open;
 
     /**
      * 备注
@@ -110,6 +115,12 @@ public class SysApi implements Serializable {
      * 是否删除
      */
     private Long deleted;
+
+
+    /**
+     * 是否可变
+     */
+    private Integer changeable;
 
 
 }

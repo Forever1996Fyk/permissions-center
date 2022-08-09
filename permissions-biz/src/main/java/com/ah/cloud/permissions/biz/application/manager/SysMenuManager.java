@@ -18,6 +18,7 @@ import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysMenu;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysRoleMenu;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUserMenu;
+import com.ah.cloud.permissions.biz.infrastructure.util.CollectionUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.enums.MenuQueryTypeEnum;
 import com.ah.cloud.permissions.enums.MenuTypeEnum;
@@ -28,7 +29,6 @@ import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -68,7 +68,7 @@ public class SysMenuManager {
                         .eq(SysMenu::getMenuCode, form.getMenuCode())
                         .eq(SysMenu::getDeleted, DeletedEnum.NO.value)
         );
-        if (!CollectionUtils.isEmpty(sysMenus)) {
+        if (CollectionUtils.isNotEmpty(sysMenus)) {
             throw new BizException(ErrorCodeEnum.MENU_CODE_IS_EXISTED, form.getMenuCode());
         }
         SysMenu sysMenu = sysMenuHelper.convertToEntity(form);
@@ -110,6 +110,7 @@ public class SysMenuManager {
             return;
         }
         SysMenu sysMenuDelete = new SysMenu();
+        sysMenuDelete.setId(id);
         sysMenuDelete.setDeleted(id);
         sysMenuDelete.setModifier(SecurityUtils.getUserNameBySession());
         sysMenuDelete.setVersion(sysMenu.getVersion());
@@ -137,6 +138,9 @@ public class SysMenuManager {
      * @return
      */
     public List<RouterVo> assembleMenuRouteByUser(Set<Long> userMenuSet) {
+        if (CollectionUtils.isEmpty(userMenuSet)) {
+            throw new BizException(ErrorCodeEnum.AUTHORITY_MENU_EXCEPTION);
+        }
         List<SysMenu> sysMenuList = sysMenuService.list(
                 new QueryWrapper<SysMenu>().lambda()
                         .in(SysMenu::getId, userMenuSet)
@@ -144,7 +148,6 @@ public class SysMenuManager {
                         .eq(SysMenu::getDeleted, DeletedEnum.NO.value)
         );
 
-        // todo 待完成
         return sysMenuHelper.convertToRouteVo(sysMenuList);
     }
 
@@ -181,8 +184,7 @@ public class SysMenuManager {
         }
 
         if (menuQueryTypeEnum.isUserMenu()) {
-            // 获取当前登录人id todo
-            Long currentUserId = PermissionsConstants.SUPER_ADMIN;
+            Long currentUserId = SecurityUtils.getUserIdBySession();
             List<SysUserMenu> sysUserMenuList = sysUserMenuExtService.list(
                     new QueryWrapper<SysUserMenu>().lambda()
                             .eq(SysUserMenu::getUserId, currentUserId)
@@ -206,6 +208,6 @@ public class SysMenuManager {
                 new QueryWrapper<SysMenu>().lambda()
                         .eq(SysMenu::getDeleted, DeletedEnum.NO.value)
         );
-        return null;
+        return sysMenuHelper.convertToTreeVo(sysMenuList);
     }
 }

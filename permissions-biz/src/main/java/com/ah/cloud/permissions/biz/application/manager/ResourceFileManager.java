@@ -1,7 +1,6 @@
 package com.ah.cloud.permissions.biz.application.manager;
 
 import com.ah.cloud.permissions.biz.application.helper.ResourceFileHelper;
-import com.ah.cloud.permissions.biz.application.helper.ResourceHelper;
 import com.ah.cloud.permissions.biz.application.service.ResourceFileService;
 import com.ah.cloud.permissions.biz.application.service.ResourceMetaDataService;
 import com.ah.cloud.permissions.biz.application.strategy.resource.ResourceActionService;
@@ -22,7 +21,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -121,7 +119,7 @@ public class ResourceFileManager {
      * @return
      */
     public PageResult<ResourceFileVo> pageResourceFileList(ResourceFileQuery query) {
-        PageInfo<ResourceFile> pageInfo = PageHelper.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<ResourceFile> pageInfo = PageHelper.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(
                         () -> resourceFileService.list(
                                 new QueryWrapper<ResourceFile>().lambda()

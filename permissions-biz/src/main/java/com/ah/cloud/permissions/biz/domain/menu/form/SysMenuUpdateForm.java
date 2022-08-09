@@ -23,7 +23,7 @@ public class SysMenuUpdateForm {
     /**
      * 父菜单id
      */
-    @NotNull(message = "父菜单id不能为空")
+    @NotNull(message = "父id不能为空")
     private Long parentId;
 
     /**
@@ -39,6 +39,12 @@ public class SysMenuUpdateForm {
     private String menuName;
 
     /**
+     * 菜单类型
+     */
+    @NotNull(message = "菜单类型不能为空")
+    private Integer menuType;
+
+    /**
      * 菜单序号
      */
     private Integer menuOrder;
@@ -46,12 +52,12 @@ public class SysMenuUpdateForm {
     /**
      * 组件路径
      */
-    @NotEmpty(message = "组件路径不能为空")
     private String component;
 
     /**
      * 菜单url
      */
+    @NotEmpty(message = "菜单路径不能为空")
     private String menuPath;
 
     /**

@@ -35,7 +35,7 @@ public class TechEdiInitAlarmHandler extends AbstractEdiAlarmHandler {
         return RetryBizRecordCountQuery.builder()
                 .bizType(retryBizConfigDTO.getBizType())
                 .bizRetryStatusEnum(BizRetryStatusEnum.RETRY_INIT)
-                .modifyTimeEnd(DateUtils.getDateBeforeMin(retryConfiguration.getAlarmInitMinute()))
+                .modifyTimeEnd(DateUtils.getDateBeforeMin(retryConfiguration.getAlarmMinute()))
                 .build();
     }
 

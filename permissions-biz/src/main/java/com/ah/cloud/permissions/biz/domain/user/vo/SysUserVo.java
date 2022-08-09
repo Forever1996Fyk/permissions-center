@@ -1,6 +1,7 @@
 package com.ah.cloud.permissions.biz.domain.user.vo;
 
 import com.baomidou.mybatisplus.annotation.Version;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +36,11 @@ public class SysUserVo {
     private String account;
 
     /**
+     * 用户名
+     */
+    private String name;
+
+    /**
      * 昵称
      */
     private String nickName;
@@ -55,6 +61,11 @@ public class SysUserVo {
     private Integer sex;
 
     /**
+     * 性别名称
+     */
+    private String sexName;
+
+    /**
      * 用于头像路径
      */
     private String avatar;
@@ -65,22 +76,13 @@ public class SysUserVo {
     private Integer status;
 
     /**
-     * 行记录创建者
+     * 状态名称
      */
-    private String creator;
-
-    /**
-     * 行记录最近更新人
-     */
-    private String modifier;
+    private String statusName;
 
     /**
      * 行记录创建时间
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createdTime;
-
-    /**
-     * 行记录最近修改时间
-     */
-    private Date modifiedTime;
 }

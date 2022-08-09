@@ -13,7 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  **/
 @EnableEncryptableProperties
 @SpringBootApplication(scanBasePackages = {"com.ah.cloud"})
-@MapperScan(basePackages = {"com.ah.cloud.permissions.biz.infrastructure.repository.mapper"} )
+@MapperScan(basePackages = {"com.ah.cloud.permissions.biz.infrastructure.repository.mapper", "com.ah.cloud.permissions.task.infrastructure.repository.mapper", "com.ah.cloud.permissions.edi.infrastructure.repository.mapper"} )
 public class PermissionsApiApplication {
 
     public static void main(String[] args) {

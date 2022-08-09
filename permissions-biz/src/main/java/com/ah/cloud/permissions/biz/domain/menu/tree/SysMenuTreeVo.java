@@ -77,5 +77,15 @@ public class SysMenuTreeVo {
     /**
      * 子菜单
      */
-    private List<SysMenuTreeVo> childrenSysMenu;
+    private List<SysMenuTreeVo> children;
+
+    /**
+     * 菜单类型名称
+     */
+    private String menuTypeName;
+
+    /**
+     * 打开类型名称
+     */
+    private String openTypeName;
 }

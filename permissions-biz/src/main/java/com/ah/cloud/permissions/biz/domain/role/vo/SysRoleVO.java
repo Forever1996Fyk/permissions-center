@@ -38,4 +38,9 @@ public class SysRoleVO {
      * 角色名称
      */
     private String roleName;
+
+    /**
+     * 角色类型名称
+     */
+    private String roleTypeName;
 }

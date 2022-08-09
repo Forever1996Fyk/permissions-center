@@ -3,6 +3,7 @@ package com.ah.cloud.permissions.biz.domain.api.form;
 import com.ah.cloud.permissions.biz.infrastructure.annotation.EnumValid;
 import com.ah.cloud.permissions.enums.ReadOrWriteEnum;
 import com.ah.cloud.permissions.enums.SysApiTypeEnum;
+import com.ah.cloud.permissions.enums.YesOrNoEnum;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
@@ -65,6 +66,11 @@ public class SysApiAddForm {
      */
     @EnumValid(enumClass = ReadOrWriteEnum.class, enumMethod = "isValid")
     private Integer readOrWrite;
+
+    /**
+     * 是否可变
+     */
+    private Integer changeable;
 
     /**
      * 备注

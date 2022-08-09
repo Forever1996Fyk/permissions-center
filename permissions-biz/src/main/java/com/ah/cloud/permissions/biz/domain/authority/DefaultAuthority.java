@@ -1,6 +1,7 @@
 package com.ah.cloud.permissions.biz.domain.authority;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
@@ -11,6 +12,7 @@ import org.springframework.security.core.SpringSecurityCoreVersion;
  * @author: YuKai Fan
  * @create: 2021-12-17 17:42
  **/
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class DefaultAuthority implements GrantedAuthority {

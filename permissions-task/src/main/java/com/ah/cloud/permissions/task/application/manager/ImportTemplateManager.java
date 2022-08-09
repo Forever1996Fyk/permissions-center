@@ -92,7 +92,7 @@ public class ImportTemplateManager {
      * @return
      */
     public PageResult<ImportTemplateVo> pageImportTemplateVoList(ImportTemplateQuery query) {
-        PageInfo<SysImportTemplateInfo> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<SysImportTemplateInfo> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(
                         () -> sysImportTemplateInfoService.list(
                                 new QueryWrapper<SysImportTemplateInfo>().lambda()
@@ -102,7 +102,7 @@ public class ImportTemplateManager {
                         )
                 );
 
-        return importExportHelper.convertToPageResult(pageInfo);
+        return importExportHelper.convertToTemplatePageResult(pageInfo);
     }
 
     /**

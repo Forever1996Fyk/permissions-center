@@ -7,8 +7,10 @@ import com.ah.cloud.permissions.biz.domain.api.vo.SysApiVo;
 import com.ah.cloud.permissions.biz.domain.role.vo.SysRoleVO;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysApi;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysRole;
+import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.enums.ApiStatusEnum;
+import com.ah.cloud.permissions.enums.YesOrNoEnum;
 import com.github.pagehelper.PageInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -39,27 +41,20 @@ public class SysApiHelper {
 
     public SysApi convertToEntity(SysApiAddForm form) {
         SysApi sysApi = SysApiHelperConvert.INSTANCE.convert(form);
-        sysApi.setIsOpen(form.getOpen());
-        sysApi.setIsAuth(form.getAuth());
+        sysApi.setChangeable(YesOrNoEnum.getByType(form.getChangeable()).getType());
+        sysApi.setCreator(SecurityUtils.getUserNameBySession());
+        sysApi.setModifier(SecurityUtils.getUserNameBySession());
         return sysApi;
     }
 
     public SysApi convertToEntity(SysApiUpdateForm form) {
         SysApi sysApi = SysApiHelperConvert.INSTANCE.convert(form);
-        if (form.getOpen() != null) {
-            sysApi.setIsOpen(form.getOpen());
-        }
-        if (form.getAuth() != null) {
-            sysApi.setIsAuth(form.getAuth());
-        }
+        sysApi.setChangeable(YesOrNoEnum.getByType(form.getChangeable()).getType());
         return sysApi;
     }
 
     public SysApiVo convertToVo(SysApi sysApi) {
-        SysApiVo sysApiVo = SysApiHelperConvert.INSTANCE.convertToVO(sysApi);
-        sysApiVo.setAuth(sysApi.getIsAuth());
-        sysApiVo.setOpen(sysApi.getIsOpen());
-        return sysApiVo;
+        return SysApiHelperConvert.INSTANCE.convertToVO(sysApi);
     }
 
     public PageResult<SysApiVo> convertToPageResult(PageInfo<SysApi> pageInfo) {
@@ -67,8 +62,7 @@ public class SysApiHelper {
         result.setTotal(pageInfo.getTotal());
         result.setPageNum(pageInfo.getPageNum());
         result.setRows(SysApiHelperConvert.INSTANCE.convertToVO(pageInfo.getList()));
-        result.setPageSize(pageInfo.getSize());
-        result.setPages(pageInfo.getPages());
+        result.setPageSize(pageInfo.getPageSize());
         return result;
     }
 
@@ -76,20 +70,62 @@ public class SysApiHelper {
     public interface SysApiHelperConvert {
         SysApiHelper.SysApiHelperConvert INSTANCE = Mappers.getMapper(SysApiHelper.SysApiHelperConvert.class);
 
+        /**
+         * 数据转换
+         *
+         * @param sysApi
+         * @return
+         */
         @Mappings({
                 @Mapping(target = "apiStatusEnum", source = "status"),
                 @Mapping(target = "uri", source = "apiUrl"),
+                @Mapping(target = "auth", expression = "java(com.ah.cloud.permissions.biz.infrastructure.util.AppUtils.convertIntToBool(sysApi.getAuth()))"),
+                @Mapping(target = "open", expression = "java(com.ah.cloud.permissions.biz.infrastructure.util.AppUtils.convertIntToBool(sysApi.getOpen()))")
         })
         AuthorityApiDTO convert(SysApi sysApi);
 
+        /**
+         * 数据转换
+         *
+         * @param sysApis
+         * @return
+         */
         List<AuthorityApiDTO> convert(List<SysApi> sysApis);
 
+        /**
+         * 数据转换
+         *
+         * @param form
+         * @return
+         */
         SysApi convert(SysApiAddForm form);
 
+        /**
+         * 数据转换
+         *
+         * @param form
+         * @return
+         */
         SysApi convert(SysApiUpdateForm form);
 
+        /**
+         * 数据转换
+         *
+         * @param sysApi
+         * @return
+         */
+        @Mappings({
+                @Mapping(target = "statusName", expression = "java(com.ah.cloud.permissions.enums.ApiStatusEnum.valueOf(sysApi.getStatus()).getDesc())"),
+                @Mapping(target = "apiTypeName", expression = "java(com.ah.cloud.permissions.enums.SysApiTypeEnum.getByType(sysApi.getApiType()).getDesc())")
+        })
         SysApiVo convertToVO(SysApi sysApi);
 
+        /**
+         * 数据转换
+         *
+         * @param sysApiList
+         * @return
+         */
         List<SysApiVo> convertToVO(List<SysApi> sysApiList);
     }
 }

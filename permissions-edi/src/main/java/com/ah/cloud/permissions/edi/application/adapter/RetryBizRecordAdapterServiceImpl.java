@@ -105,7 +105,7 @@ public class RetryBizRecordAdapterServiceImpl implements RetryBizRecordAdapterSe
             EdiBizRetryRecord ediBizRetryRecord = ediBizRetryRecordService.getOne(
                     new QueryWrapper<EdiBizRetryRecord>().lambda()
                             .eq(EdiBizRetryRecord::getId, id)
-                            .eq(EdiBizRetryRecord::getShardingKey, shardingKey)
+                            .eq(EdiBizRetryRecord::getShardingKey, RetryUtils.getShardingKey(bizType))
                             .eq(EdiBizRetryRecord::getEnv, env)
                             .eq(EdiBizRetryRecord::getDeleted, DeletedEnum.NO.value)
             );
@@ -248,7 +248,7 @@ public class RetryBizRecordAdapterServiceImpl implements RetryBizRecordAdapterSe
             retryBizConfig = retryBizConfigAdapterService.getRetryBizConfigByLocalCache(query.getBizType(), query.getEdiTypeEnum());
         }
         if (Objects.isNull(query.getEdiTypeEnum())) {
-            PageInfo<EdiTechBizRetryRecord> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+            PageInfo<EdiTechBizRetryRecord> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                     .doSelectPageInfo(
                             () -> ediTechBizRetryRecordService.list(
                                     new QueryWrapper<EdiTechBizRetryRecord>().lambda()
@@ -264,7 +264,7 @@ public class RetryBizRecordAdapterServiceImpl implements RetryBizRecordAdapterSe
                     );
             return retryRecordHelper.convertToTechPageResult(pageInfo, retryBizConfig);
         } else {
-            PageInfo<EdiBizRetryRecord> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+            PageInfo<EdiBizRetryRecord> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                     .doSelectPageInfo(
                             () -> ediBizRetryRecordService.list(
                                     new QueryWrapper<EdiBizRetryRecord>().lambda()

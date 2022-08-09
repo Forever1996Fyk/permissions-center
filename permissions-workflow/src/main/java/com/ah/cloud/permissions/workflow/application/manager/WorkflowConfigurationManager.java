@@ -126,7 +126,7 @@ public class WorkflowConfigurationManager {
      * @return
      */
     public PageResult<ProcessFormConfigurationVo> pageProcessFormConfigurationVoList(ProcessFormConfigurationQuery query) {
-        PageInfo<WorkflowFormProcess> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<WorkflowFormProcess> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(() ->
                         workflowFormProcessService.list(
                                 new QueryWrapper<WorkflowFormProcess>().lambda()

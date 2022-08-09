@@ -23,6 +23,7 @@ public class BizException extends RuntimeException {
     public BizException(ErrorCode errorCode) {
         super(errorCode.getMsg());
         this.errorCode = errorCode;
+        this.errorMessage = errorCode.getMsg();
     }
 
     public BizException(ErrorCode errorCode, String... args) {

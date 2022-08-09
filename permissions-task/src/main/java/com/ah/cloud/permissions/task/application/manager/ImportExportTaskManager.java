@@ -76,7 +76,7 @@ public class ImportExportTaskManager {
      * @return
      */
     public PageResult<ImportExportTaskVo> pageImportExportList(ImportExportTaskQuery query) {
-        PageInfo<SysImportExportTask> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<SysImportExportTask> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(
                         () -> sysImportExportTaskService.list(
                                 new QueryWrapper<SysImportExportTask>().lambda()

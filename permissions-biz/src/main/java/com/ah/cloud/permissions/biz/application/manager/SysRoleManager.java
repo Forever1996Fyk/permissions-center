@@ -160,7 +160,7 @@ public class SysRoleManager {
      * @return
      */
     public PageResult<SysRoleVO> pageSysRoles(SysRoleQuery query) {
-        PageInfo<SysRole> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<SysRole> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(
                         () -> sysRoleService.list(
                                 new QueryWrapper<SysRole>().lambda()

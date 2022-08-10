@@ -55,7 +55,6 @@ public class RetryUtils {
         if (StringUtils.isNotBlank(date)) {
             dateMonth = DateUtils.localDate2Str(DateUtils.str2LocalDate(date), DateUtils.pattern5);
         }
-        String dateMonth = DateUtils.format(date, DateUtils.pattern5);
         return dateMonth.concat("_").concat(String.valueOf(bizType));
     }
 

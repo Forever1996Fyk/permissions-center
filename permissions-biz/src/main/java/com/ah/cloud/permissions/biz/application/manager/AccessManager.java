@@ -46,6 +46,8 @@ import java.util.Objects;
 @Component
 public class AccessManager implements InitializingBean {
     @Resource
+    protected ApiProperties apiProperties;
+    @Resource
     private LocalUserHelper localUserHelper;
     @Resource
     private UserAuthManager userAuthManager;
@@ -55,6 +57,11 @@ public class AccessManager implements InitializingBean {
     private RedisCacheHandleStrategy redisCacheHandleStrategy;
 
     /**
+     * 路径匹配器
+     */
+    protected final static AntPathMatcher PATH_MATCHER = new AntPathMatcher();
+
+    /**
      * Spring Security 权限校验表达式方法
      *
      * @param request
@@ -62,6 +69,16 @@ public class AccessManager implements InitializingBean {
      * @return
      */
     public boolean access(HttpServletRequest request, Authentication authentication) {
+         /*
+        获取当前请求uri
+         */
+        String uri = request.getRequestURI();
+        /*
+        判断当前uri是否可放行
+         */
+        if (checkUriIsPermit(uri)) {
+            return Boolean.TRUE;
+        }
         int currentPosition = 0;
         int size = this.accessProviderList.size();
         for (AccessProvider accessProvider : accessProviderList) {
@@ -76,6 +93,17 @@ public class AccessManager implements InitializingBean {
         }
         log.error("AccessManager has no Provider");
         return false;
+    }
+
+    /**
+     * 校验uri是否可放行
+     *
+     * @param uri
+     * @return
+     */
+    private boolean checkUriIsPermit(String uri) {
+        return apiProperties.getPermitAll().stream()
+                .anyMatch(item -> PATH_MATCHER.match(item, uri));
     }
 
 

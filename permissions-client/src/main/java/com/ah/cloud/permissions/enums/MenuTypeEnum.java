@@ -1,5 +1,7 @@
 package com.ah.cloud.permissions.enums;
 
+import java.util.Objects;
+
 /**
  * @program: permissions-center
  * @description: 菜单类型枚举
@@ -7,6 +9,11 @@ package com.ah.cloud.permissions.enums;
  * @create: 2022-03-28 16:17
  **/
 public enum MenuTypeEnum {
+
+    /**
+     * 未知
+     */
+    UNKNOWN(-1, "未知"),
 
     /**
      * 目录
@@ -33,6 +40,16 @@ public enum MenuTypeEnum {
      * 描述
      */
     private final String desc;
+
+    public static MenuTypeEnum getByType(Integer type) {
+        MenuTypeEnum[] values = values();
+        for (MenuTypeEnum value : values) {
+            if (Objects.equals(value.getType(), type)) {
+                return value;
+            }
+        }
+        return UNKNOWN;
+    }
 
     MenuTypeEnum(int type, String desc) {
         this.type = type;

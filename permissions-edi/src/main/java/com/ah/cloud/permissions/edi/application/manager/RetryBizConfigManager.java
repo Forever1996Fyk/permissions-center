@@ -104,7 +104,7 @@ public class RetryBizConfigManager {
      */
     public PageResult<CfgBizRetryVo> pageCfgBizRetryList(CfgBizRetryPageQuery query) {
         if (query.isTech()) {
-            PageInfo<EdiCfgTechBizRetry> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+            PageInfo<EdiCfgTechBizRetry> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                     .doSelectPageInfo(
                             () -> ediCfgTechBizRetryService.list(
                                     new QueryWrapper<EdiCfgTechBizRetry>().lambda()
@@ -115,7 +115,7 @@ public class RetryBizConfigManager {
                     );
             return retryBizConfigHelper.convertToTechPageResult(pageInfo);
         } else {
-            PageInfo<EdiCfgBizRetry> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+            PageInfo<EdiCfgBizRetry> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                     .doSelectPageInfo(
                             () -> ediCfgBizRetryService.list(
                                     new QueryWrapper<EdiCfgBizRetry>().lambda()

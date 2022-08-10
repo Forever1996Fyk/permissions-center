@@ -47,11 +47,6 @@ public class RouterVo {
     private String component;
 
     /**
-     * 当你一个路由下面的 children 声明的路由大于1个时，自动会变成嵌套的模式--如组件页面
-     */
-    private Boolean alwaysShow;
-
-    /**
      * 其他元素
      */
     private MetaVo meta;
@@ -62,6 +57,7 @@ public class RouterVo {
     private List<RouterVo> children;
 
     @Data
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class MetaVo {
@@ -74,5 +70,15 @@ public class RouterVo {
          * 设置该路由的图标，对应路径src/icons/svg
          */
         private String icon;
+
+        /**
+         * 是否显示
+         */
+        private boolean hidden;
+
+        /**
+         * 是否显示在菜单中显示隐藏一级路由
+         */
+        private boolean levelHidden;
     }
 }

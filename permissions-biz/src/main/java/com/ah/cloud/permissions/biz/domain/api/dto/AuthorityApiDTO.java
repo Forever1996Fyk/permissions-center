@@ -2,14 +2,12 @@ package com.ah.cloud.permissions.biz.domain.api.dto;
 
 import com.ah.cloud.permissions.enums.ApiStatusEnum;
 import com.ah.cloud.permissions.enums.SysApiTypeEnum;
-import com.ah.cloud.permissions.enums.YesOrNoEnum;
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Objects;
+import java.io.Serializable;
 
 /**
  * @program: permissions-center
@@ -21,7 +19,7 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthorityApiDTO {
+public class AuthorityApiDTO implements Serializable {
 
     /**
      * api编码

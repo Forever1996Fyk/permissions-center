@@ -14,7 +14,7 @@ spring:
   redis:
     ################### redis 单机版 start ##########################
     host: localhost
-    port: 3306
+    port: 6379
     password:
     timeout: 6000
     database: 0
@@ -134,6 +134,10 @@ security:
       - /validateCode/sendCode
       - /validateCode/sendSmsCode
       - /validateCode/sendEmailCode
+      - /user/*
+      - /role/*
+      - /api/*
+      - /menu/*
 
 mq:
   redis:
@@ -157,3 +161,18 @@ system:
   local:
     file:
       uri: http://localhost:8080/showImage/
+
+edi:
+  retry:
+    runTime: 3000 # 快慢线程池切换 单个任务执行超过3000ms定义为慢任务
+    hourOverTimes: 10 # 快慢线程池切换 1min内慢任务超过10个类型会被分配到慢线程池执行
+    dataSource: edi0 # 数据源配置
+    retryRecordActualTableSuffix: 0,1,2,3 # EDI记录表后缀
+    retryTechRecordActualTableSuffix: 0,1,2,3 # TECH EDI记录表后缀
+    retryRecordActualTableName: edi_biz_retry_record # EDI记录表前缀
+    retryTechRecordActualTableName: edi_tech_biz_retry_record #TECH EDI记录表前缀
+    alarm:
+      bot: https://open.feishu.cn/open-apis/bot/v2/hook/eb7c1281-a644-4929-aab1-245ae2502d7a #告警机器人配置
+      secret: VokIeaTfHwUBiXARWmyhMc
+      maxCount: 1 #告警记录阈值
+      minute: 30 #告警时间阈值

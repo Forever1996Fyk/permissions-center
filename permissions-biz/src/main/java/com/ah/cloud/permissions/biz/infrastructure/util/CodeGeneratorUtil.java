@@ -120,8 +120,8 @@ public class CodeGeneratorUtil {
         // 去除is前缀
         strategy.setEntityBooleanColumnRemoveIsPrefix(true);
 
+
         strategy.setInclude(tables);
-        strategy.setEntityBooleanColumnRemoveIsPrefix(true);
 
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix("");

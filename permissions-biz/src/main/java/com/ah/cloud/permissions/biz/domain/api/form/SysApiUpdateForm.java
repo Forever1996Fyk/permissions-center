@@ -72,6 +72,12 @@ public class SysApiUpdateForm {
     @EnumValid(enumClass = ReadOrWriteEnum.class, enumMethod = "isValid")
     private Integer readOrWrite;
 
+
+    /**
+     * 是否可变
+     */
+    private Integer changeable;
+
     /**
      * 备注
      */

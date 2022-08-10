@@ -25,6 +25,11 @@ public class SysApiQuery extends PageQuery {
     private String apiName;
 
     /**
+     * 接口url
+     */
+    private String apiUrl;
+
+    /**
      * 接口类型
      */
     private List<Integer> apiType;

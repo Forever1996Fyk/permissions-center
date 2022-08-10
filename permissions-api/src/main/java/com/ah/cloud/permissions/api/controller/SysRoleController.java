@@ -58,7 +58,7 @@ public class SysRoleController {
      * @return
      */
     @ApiMethodLog
-    @PostMapping("/delete/{id}")
+    @PostMapping("/deleteById/{id}")
     public ResponseResult<Void> delete(@PathVariable(value = "id") Long id) {
         sysRoleManager.deleteSysRole(id);
         return ResponseResult.ok();

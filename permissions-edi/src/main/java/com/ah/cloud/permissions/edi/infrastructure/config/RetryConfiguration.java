@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,83 +16,71 @@ import java.util.List;
  * @create: 2022-07-06 10:12
  **/
 @Data
-@Component
+@Configuration
 @ConfigurationProperties(prefix = "edi.retry")
 public class RetryConfiguration {
 
     /**
      * retry 执行时间
      */
-    @Value(value = "${runTime:1000}")
     private int runTime;
 
     /**
      * 切换次数
      */
-    @Value(value = "${hourOverTimes:10}")
     private int hourOverTimes;
 
     /**
      * 重试超时时间(毫秒)
      */
-    @Value(value = "${retryTimout:2000}")
     private int retryTimout;
 
     /**
      * 数据源
      */
-    @Value(value = "${datasource}")
     private String dataSource;
 
     /**
      * 真实表前后缀
      */
-    @Value(value = "${retryRecordActualTableSuffix}")
     private String retryRecordActualTableSuffix;
 
 
     /**
      * tech-edi 真实表前后缀
      */
-    @Value(value = "${retryTechRecordActualTableSuffix}")
     private String retryTechRecordActualTableSuffix;
 
     /**
      * edi真实表名
      */
-    @Value(value = "${retryRecordActualTableName}")
     private String retryRecordActualTableName;
 
     /**
      * tech-edi真实表名
      */
-    @Value(value = "${retryTechRecordActualTableName}")
     private String retryTechRecordActualTableName;
 
     /**
      * 告警最大数量
      */
-    @Value(value = "${alarm.maxCount:30}")
     private Integer alarmMaxCount;
 
     /**
      * 告警机器人链接
      */
-    @Value(value = "${alarm.boot}")
     private String alarmBoot;
 
 
     /**
      * 告警机器人链接
      */
-    @Value(value = "${alarm.secret}")
-    private String secret;
+    private String alarmSecret;
 
     /**
      * 告警初始时间
      */
-    @Value(value = "${alarm.minute:30}")
-    private Integer alarmInitMinute;
+    private Integer alarmMinute;
 
 
 

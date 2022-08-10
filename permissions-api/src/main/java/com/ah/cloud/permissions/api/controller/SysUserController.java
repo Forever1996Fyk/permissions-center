@@ -4,11 +4,9 @@ import com.ah.cloud.permissions.biz.application.manager.ResourceManager;
 import com.ah.cloud.permissions.biz.application.manager.SysUserManager;
 import com.ah.cloud.permissions.biz.application.strategy.cache.impl.RedisCacheHandleStrategy;
 import com.ah.cloud.permissions.biz.domain.menu.vo.RouterVo;
-import com.ah.cloud.permissions.biz.domain.user.form.SysUserAddForm;
-import com.ah.cloud.permissions.biz.domain.user.form.SysUserApiAddForm;
-import com.ah.cloud.permissions.biz.domain.user.form.SysUserMenuAddForm;
-import com.ah.cloud.permissions.biz.domain.user.form.SysUserRoleAddForm;
+import com.ah.cloud.permissions.biz.domain.user.form.*;
 import com.ah.cloud.permissions.biz.domain.user.query.SysUserQuery;
+import com.ah.cloud.permissions.biz.domain.user.vo.GetUserInfoVo;
 import com.ah.cloud.permissions.biz.domain.user.vo.SysUserVo;
 import com.ah.cloud.permissions.biz.infrastructure.annotation.ApiMethodLog;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
@@ -34,8 +32,6 @@ import java.util.List;
 public class SysUserController {
     @Resource
     private SysUserManager sysUserManager;
-    @Resource
-    private ResourceManager resourceManager;
 
     /**
      * 添加新用户
@@ -50,13 +46,26 @@ public class SysUserController {
     }
 
     /**
+     * 更新用户
+     * @param form
+     * @return
+     */
+    @ApiMethodLog
+    @PostMapping("/update")
+    public ResponseResult<Void> update(@Valid @RequestBody SysUserUpdateForm form) {
+        sysUserManager.updateSysUser(form);
+        return ResponseResult.ok();
+    }
+
+
+    /**
      * 根据id删除用户
      *
      * @param id
      * @return
      */
     @ApiMethodLog
-    @PostMapping("/delete/{id}")
+    @PostMapping("/deleteById/{id}")
     public ResponseResult<Void> delete(@PathVariable(value = "id") Long id) {
         sysUserManager.deleteSysUserById(id);
         return ResponseResult.ok();
@@ -121,17 +130,6 @@ public class SysUserController {
     }
 
     /**
-     * 根据当前登录人id获取菜单路由信息
-     * @return
-     */
-    @ApiMethodLog
-    @GetMapping("/listRouterVoByUserId")
-    public ResponseResult<List<RouterVo>> listRouterVoByUserId() {
-        Long currentUserId = SecurityUtils.getUserIdBySession();
-        return ResponseResult.ok(sysUserManager.listRouterVoByUserId(currentUserId));
-    }
-
-    /**
      * 上传用户头像
      *
      * @param request
@@ -140,5 +138,14 @@ public class SysUserController {
     @PostMapping("/uploadUserAvatar")
     public ResponseResult<String> uploadUserAvatar(HttpServletRequest request) {
         return ResponseResult.ok(sysUserManager.uploadUserAvatar(request));
+    }
+
+    /**
+     * 获取用户信息
+     * @return
+     */
+    @GetMapping("/getUserInfoVo")
+    public ResponseResult<GetUserInfoVo> getUserInfoVo() {
+        return ResponseResult.ok(sysUserManager.getCurrentUserInfo());
     }
 }

@@ -181,32 +181,10 @@ public class RetryRecordHelper {
 
         /**
          * 数据转换
-         * @param ediBizRetryRecord
-         * @param retryBizConfig
-         * @return
-         */
-        @Mappings(
-                @Mapping(target = "nextOpTime", expression = "java(RetryUtils.getNextOpTime(ediBizRetryRecord, retryBizConfig))")
-        )
-        RetryBizRecordVo convertToVo(EdiBizRetryRecord ediBizRetryRecord, RetryBizConfigCacheDTO retryBizConfig);
-
-        /**
-         * 数据转换
          * @param ediBizRetryRecordList
          * @return
          */
         List<RetryBizRecordVo> convertToVoList(List<EdiBizRetryRecord> ediBizRetryRecordList);
-
-        /**
-         * 数据转换
-         * @param techBizRetryRecord
-         * @param retryBizConfig
-         * @return
-         */
-        @Mappings(
-                @Mapping(target = "nextOpTime", expression = "java(RetryUtils.getNextOpTime(techBizRetryRecord, retryBizConfig))")
-        )
-        RetryBizRecordVo convertToTechVo(EdiTechBizRetryRecord techBizRetryRecord, RetryBizConfigCacheDTO retryBizConfig);
 
         /**
          * 数据转换

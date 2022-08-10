@@ -33,4 +33,9 @@ public class BaseUserInfo implements Serializable {
      * 当前部门编码
      */
     private String deptCode;
+
+    /**
+     * 用户头像
+     */
+    private String avatar;
 }

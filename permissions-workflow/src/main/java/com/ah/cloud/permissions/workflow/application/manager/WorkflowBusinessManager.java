@@ -61,7 +61,7 @@ public class WorkflowBusinessManager {
      * @return
      */
     public PageResult<UserSubmitProcessVo> pageUserSubmitProcessVoList(UserSubmitProcessQuery query) {
-        PageInfo<WorkflowBusiness> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<WorkflowBusiness> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(
                         () -> workflowBusinessExtService.list(
                                 new QueryWrapper<WorkflowBusiness>().lambda()

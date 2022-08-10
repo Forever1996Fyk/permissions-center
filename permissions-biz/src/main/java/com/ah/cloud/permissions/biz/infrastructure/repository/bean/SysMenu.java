@@ -41,10 +41,18 @@ public class SysMenu implements Serializable {
     private String menuCode;
 
     /**
+     * 父菜单编码
+     */
+    private String parentMenuCode;
+
+    /**
      * 菜单名称
      */
     private String menuName;
 
+    /**
+     * 菜单类型
+     */
     private Integer menuType;
 
     /**

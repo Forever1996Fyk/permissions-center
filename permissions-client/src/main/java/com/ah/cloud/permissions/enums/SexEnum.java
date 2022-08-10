@@ -11,6 +11,11 @@ import java.util.Objects;
 public enum SexEnum {
 
     /**
+     * 未知
+     */
+    UNKNOWN(-1, "未知"),
+
+    /**
      * 男
      */
     MALE(1, "男"),
@@ -32,7 +37,7 @@ public enum SexEnum {
                 return value;
             }
         }
-        return MALE;
+        return UNKNOWN;
     }
 
     public static SexEnum getByDesc(String desc) {
@@ -43,6 +48,11 @@ public enum SexEnum {
             }
         }
         return null;
+    }
+
+    public static boolean isValid(Integer type) {
+        SexEnum sexEnum = getByType(type);
+        return !Objects.equals(sexEnum, UNKNOWN);
     }
 
     SexEnum(int type, String desc) {

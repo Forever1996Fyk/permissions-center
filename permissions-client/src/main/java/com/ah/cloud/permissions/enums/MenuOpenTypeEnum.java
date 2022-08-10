@@ -1,12 +1,19 @@
 package com.ah.cloud.permissions.enums;
 
+import java.util.Objects;
+
 /**
  * @program: permissions-center
  * @description:
  * @author: YuKai Fan
  * @create: 2022-03-28 17:21
  **/
-public enum MenuOpenType {
+public enum MenuOpenTypeEnum {
+
+    /**
+     * 未知
+     */
+    UNKNOWN(-1, "未知"),
 
     /**
      * 页面内
@@ -23,7 +30,17 @@ public enum MenuOpenType {
 
     private final String desc;
 
-    MenuOpenType(int type, String desc) {
+    public static MenuOpenTypeEnum getByType(Integer type) {
+        MenuOpenTypeEnum[] values = values();
+        for (MenuOpenTypeEnum value : values) {
+            if (Objects.equals(value.getType(), type)) {
+                return value;
+            }
+        }
+        return UNKNOWN;
+    }
+
+    MenuOpenTypeEnum(int type, String desc) {
         this.type = type;
         this.desc = desc;
     }

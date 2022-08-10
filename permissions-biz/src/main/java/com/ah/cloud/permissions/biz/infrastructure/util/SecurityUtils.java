@@ -7,6 +7,7 @@ import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -59,7 +60,7 @@ public class SecurityUtils {
     public static String getUserNameBySession() {
         try {
             BaseUserInfo baseUserInfo = getBaseUserInfo();
-            return baseUserInfo.getName();
+            return StringUtils.isBlank(baseUserInfo.getName()) ? PermissionsConstants.OPERATOR_SYSTEM : baseUserInfo.getName();
         } catch (Throwable throwable) {
             return PermissionsConstants.OPERATOR_SYSTEM;
         }

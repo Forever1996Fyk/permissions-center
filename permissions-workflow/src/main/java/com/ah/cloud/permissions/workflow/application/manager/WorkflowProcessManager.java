@@ -151,7 +151,7 @@ public class WorkflowProcessManager {
      * @return
      */
     public PageResult<WorkflowProcessVo> pageWorkflowProcessVoList(WorkflowProcessQuery query) {
-        PageInfo<WorkflowProcess> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<WorkflowProcess> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(
                         () -> workflowProcessExtService.list(
                                 new QueryWrapper<WorkflowProcess>().lambda()

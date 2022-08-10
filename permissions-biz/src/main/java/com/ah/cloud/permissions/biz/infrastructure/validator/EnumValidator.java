@@ -42,7 +42,7 @@ public class EnumValidator implements ConstraintValidator<EnumValid, Object> {
 
         Class<?> valueClass = value.getClass();
         try {
-            Method method = valueClass.getMethod(enumMethod, valueClass);
+            Method method = enumClass.getMethod(enumMethod, valueClass);
             if (!Boolean.TYPE.equals(method.getReturnType())
                     && !Boolean.class.equals(method.getReturnType())) {
                 throw new RuntimeException(String.format("%s method return is not boolean type in the %s class", enumMethod, enumClass));

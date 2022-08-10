@@ -115,7 +115,7 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
         processInstanceHelper.buildProcessInstanceQuery(processInstanceQuery, query);
         List<ProcessInstance> processInstanceList = processInstanceQuery
                 .orderByStartTime().desc()
-                .listPage(query.getPageNum(), query.getPageSize());
+                .listPage(query.getPageNo(), query.getPageSize());
         long count = processInstanceQuery.count();
         return processInstanceHelper.convertToVoPageResult(processInstanceList, count, query);
     }

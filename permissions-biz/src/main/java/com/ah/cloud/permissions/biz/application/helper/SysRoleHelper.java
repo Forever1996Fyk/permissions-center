@@ -13,6 +13,8 @@ import com.ah.cloud.permissions.domain.common.PageResult;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 
@@ -73,8 +75,7 @@ public class SysRoleHelper {
         result.setTotal(pageInfo.getTotal());
         result.setPageNum(pageInfo.getPageNum());
         result.setRows(SysRoleConvert.INSTANCE.convert(pageInfo.getList()));
-        result.setPageSize(pageInfo.getSize());
-        result.setPages(pageInfo.getPages());
+        result.setPageSize(pageInfo.getPageSize());
         return result;
     }
 
@@ -110,6 +111,11 @@ public class SysRoleHelper {
 
         SysRoleVO convert(SysRole sysRole);
 
+        /**
+         * 数据转换
+         * @param sysRoles
+         * @return
+         */
         List<SysRoleVO> convert(List<SysRole> sysRoles);
     }
 }

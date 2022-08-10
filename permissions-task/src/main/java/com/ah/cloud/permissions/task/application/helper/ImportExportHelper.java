@@ -11,7 +11,6 @@ import com.ah.cloud.permissions.task.domain.enums.ImportExportTaskStatusEnum;
 import com.ah.cloud.permissions.task.domain.enums.ImportExportTaskTypeEnum;
 import com.ah.cloud.permissions.task.domain.enums.ImportTemplateStatusEnum;
 import com.ah.cloud.permissions.task.domain.form.DataExportForm;
-import com.ah.cloud.permissions.task.domain.form.DataImportForm;
 import com.ah.cloud.permissions.task.domain.form.ImportTemplateForm;
 import com.ah.cloud.permissions.task.domain.form.ImportTemplateUpdateForm;
 import com.ah.cloud.permissions.task.domain.vo.ImportExportTaskVo;
@@ -155,7 +154,7 @@ public class ImportExportHelper {
      * @param pageInfo
      * @return
      */
-    public PageResult<ImportTemplateVo> convertToPageResult(PageInfo<SysImportTemplateInfo> pageInfo) {
+    public PageResult<ImportTemplateVo> convertToTemplatePageResult(PageInfo<SysImportTemplateInfo> pageInfo) {
         PageResult<ImportTemplateVo> pageResult = new PageResult<>();
         pageResult.setRows(Convert.INSTANCE.convertToTemplateVoList(pageInfo.getList()));
         pageResult.setPageNum(pageResult.getPageNum());

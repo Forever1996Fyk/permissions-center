@@ -57,7 +57,7 @@ public class SysApiController {
      * @return
      */
     @ApiMethodLog
-    @PostMapping("/delete/{id}")
+    @PostMapping("/deleteById/{id}")
     public ResponseResult<Void> delete(@PathVariable(value = "id") Long id) {
         sysApiManager.deleteSysApiById(id);
         return ResponseResult.ok();
@@ -81,5 +81,41 @@ public class SysApiController {
     @GetMapping("/page")
     public ResponseResult<PageResult<SysApiVo>> page(SysApiQuery query) {
         return ResponseResult.ok(sysApiManager.pageSysApiList(query));
+    }
+
+    /**
+     * 变更api状态
+     * @param id
+     * @param status
+     * @return
+     */
+    @PostMapping("/changeApiStatus/{id}/{status}")
+    public ResponseResult<Void> changeApiStatus(@PathVariable("id") Long id, @PathVariable("status") Integer status) {
+        sysApiManager.changeApiStatus(id, status);
+        return ResponseResult.ok();
+    }
+
+    /**
+     * 变更api权限
+     * @param id
+     * @param auth
+     * @return
+     */
+    @PostMapping("/changeApiAuth/{id}/{auth}")
+    public ResponseResult<Void> changeApiAuth(@PathVariable("id") Long id, @PathVariable("auth") Integer auth) {
+        sysApiManager.changeApiAuth(id, auth);
+        return ResponseResult.ok();
+    }
+
+    /**
+     * 变更api公开
+     * @param id
+     * @param open
+     * @return
+     */
+    @PostMapping("/changeApiOpen/{id}/{open}")
+    public ResponseResult<Void> changeApiOpen(@PathVariable("id") Long id, @PathVariable("open") Integer open) {
+        sysApiManager.changeApiOpen(id, open);
+        return ResponseResult.ok();
     }
 }

@@ -1,8 +1,10 @@
 package com.ah.cloud.permissions.biz.infrastructure.util;
 
+import com.ah.cloud.permissions.enums.YesOrNoEnum;
 import com.ah.cloud.permissions.exception.ErrorCode;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -65,5 +67,16 @@ public class AppUtils {
             errorMsg = sb.toString();
         }
         return errorMsg;
+    }
+
+    /**
+     * int 转为 boolean
+     *
+     * 1表示true, 其他表示false
+     * @param value
+     * @return
+     */
+    public static boolean convertIntToBool(Integer value) {
+        return Objects.equals(value, YesOrNoEnum.YES.getType());
     }
 }

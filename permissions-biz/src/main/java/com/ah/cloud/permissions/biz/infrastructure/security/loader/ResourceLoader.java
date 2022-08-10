@@ -1,19 +1,21 @@
 package com.ah.cloud.permissions.biz.infrastructure.security.loader;
 
 import com.ah.cloud.permissions.biz.application.manager.SysApiManager;
+import com.ah.cloud.permissions.biz.application.strategy.cache.impl.RedisCacheHandleStrategy;
 import com.ah.cloud.permissions.biz.domain.api.dto.AuthorityApiDTO;
+import com.ah.cloud.permissions.biz.infrastructure.constant.CacheConstants;
+import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
+import com.ah.cloud.permissions.biz.infrastructure.util.CollectionUtils;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -28,22 +30,20 @@ import java.util.stream.Collectors;
 public class ResourceLoader implements InitializingBean {
     @Resource
     private SysApiManager sysApiManager;
-
-    private Map<String, AuthorityApiDTO> uriAndApiCodeMap;
-
-    /**
-     * 用户接口编码
-     */
-    private Map<Long, Set<String>> userApiCodeMap;
+    @Resource
+    private RedisCacheHandleStrategy redisCacheHandleStrategy;
 
     @Override
     public void afterPropertiesSet() throws Exception {
         List<AuthorityApiDTO> allAuthorityApis = sysApiManager.getAllAuthorityApis();
-        uriAndApiCodeMap = allAuthorityApis.stream()
-                .collect(Collectors.toConcurrentMap(AuthorityApiDTO::getUri, Function.identity()));
-
-        userApiCodeMap = Maps.newConcurrentMap();
-
+        if (CollectionUtils.isEmpty(allAuthorityApis)) {
+            throw new RuntimeException("Project Run failed, cause api authority info list is empty");
+        }
+        // 重启时先清除缓存
+        redisCacheHandleStrategy.removeCacheHashByKey(CacheConstants.AUTHORITY_API_PREFIX);
+        for (AuthorityApiDTO authorityApiDTO : allAuthorityApis) {
+            redisCacheHandleStrategy.setCacheHashValue(CacheConstants.AUTHORITY_API_PREFIX, authorityApiDTO.getUri(), authorityApiDTO);
+        }
     }
 
     /**
@@ -52,28 +52,45 @@ public class ResourceLoader implements InitializingBean {
      * @return
      */
     public Map<String, AuthorityApiDTO> getUriAndApiCodeMap() {
-        return CollectionUtils.isEmpty(uriAndApiCodeMap) ? Maps.newConcurrentMap() : uriAndApiCodeMap;
+        List<AuthorityApiDTO> allAuthorityApis = redisCacheHandleStrategy.getCacheHashValues(CacheConstants.AUTHORITY_API_PREFIX);
+        return CollectionUtils.isEmpty(allAuthorityApis) ? Maps.newConcurrentMap() : allAuthorityApis.stream()
+                .collect(Collectors.toConcurrentMap(AuthorityApiDTO::getUri, Function.identity()));
     }
 
     /**
      * 更新资源缓存
+     *
      * @param authorityApiDTO
      */
     public void updateResourceMap(AuthorityApiDTO authorityApiDTO) {
-        if (CollectionUtils.isEmpty(uriAndApiCodeMap)) {
-            uriAndApiCodeMap = Maps.newConcurrentMap();
+        if (Objects.nonNull(authorityApiDTO) && StringUtils.isNotBlank(authorityApiDTO.getUri())) {
+            redisCacheHandleStrategy.setCacheHashValue(CacheConstants.AUTHORITY_API_PREFIX, authorityApiDTO.getUri(), authorityApiDTO);
         }
-        uriAndApiCodeMap.put(authorityApiDTO.getUri(), authorityApiDTO);
+    }
+
+    /**
+     * 根据uri获取当前权限api缓存信息
+     *
+     * @param uri
+     * @return
+     */
+    public AuthorityApiDTO getCacheResourceByUri(String uri) {
+        if (StringUtils.isBlank(uri)) {
+            return null;
+        }
+        return redisCacheHandleStrategy.getCacheHashByKey(CacheConstants.AUTHORITY_API_PREFIX, uri);
     }
 
     /**
      * 删除资源
+     *
      * @param uri
      */
-    public void deleteResourceByUri(String uri) {
-        if (CollectionUtils.isEmpty(uriAndApiCodeMap)) {
-            return;
+    public boolean deleteResourceByUri(String uri) {
+        if (StringUtils.isBlank(uri)) {
+            return false;
         }
-        uriAndApiCodeMap.remove(uri);
+        Long result = redisCacheHandleStrategy.deleteCacheHashByKey(CacheConstants.AUTHORITY_API_PREFIX, uri);
+        return result != null && !Objects.equals(result, PermissionsConstants.ZERO);
     }
 }

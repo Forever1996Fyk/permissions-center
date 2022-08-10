@@ -320,7 +320,7 @@ public class ThreadPoolConfigManager implements InitializingBean {
      * @return
      */
     public PageResult<CfgThreadPoolVo> pageCfgThreadPoolList(CfgThreadPoolQuery query) {
-        PageInfo<CfgThreadPool> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<CfgThreadPool> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(
                         () -> cfgThreadPoolService.list(
                                 new QueryWrapper<CfgThreadPool>().lambda()
@@ -342,7 +342,7 @@ public class ThreadPoolConfigManager implements InitializingBean {
      */
     public PageResult<ThreadPoolDataVo> pageHistoryMonitorData(ThreadPoolDataQuery query) {
         Integer shardingKey = threadPoolConfigChecker.checkThreadPoolDataQueryAndReturnDate(query);
-        PageInfo<ThreadPoolData> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<ThreadPoolData> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(
                         () -> threadPoolDataService.list(
                                 new QueryWrapper<ThreadPoolData>().lambda()

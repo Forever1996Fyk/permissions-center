@@ -1,35 +1,25 @@
 package com.ah.cloud.permissions.biz.application.helper;
 
-import cn.hutool.core.util.RandomUtil;
 import com.ah.cloud.permissions.biz.domain.menu.form.SysMenuAddForm;
 import com.ah.cloud.permissions.biz.domain.menu.form.SysMenuUpdateForm;
 import com.ah.cloud.permissions.biz.domain.menu.tree.SysMenuTreeSelectVo;
+import com.ah.cloud.permissions.biz.domain.menu.tree.SysMenuTreeVo;
 import com.ah.cloud.permissions.biz.domain.menu.vo.RouterVo;
 import com.ah.cloud.permissions.biz.domain.menu.vo.SysMenuVo;
-import com.ah.cloud.permissions.biz.domain.user.form.SysUserAddForm;
-import com.ah.cloud.permissions.biz.domain.user.vo.SysUserVo;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysMenu;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUser;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUserRole;
 import com.ah.cloud.permissions.biz.infrastructure.util.AppUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
-import com.ah.cloud.permissions.domain.common.PageResult;
-import com.ah.cloud.permissions.enums.MenuOpenType;
-import com.ah.cloud.permissions.enums.MenuTypeEnum;
-import com.ah.cloud.permissions.enums.UserStatusEnum;
+import com.ah.cloud.permissions.enums.MenuOpenTypeEnum;
 import com.ah.cloud.permissions.enums.YesOrNoEnum;
-import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
-import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -49,6 +39,7 @@ public class SysMenuHelper {
      */
     public SysMenu convertToEntity(SysMenuAddForm form) {
         SysMenu sysMenu = SysMenuConvert.INSTANCE.convert(form);
+        sysMenu.setParentId(sysMenu.getParentId() != null ? sysMenu.getParentId() : PermissionsConstants.ZERO);
         sysMenu.setCreator(SecurityUtils.getUserNameBySession());
         sysMenu.setModifier(SecurityUtils.getUserNameBySession());
         return sysMenu;
@@ -80,15 +71,15 @@ public class SysMenuHelper {
      * @return
      */
     public List<RouterVo> convertToRouteVo(List<SysMenu> sysMenuList) {
-        return convertToMenuTree(sysMenuList, PermissionsConstants.ZERO);
+        return convertToRouteTree(sysMenuList, PermissionsConstants.ZERO);
     }
 
-    private List<RouterVo> convertToMenuTree(List<SysMenu> sysMenuList, Long pid) {
+    private List<RouterVo> convertToRouteTree(List<SysMenu> sysMenuList, Long pid) {
         List<RouterVo> routerVoList = Lists.newArrayList();
         for (SysMenu sysMenu : sysMenuList) {
             if (Objects.equals(sysMenu.getParentId(), pid)) {
                 RouterVo routerVo = buildRouterVoByMenu(sysMenu);
-                List<RouterVo> childRouterVos = convertToMenuTree(sysMenuList, sysMenu.getId());
+                List<RouterVo> childRouterVos = convertToRouteTree(sysMenuList, sysMenu.getId());
                 routerVo.setChildren(childRouterVos);
                 routerVoList.add(routerVo);
             }
@@ -98,23 +89,21 @@ public class SysMenuHelper {
 
     private RouterVo buildRouterVoByMenu(SysMenu sysMenu) {
         return RouterVo.builder()
-                .name(getRouteName(sysMenu))
+                .name(sysMenu.getMenuCode())
                 .hidden(isHidden(sysMenu))
+                .component(sysMenu.getComponent())
+                .path(sysMenu.getMenuPath())
+                .meta(buildMetaVoByMenu(sysMenu))
                 .build();
     }
 
-    /**
-     * 获取路由名称
-     * @param sysMenu
-     * @return
-     */
-    private String getRouteName(SysMenu sysMenu) {
-        String routerName = StringUtils.capitalize(sysMenu.getMenuPath());
-        // 非外链并且是一级目录（类型为菜单）
-        if (isMenuFrame(sysMenu)) {
-            routerName = StringUtils.EMPTY;
-        }
-        return routerName;
+    private RouterVo.MetaVo buildMetaVoByMenu(SysMenu sysMenu) {
+        return RouterVo.MetaVo.builder()
+                .icon(sysMenu.getMenuIcon())
+                .hidden(AppUtils.convertIntToBool(sysMenu.getHidden()))
+                .title(sysMenu.getMenuName())
+                .levelHidden(false)
+                .build();
     }
 
     /**
@@ -132,21 +121,14 @@ public class SysMenuHelper {
      * @return
      */
     private boolean isMenuFrame(SysMenu sysMenu) {
-        return Objects.equals(sysMenu.getOpenType(), MenuOpenType.FRAME_TARGET.getType());
-    }
-
-    /**
-     * 判断是否是顶级菜单
-     *
-     * @param menuId
-     * @return
-     */
-    public boolean isParentMenu(Long menuId) {
-        return Objects.equals(menuId, PermissionsConstants.ZERO);
+        return Objects.equals(sysMenu.getOpenType(), MenuOpenTypeEnum.FRAME_TARGET.getType());
     }
 
     /**
      * 数据转换
+     *
+     * 菜单树选择列表转换
+     *
      * @param sysMenuList
      * @param roleMenuIdSet
      * @return
@@ -161,7 +143,7 @@ public class SysMenuHelper {
             if (Objects.equals(sysMenu.getParentId(), pid)) {
                 SysMenuTreeSelectVo sysMenuTreeSelectVo = buildSysMenuTreeSelectVoByMenu(sysMenu, roleMenuIdSet);
                 List<SysMenuTreeSelectVo> childSysMenuTreeSelectVoList = convertToTreeSelectVo(sysMenuList, sysMenu.getId(), roleMenuIdSet);
-                sysMenuTreeSelectVo.setChildNode(childSysMenuTreeSelectVoList);
+                sysMenuTreeSelectVo.setChildren(childSysMenuTreeSelectVoList);
                 sysMenuTreeSelectVoList.add(sysMenuTreeSelectVo);
             }
         }
@@ -177,55 +159,68 @@ public class SysMenuHelper {
                 .build();
     }
 
-//    /**
-//     * 获取路由路径
-//     * @param sysMenu
-//     * @return
-//     */
-//    private String getRouterPath(SysMenu sysMenu) {
-//        String url = sysMenu.getMenuPath();
-//        if (isDirFrame(sysMenu)) {
-//            // 非外链并且是一级目录（类型为目录）
-//            url = "/" + sysMenu.getUrl();
-//        } else if (isMenuFrame(sysMenu)) {
-//            // 非外链并且是一级目录（类型为菜单）
-//            url = "/";
-//        }
-//        return url;
-//    }
-//
-//    /**
-//     * 获取组件信息
-//     * @param sysMenu
-//     * @return
-//     */
-//    private static String getComponent(SystemMenuVo sysMenu) {
-//        String component = LAYOUT;
-//        if (StringUtils.isNotBlank(sysMenu.getComponent()) && !isMenuFrame(sysMenu)) {
-//            component = sysMenu.getComponent();
-//        }
-//        return component;
-//    }
-//
-//    /**
-//     *  判断是否为目录内部跳转
-//     * @param sysMenu
-//     * @return
-//     */
-//    private static boolean isDirFrame(SystemMenuVo sysMenu) {
-//        return sysMenu.getParentId().longValue() == 0L && TYPE_DIR.equals(sysMenu.getMenuType())
-//                && NO_FRAME_TARGET.equals(sysMenu.getTarget());
-//    }
+    /**
+     * 数据转换
+     *
+     * 菜单树列表 转换
+     * @param sysMenuList
+     * @return
+     */
+    public List<SysMenuTreeVo> convertToTreeVo(List<SysMenu> sysMenuList) {
+        return convertToMenuTreeVo(sysMenuList, PermissionsConstants.ZERO);
+    }
 
+    private List<SysMenuTreeVo> convertToMenuTreeVo(List<SysMenu> sysMenuList, Long pid) {
+        List<SysMenuTreeVo> routerVoList = Lists.newArrayList();
+        for (SysMenu sysMenu : sysMenuList) {
+            if (Objects.equals(sysMenu.getParentId(), pid)) {
+                SysMenuTreeVo sysMenuTreeVo = buildMenuTreeVoByMenu(sysMenu);
+                List<SysMenuTreeVo> childRouterVos = convertToMenuTreeVo(sysMenuList, sysMenu.getId());
+                sysMenuTreeVo.setChildren(childRouterVos);
+                routerVoList.add(sysMenuTreeVo);
+            }
+        }
+        return routerVoList;
+    }
+
+    private SysMenuTreeVo buildMenuTreeVoByMenu(SysMenu sysMenu) {
+        return SysMenuConvert.INSTANCE.convertToTree(sysMenu);
+    }
 
     @Mapper
     public interface SysMenuConvert {
         SysMenuHelper.SysMenuConvert INSTANCE = Mappers.getMapper(SysMenuHelper.SysMenuConvert.class);
 
+        /**
+         * 数据转换
+         * @param form
+         * @return
+         */
         SysMenu convert(SysMenuAddForm form);
 
+        /**
+         * 数据换砖
+         * @param form
+         * @return
+         */
         SysMenu convert(SysMenuUpdateForm form);
 
+        /**
+         * 数据转换
+         * @param sysMenu
+         * @return
+         */
         SysMenuVo convert(SysMenu sysMenu);
+
+        /**
+         * 数据转换
+         * @param sysMenu
+         * @return
+         */
+        @Mappings({
+                @Mapping(target = "menuTypeName", expression = "java(com.ah.cloud.permissions.enums.MenuTypeEnum.getByType(sysMenu.getMenuType()).getDesc())"),
+                @Mapping(target = "openTypeName", expression = "java(com.ah.cloud.permissions.enums.MenuOpenTypeEnum.getByType(sysMenu.getOpenType()).getDesc())")
+        })
+        SysMenuTreeVo convertToTree(SysMenu sysMenu);
     }
 }

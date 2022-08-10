@@ -82,6 +82,7 @@ create table sys_api
     api_code      varchar(32)   default ''                not null comment '接口编码',
     api_name      varchar(50)   default ''                not null comment '接口名称',
     api_type      tinyint(3) unsigned default 0 not null comment '接口类型',
+    read_or_write tinyint(3) unsigned default 0 not null comment '读写类型',
     api_desc      varchar(200)  default ''                not null comment '接口描述',
     api_url       varchar(100)  default ''                not null comment '请求路径',
     status        tinyint(3) unsigned default 1 not null comment '账号状态(1:启用,2:停用)',

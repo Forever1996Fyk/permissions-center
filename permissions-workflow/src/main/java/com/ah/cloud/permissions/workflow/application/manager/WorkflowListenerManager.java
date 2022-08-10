@@ -103,7 +103,7 @@ public class WorkflowListenerManager {
      * @return
      */
     public PageResult<ProcessListenerVo> pageProcessListenerVoList(ProcessListenerQuery query) {
-        PageInfo<WorkflowProcessListener> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<WorkflowProcessListener> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(
                         () -> workflowProcessListenerService.list(
                                 new QueryWrapper<WorkflowProcessListener>().lambda()

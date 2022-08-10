@@ -142,7 +142,7 @@ public class WorkflowFormManager {
      * @return
      */
     public PageResult<FormModelVo> pageFormModelList(FormModelQuery query) {
-        PageInfo<WorkflowFormModel> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<WorkflowFormModel> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(() -> workflowFormModelExtService.list(
                         new QueryWrapper<WorkflowFormModel>().lambda()
                                 .eq(StringUtils.isNotBlank(query.getCode()), WorkflowFormModel::getCode, query.getCode())

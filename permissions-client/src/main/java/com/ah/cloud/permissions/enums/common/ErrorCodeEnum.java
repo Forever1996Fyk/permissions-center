@@ -24,6 +24,8 @@ public enum ErrorCodeEnum implements ErrorCode {
      */
     PARAM_MISS(100_1_001,"缺少必要参数[%s]"),
     PARAM_ILLEGAL(100_1_002,"参数非法"),
+    LOGIN_INVALID(100_1_003, "登录失效，请重新登录"),
+    PARAM_ILLEGAL_FIELD(100_1_004,"[%s]参数非法"),
 
     /**
      * 公共业务异常
@@ -46,9 +48,11 @@ public enum ErrorCodeEnum implements ErrorCode {
      */
     UNKNOWN_PERMISSION(200_0_001,"未知的权限错误, 请联系管理员"),
     PERMISSION_DENY(200_0_002,"权限不足, 拒绝访问"),
+
     AUTHORITY_API_DISABLED(200_1_001, "当前接口已被禁用,无法访问"),
     AUTHORITY_API_NOT_OPEN(200_1_002, "当前接口未公开, 无法访问"),
-    VALIDATE_CODE_USER_IS_NULL(200_0_001, "短信认证失败, 用户不存在"),
+    AUTHORITY_MENU_EXCEPTION(200_1_003, "用户菜单权限异常, 无法访问"),
+
 
     /**
      * 认证相关响应码
@@ -58,6 +62,7 @@ public enum ErrorCodeEnum implements ErrorCode {
     AUTHENTICATION_ACCOUNT_LOG_OFF(300_0_003, "当前账号已被注销"),
     AUTHENTICATION_LOGIN_PROCESS_EXCEPTION(300_0_004, "登录流程异常, 请联系管理员"),
     AUTHENTICATION_USER_ID_ERROR(300_0_005, "用户id[%s]错误"),
+    VALIDATE_CODE_USER_IS_NULL(300_0_006, "短信认证失败, 用户不存在"),
 
     /**
      * 用户相关响应码
@@ -98,6 +103,8 @@ public enum ErrorCodeEnum implements ErrorCode {
     API_INFO_IS_NOT_EXISTED_UPDATE_FAILED(800_0_002, "当前接口信息不存在, 更新失败"),
     API_CODE_CANNOT_CHANGE_UPDATE_FAILED(800_0_003, "菜单编码禁止变更"),
     API_INFO_IS_NOT_EXISTED(800_0_004, "当前接口信息不存在"),
+    API_CACHE_INFO_NOT_EXISTED(800_0_005, "当前api缓存信息不存在[%s]"),
+    API_STATUS_AUTH_OPEN_CANNOT_CHANGEABLE(800_0_006, "当前api的|状态|权限信息|开放状态|无法变更"),
 
     /**
      * 线程池配置

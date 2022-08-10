@@ -222,7 +222,7 @@ public class QuartzJobManager {
      * @return
      */
     public PageResult<QuartzJobVo> pageQuartzJobList(QuartzJobQuery query) {
-        PageInfo<QuartzJob> pageInfo = PageMethod.startPage(query.getPageNum(), query.getPageSize())
+        PageInfo<QuartzJob> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
                 .doSelectPageInfo(
                         () -> quartzJobService.list(
                                 new QueryWrapper<QuartzJob>().lambda()
@@ -238,7 +238,7 @@ public class QuartzJobManager {
                                         )
                                         .eq(
                                                 query.getConcurrent() != null,
-                                                QuartzJob::getIsConcurrent,
+                                                QuartzJob::getConcurrent,
                                                 query.getConcurrent()
                                         )
                                         .eq(

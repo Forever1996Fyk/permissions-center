@@ -19,6 +19,11 @@ public class CacheConstants {
     public static final String LOGIN_EMAIL_CODE_PREFIX = "login:email:code:";
 
     /**
+     * api权限缓存前缀
+     */
+    public static final String AUTHORITY_API_PREFIX = "authority_api";
+
+    /**
      * im分布式session 前缀
      */
     public static final String IM_DISTRIBUTION_SESSION_PREFIX = "im:user:session:";

@@ -62,7 +62,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
         TaskQuery taskQuery = taskService.createTaskQuery();
         // 构建任务查询条件
         processTaskHelper.buildTaskQuery(taskQuery, query);
-        List<Task> taskList = taskQuery.listPage((query.getPageNum() - 1) * query.getPageSize(), query.getPageSize());
+        List<Task> taskList = taskQuery.listPage((query.getPageNo() - 1) * query.getPageSize(), query.getPageSize());
         return ImmutablePair.of(taskQuery.count(), taskList);
     }
 
@@ -71,7 +71,7 @@ public class ProcessTaskServiceImpl implements ProcessTaskService {
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery();
         // 构建任务查询条件
         processTaskHelper.buildHistoricTaskQuery(historicTaskInstanceQuery, query);
-        List<HistoricTaskInstance> historicTaskList = historicTaskInstanceQuery.listPage((query.getPageNum() - 1) * query.getPageSize(), query.getPageSize());
+        List<HistoricTaskInstance> historicTaskList = historicTaskInstanceQuery.listPage((query.getPageNo() - 1) * query.getPageSize(), query.getPageSize());
         return ImmutablePair.of(historicTaskInstanceQuery.count(), historicTaskList);
     }
 

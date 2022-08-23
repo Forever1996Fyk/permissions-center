@@ -139,8 +139,7 @@ public class SysRoleManager {
         sysRoleDel.setId(id);
         sysRoleDel.setDeleted(id);
         sysRoleDel.setVersion(sysRole.getVersion());
-        // todo 当前用户信息
-        sysRoleDel.setModifier(PermissionsConstants.OPERATOR_SYSTEM);
+        sysRoleDel.setModifier(SecurityUtils.getUserNameBySession());
         final boolean deleteResult = sysRoleService.updateById(sysRoleDel);
         if (!deleteResult) {
             throw new BizException(ErrorCodeEnum.VERSION_ERROR);

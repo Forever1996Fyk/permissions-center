@@ -37,6 +37,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.ResultHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.AntPathMatcher;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -64,6 +65,8 @@ public class SysUserManager {
     @Resource
     private SysRoleHelper sysRoleHelper;
     @Resource
+    private SysDeptManager sysDeptManager;
+    @Resource
     private SysRoleService sysRoleService;
     @Resource
     private SysUserChecker sysUserChecker;
@@ -76,21 +79,18 @@ public class SysUserManager {
     @Resource
     private SysRoleMenuService sysRoleMenuService;
     @Resource
+    private SysUserIntroManager sysUserIntroManager;
+    @Resource
     private SysUserApiExtService sysUserApiExtService;
     @Resource
     private SysUserMenuExtService sysUserMenuExtService;
     @Resource
     private SysUserRoleExtService sysUserRoleExtService;
-    @Resource
-    private SysDeptManager sysDeptManager;
-    @Resource
-    private SysUserIntroManager sysUserIntroManager;
 
     /**
      * 添加新用户
-     * 记录操作日志 TODO
      *
-     * @param form
+     *  @param form
      */
     public void addSysUser(SysUserAddForm form) {
         /*
@@ -122,7 +122,6 @@ public class SysUserManager {
 
     /**
      * 逻辑删除用户
-     * 记录操作日志 TODO
      *
      * @param id
      */
@@ -140,15 +139,6 @@ public class SysUserManager {
         sysUser.setDeleted(id);
         sysUser.setModifier(String.valueOf(SecurityUtils.getBaseUserInfo().getUserId()));
         sysUserExtService.updateById(sysUser);
-
-        /*
-        逻辑删除用户角色 todo
-         */
-
-        /*
-        逻辑删除用户菜单接口权限 todo
-         */
-
     }
 
     /**
@@ -199,7 +189,6 @@ public class SysUserManager {
     /**
      * 设置用户角色
      * <p>
-     * 记录操作日志 TODO
      *
      * @param form
      */
@@ -214,7 +203,7 @@ public class SysUserManager {
         );
 
         if (CollectionUtils.isEmpty(form.getRoleCodeList())) {
-            log.warn("SysUserManager[setSysUserRole] delete SysUserRole allData, userId={}", form.getUserId());
+            log.warn("SysUserManager[setSysUserRole] delete SysUserRole allData, userId is {}, oldUserRoleCount is {}", form.getUserId(), countDeleted);
             return;
         }
 
@@ -365,7 +354,6 @@ public class SysUserManager {
      * @return
      */
     public String uploadUserAvatar(HttpServletRequest request) {
-        String file = request.getParameter("file");
         Long userId = SecurityUtils.getUserIdBySession();
         String url = resourceManager.uploadUrl(request, userId);
         SysUser updateSysUser = new SysUser();
@@ -409,22 +397,6 @@ public class SysUserManager {
         // 根据部门编码获取部门负责人id
         Long deptLeaderId = 0L;
         return Objects.equals(proposerId, deptLeaderId) ? sysUser : sysUserExtService.getOneByUserId(deptLeaderId);
-    }
-
-    /**
-     * 获取用户选择list
-     *
-     * @return
-     */
-    public List<SelectSysUserVo> selectSysUserVoList() {
-        List<SysUser> sysUserList = sysUserExtService.list(
-                new QueryWrapper<SysUser>().lambda()
-                        .eq(SysUser::getDeleted, DeletedEnum.NO.value)
-                        .eq(SysUser::getStatus, UserStatusEnum.NORMAL.getStatus())
-        );
-        return sysUserList.stream()
-                .map(sysUser -> SelectSysUserVo.builder().userId(sysUser.getUserId()).name(sysUser.getNickName()).build())
-                .collect(Collectors.toList());
     }
 
     /**

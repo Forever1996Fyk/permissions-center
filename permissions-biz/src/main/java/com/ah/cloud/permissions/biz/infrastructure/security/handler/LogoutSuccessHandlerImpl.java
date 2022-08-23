@@ -43,7 +43,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
             // 删除用户缓存记录
             tokenManager.clearToken(localUser.getAccessToken());
         }
-	    response.setStatus(ErrorCodeEnum.UNKNOWN_PERMISSION.getCode());
+	    response.setStatus(ErrorCodeEnum.LOGOUT_SUCCESS.getCode());
 	    response.setContentType("application/json");
 	    response.setCharacterEncoding("utf-8");
 	    response.getWriter().print(JsonUtils.toJSONString(ResponseResult.ok()));

@@ -45,19 +45,12 @@ public abstract class AbstractAccessProvider implements AccessProvider {
         /*
         根据uri匹配对应的apiCode
          */
-        Map<String, AuthorityApiDTO> apiCodeMap = resourceLoader.getUriAndApiCodeMap();
-        Set<String> apiCodeSet = apiCodeMap.keySet();
-        String apiCodeKey = apiCodeSet.stream().filter(apiCode -> PATH_MATCHER.match(apiCode, uri)).findAny().orElse(null);
-        if (StringUtils.isBlank(apiCodeKey)) {
-            log.error("{}[access] get apiCodeKey by uri is empty, uri is {}, apiCodeMap is {}", getLogMark(), uri, apiCodeMap);
-            return false;
-        }
-        AuthorityApiDTO authorityApiDTO = apiCodeMap.get(apiCodeKey);
-
+        AuthorityApiDTO authorityApiDTO = resourceLoader.getCacheResourceByUri(uri);
         /*
         如果没有匹配到apiCode则直接返回false
          */
         if (Objects.isNull(authorityApiDTO)) {
+            log.error("{}[access] get apiCodeKey by uri is empty, uri is {}", getLogMark(), uri);
             return Boolean.FALSE;
         }
         /*

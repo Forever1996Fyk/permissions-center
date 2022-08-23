@@ -46,7 +46,7 @@ public class RedisAuthenticationTokenFilter extends OncePerRequestFilter {
     @Resource
     private AuthenticationHelper authenticationHelper;
     /**
-     * 验证码校验失败处理器
+     * 校验失败处理器
      */
     @Resource
     private AuthenticationFailureHandler authenticationFailureHandler;

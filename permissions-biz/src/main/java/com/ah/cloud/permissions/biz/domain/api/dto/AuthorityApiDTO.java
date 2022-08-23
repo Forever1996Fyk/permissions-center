@@ -1,6 +1,7 @@
 package com.ah.cloud.permissions.biz.domain.api.dto;
 
 import com.ah.cloud.permissions.enums.ApiStatusEnum;
+import com.ah.cloud.permissions.enums.ReadOrWriteEnum;
 import com.ah.cloud.permissions.enums.SysApiTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,4 +52,9 @@ public class AuthorityApiDTO implements Serializable {
      * 是否公开
      */
     private Boolean open;
+
+    /**
+     * 读写类型
+     */
+    private ReadOrWriteEnum readOrWriteEnum;
 }

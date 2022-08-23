@@ -11,6 +11,7 @@ import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysRole;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.enums.ApiStatusEnum;
+import com.ah.cloud.permissions.enums.ReadOrWriteEnum;
 import com.ah.cloud.permissions.enums.YesOrNoEnum;
 import com.github.pagehelper.PageInfo;
 import org.mapstruct.Mapper;
@@ -67,7 +68,7 @@ public class SysApiHelper {
         return result;
     }
 
-    @Mapper(uses = ApiStatusEnum.class)
+    @Mapper(uses = {ApiStatusEnum.class, ReadOrWriteEnum.class})
     public interface SysApiHelperConvert {
         SysApiHelper.SysApiHelperConvert INSTANCE = Mappers.getMapper(SysApiHelper.SysApiHelperConvert.class);
 
@@ -79,6 +80,7 @@ public class SysApiHelper {
          */
         @Mappings({
                 @Mapping(target = "apiStatusEnum", source = "status"),
+                @Mapping(target = "readOrWriteEnum", source = "readOrWrite"),
                 @Mapping(target = "uri", source = "apiUrl"),
                 @Mapping(target = "auth", expression = "java(com.ah.cloud.permissions.biz.infrastructure.util.AppUtils.convertIntToBool(sysApi.getAuth()))"),
                 @Mapping(target = "open", expression = "java(com.ah.cloud.permissions.biz.infrastructure.util.AppUtils.convertIntToBool(sysApi.getOpen()))")

@@ -50,6 +50,11 @@ public enum ReadOrWriteEnum {
     }
 
 
+    public boolean isWrite() {
+        return Objects.equals(this, WRITE);
+    }
+
+
     public static ReadOrWriteEnum getByType(Integer type) {
         ReadOrWriteEnum[] values = values();
         for (ReadOrWriteEnum readOrWriteEnum : values) {

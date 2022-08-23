@@ -157,6 +157,7 @@ system:
   local:
     file:
       uri: http://localhost:8080/showImage/
+  mode: visitor
 
 edi:
   retry:

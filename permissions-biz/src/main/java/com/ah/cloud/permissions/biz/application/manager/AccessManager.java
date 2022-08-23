@@ -101,7 +101,7 @@ public class AccessManager implements InitializingBean {
      * @param uri
      * @return
      */
-    private boolean checkUriIsPermit(String uri) {
+    public boolean checkUriIsPermit(String uri) {
         return apiProperties.getPermitAll().stream()
                 .anyMatch(item -> PATH_MATCHER.match(item, uri));
     }

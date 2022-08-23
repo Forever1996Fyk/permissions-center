@@ -52,5 +52,5 @@ public class SysDeptTreeVo {
     /**
      * 子部门
      */
-    private List<SysDeptTreeVo> childList;
+    private List<SysDeptTreeVo> children;
 }

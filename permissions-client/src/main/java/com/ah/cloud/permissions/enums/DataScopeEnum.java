@@ -11,6 +11,11 @@ import java.util.Objects;
 public enum DataScopeEnum {
 
     /**
+     * 未知
+     */
+    UNKNOWN(-1, "未知"),
+
+    /**
      * 默认
      */
     DEFAULT_SCOPE(0, "默认"),
@@ -50,6 +55,11 @@ public enum DataScopeEnum {
         this.desc = desc;
     }
 
+    public static boolean isValid(Integer type) {
+        DataScopeEnum dataScopeEnum = getByType(type);
+        return !Objects.equals(dataScopeEnum, UNKNOWN);
+    }
+
     public static DataScopeEnum getByType(Integer type) {
         DataScopeEnum[] values = values();
         for (DataScopeEnum value : values) {
@@ -57,7 +67,7 @@ public enum DataScopeEnum {
                 return value;
             }
         }
-        return DATA_SCOPE_ALL;
+        return UNKNOWN;
     }
 
     public int getType() {

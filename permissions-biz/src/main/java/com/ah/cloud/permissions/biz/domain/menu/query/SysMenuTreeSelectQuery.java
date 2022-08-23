@@ -17,6 +17,12 @@ public class SysMenuTreeSelectQuery {
     private String roleCode;
 
     /**
+     * 用户id
+     */
+    private Long userId;
+
+
+    /**
      * 菜单树查询类型(1: 全量查询, 2: 角色菜单查询, 3: 用户菜单查询)
      */
     private Integer sysMenuQueryType;

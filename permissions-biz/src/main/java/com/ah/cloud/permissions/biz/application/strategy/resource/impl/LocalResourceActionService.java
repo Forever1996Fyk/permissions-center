@@ -46,10 +46,11 @@ public class LocalResourceActionService extends AbstractResourceActionService {
     private String localFileUri;
 
     @Override
-    protected UploadResultDTO upload(UploadFileDTO dto) {
+    protected UploadResultDTO upload(Long resId, UploadFileDTO dto) {
         UploadResultDTO resultDTO = UploadResultDTO.builder().build();
         ResourceBizTypeEnum resourceBizTypeEnum = dto.getResourceBizTypeEnum();
         String path = localUploadPath + "/" + resourceBizTypeEnum.getBucketName();
+        String url =  localFileUri + "/" + resId;
         // 生成资源名称, 即存储在服务器上的文件名
         String resourceName = AppUtils.simpleUUID() + PermissionsConstants.DOT_SEPARATOR + FileUtils.getFileSuffix(dto.getFileName());
         try {
@@ -59,6 +60,7 @@ public class LocalResourceActionService extends AbstractResourceActionService {
                     UploadResultDTO.ResultData.builder()
                             .resourceName(resourceName)
                             .resourcePath(path)
+                            .resourceUrl(url)
                             .build()
             );
         } catch (IOException e) {

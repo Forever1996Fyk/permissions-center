@@ -42,22 +42,7 @@ public class SysDictVo {
     private Integer change;
 
     /**
-     * 行记录创建者
+     * 是否可变
      */
-    private String creator;
-
-    /**
-     * 行记录最近更新人
-     */
-    private String modifier;
-
-    /**
-     * 行记录创建时间
-     */
-    private String createdTime;
-
-    /**
-     * 行记录最近修改时间
-     */
-    private String modifiedTime;
+    private String changeName;
 }

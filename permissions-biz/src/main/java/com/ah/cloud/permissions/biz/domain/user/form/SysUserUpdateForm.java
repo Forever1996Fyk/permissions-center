@@ -53,4 +53,16 @@ public class SysUserUpdateForm {
      */
     @EnumValid(enumClass = SexEnum.class, enumMethod = "isValid")
     private Integer sex;
+
+
+    /**
+     * 部门编码
+     */
+    @NotEmpty(message = "部门编码不能为空")
+    private String deptCode;
+
+    /**
+     * 数据权限类型
+     */
+    private Integer dataScope;
 }

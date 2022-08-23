@@ -70,4 +70,22 @@ public class SysMenuVo {
      */
     private String menuIcon;
 
+
+
+    /**
+     * 激活页面路径
+     */
+    private String activeMenu;
+
+    /**
+     * 动态创建新的tab
+     */
+    private Integer dynamicNewTab;
+
+
+    /**
+     * 是否隐藏
+     */
+    private Integer hidden;
+
 }

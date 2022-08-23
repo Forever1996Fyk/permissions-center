@@ -47,28 +47,13 @@ public class SysDictDetailVo {
     private Integer edit;
 
     /**
+     * 是否可编辑
+     */
+    private String editName;
+
+    /**
      * 备注
      */
     private String remark;
-
-    /**
-     * 行记录创建者
-     */
-    private String creator;
-
-    /**
-     * 行记录最近更新人
-     */
-    private String modifier;
-
-    /**
-     * 行记录创建时间
-     */
-    private String createdTime;
-
-    /**
-     * 行记录最近修改时间
-     */
-    private String modifiedTime;
 
 }

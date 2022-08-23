@@ -36,6 +36,11 @@ public class SysMenuApi implements Serializable {
     private Long menuId;
 
     /**
+     * 菜单编码
+     */
+    private String menuCode;
+
+    /**
      * 接口编码
      */
     private String apiCode;

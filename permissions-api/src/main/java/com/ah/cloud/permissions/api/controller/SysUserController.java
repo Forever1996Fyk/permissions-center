@@ -5,9 +5,9 @@ import com.ah.cloud.permissions.biz.application.manager.SysUserManager;
 import com.ah.cloud.permissions.biz.application.strategy.cache.impl.RedisCacheHandleStrategy;
 import com.ah.cloud.permissions.biz.domain.menu.vo.RouterVo;
 import com.ah.cloud.permissions.biz.domain.user.form.*;
+import com.ah.cloud.permissions.biz.domain.user.query.SelectUserApiQuery;
 import com.ah.cloud.permissions.biz.domain.user.query.SysUserQuery;
-import com.ah.cloud.permissions.biz.domain.user.vo.GetUserInfoVo;
-import com.ah.cloud.permissions.biz.domain.user.vo.SysUserVo;
+import com.ah.cloud.permissions.biz.domain.user.vo.*;
 import com.ah.cloud.permissions.biz.infrastructure.annotation.ApiMethodLog;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
@@ -20,6 +20,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @program: permissions-center
@@ -130,6 +131,18 @@ public class SysUserController {
     }
 
     /**
+     * 取消用户接口权限
+     * @param form
+     * @return
+     */
+    @ApiMethodLog
+    @PostMapping("/cancelSysApiForUser")
+    public ResponseResult<Void> cancelSysApiForUser(@Valid @RequestBody SysUserApiAddForm form) {
+        sysUserManager.cancelSysApiForUser(form);
+        return ResponseResult.ok();
+    }
+
+    /**
      * 上传用户头像
      *
      * @param request
@@ -147,5 +160,47 @@ public class SysUserController {
     @GetMapping("/getUserInfoVo")
     public ResponseResult<GetUserInfoVo> getUserInfoVo() {
         return ResponseResult.ok(sysUserManager.getCurrentUserInfo());
+    }
+
+    /**
+     * 根据用户id获取用户的角色信息
+     * @param userId
+     * @return
+     */
+    @GetMapping("/listSelectUserRole/{userId}")
+    public ResponseResult<SelectUserRoleVo> listSelectUserRoleByUserId(@PathVariable("userId") Long userId) {
+        return ResponseResult.ok(sysUserManager.listSelectUserRoleByUserId(userId));
+    }
+
+    /**
+     * 根据用户id分页获取用户的角色信息
+     * @param query
+     * @return
+     */
+    @GetMapping("/pageSelectUserApi")
+    public ResponseResult<PageResult<SelectUserApiVo.ApiInfoVo>> pageSelectUserApi(SelectUserApiQuery query) {
+        return ResponseResult.ok(sysUserManager.pageSelectUserApi(query));
+    }
+
+    /**
+     * 获取用户个人信息
+     *
+     * @param userId
+     * @return
+     */
+    @GetMapping("/findUserPersonalInfo/{userId}")
+    public ResponseResult<SysUserPersonalInfoVo> findUserPersonalInfoVo(@PathVariable(value = "userId", required = false) Long userId) {
+        return ResponseResult.ok(sysUserManager.findSysUserPersonalInfoVo(userId));
+    }
+
+    /**
+     * 更新个人中心基本信息
+     * @param form
+     * @return
+     */
+    @PostMapping("/updatePersonalBaseUserInfo")
+    public ResponseResult<Void> updatePersonalBaseUserInfo(@Valid @RequestBody SysUserInfoUpdateForm form) {
+        sysUserManager.updatePersonalBaseUserInfo(form);
+        return ResponseResult.ok();
     }
 }

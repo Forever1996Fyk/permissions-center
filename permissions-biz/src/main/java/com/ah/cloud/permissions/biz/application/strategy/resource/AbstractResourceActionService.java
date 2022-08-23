@@ -41,11 +41,13 @@ public abstract class AbstractResourceActionService implements ResourceActionSer
     private ResourceMetaDataService resourceMetaDataService;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Long uploadFile(UploadFileDTO dto) {
         return doUpload(dto).getResId();
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String uploadFileUrl(UploadFileDTO dto) {
         return doUpload(dto).getResourceUrl();
     }
@@ -144,7 +146,7 @@ public abstract class AbstractResourceActionService implements ResourceActionSer
         // 构建资源文件信息
         ResourceFile resourceFile = resourceHelper.convertToEntity(dto);
         // 上传文件
-        UploadResultDTO resultDTO = upload(dto);
+        UploadResultDTO resultDTO = upload(resourceFile.getResId(), dto);
         if (Objects.isNull(resultDTO) || resultDTO.isFailed() || Objects.isNull(resultDTO.getData())) {
             log.error("{}[upload] file upload error, uploadType is {},  params is {}, reason is {}"
                     , getLogMark()
@@ -184,10 +186,11 @@ public abstract class AbstractResourceActionService implements ResourceActionSer
     /**
      * 上传文件
      *
+     * @param resId
      * @param dto
      * @return
      */
-    protected abstract UploadResultDTO upload(UploadFileDTO dto);
+    protected abstract UploadResultDTO upload(Long resId, UploadFileDTO dto);
 
     /**
      * 日志标记

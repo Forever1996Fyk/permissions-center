@@ -6,24 +6,33 @@ import com.ah.cloud.permissions.biz.application.service.ext.SysDeptExtService;
 import com.ah.cloud.permissions.biz.domain.dept.form.DeptAddForm;
 import com.ah.cloud.permissions.biz.domain.dept.form.DeptUpdateForm;
 import com.ah.cloud.permissions.biz.domain.dept.query.SysDeptQuery;
+import com.ah.cloud.permissions.biz.domain.dept.query.SysDeptTreeSelectQuery;
+import com.ah.cloud.permissions.biz.domain.dept.vo.SysDeptTreeSelectVo;
 import com.ah.cloud.permissions.biz.domain.dept.vo.SysDeptTreeVo;
 import com.ah.cloud.permissions.biz.domain.dept.vo.SysDeptVo;
+import com.ah.cloud.permissions.biz.domain.menu.query.SysMenuTreeSelectQuery;
+import com.ah.cloud.permissions.biz.domain.menu.tree.SysMenuTreeSelectVo;
+import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysDept;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysDeptRelation;
+import com.ah.cloud.permissions.biz.infrastructure.repository.bean.*;
 import com.ah.cloud.permissions.biz.infrastructure.util.CollectionUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
+import com.ah.cloud.permissions.enums.MenuQueryTypeEnum;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @program: permissions-center
@@ -45,6 +54,7 @@ public class SysDeptManager {
      * 添加部门信息
      * @param form
      */
+    @Transactional(rollbackFor = Exception.class)
     public void addDept(DeptAddForm form) {
         SysDept existedSysDept = sysDeptExtService.getOneByCode(form.getDeptCode());
         if (Objects.nonNull(existedSysDept)) {
@@ -75,8 +85,8 @@ public class SysDeptManager {
                 newSysDeptRelation.setModifier(userNameBySession);
                 sysDeptRelationList.add(newSysDeptRelation);
             }
+            sysDeptRelationService.saveBatch(sysDeptRelationList);
         }
-        sysDeptRelationService.saveBatch(sysDeptRelationList);
     }
 
     /**
@@ -156,4 +166,35 @@ public class SysDeptManager {
         return sysDeptHelper.convertToTree(sysDeptList);
     }
 
+    /**
+     * 获取部门选择树
+     *
+     * @param query
+     * @return
+     */
+    public List<SysDeptTreeSelectVo> listDeptSelectTree(SysDeptTreeSelectQuery query) {
+        List<SysDept> sysDeptList = sysDeptExtService.list(
+                new QueryWrapper<SysDept>().lambda()
+                        .eq(SysDept::getDeleted, DeletedEnum.NO.value)
+        );
+        return sysDeptHelper.convertToTreeSelectVo(sysDeptList);
+    }
+
+    /**
+     * 根据部门编码获取当前部门名称
+     * @param deptCode
+     * @return
+     */
+    public String getDeptNameByCode(String deptCode) {
+        if (StringUtils.isBlank(deptCode)) {
+            log.error("SysDeptManager[getDeptNameByCode] deptCode is empty");
+            return PermissionsConstants.STR_EMPTY;
+        }
+        SysDept sysDept = sysDeptExtService.getOneByCode(deptCode);
+        if (Objects.isNull(sysDept)) {
+            log.error("SysDeptManager[getDeptNameByCode] dept info not existed, deptCode is {}", deptCode);
+            return PermissionsConstants.STR_EMPTY;
+        }
+        return sysDept.getName();
+    }
 }

@@ -1,8 +1,11 @@
 package com.ah.cloud.permissions.biz.application.manager;
 
 import com.ah.cloud.permissions.biz.application.checker.SysUserChecker;
+import com.ah.cloud.permissions.biz.application.helper.SysRoleHelper;
 import com.ah.cloud.permissions.biz.application.helper.SysUserHelper;
+import com.ah.cloud.permissions.biz.application.service.SysApiService;
 import com.ah.cloud.permissions.biz.application.service.SysRoleMenuService;
+import com.ah.cloud.permissions.biz.application.service.SysRoleService;
 import com.ah.cloud.permissions.biz.application.service.ext.SysUserApiExtService;
 import com.ah.cloud.permissions.biz.application.service.ext.SysUserExtService;
 import com.ah.cloud.permissions.biz.application.service.ext.SysUserMenuExtService;
@@ -11,11 +14,11 @@ import com.ah.cloud.permissions.biz.domain.menu.vo.RouterVo;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
 import com.ah.cloud.permissions.biz.domain.user.dto.SelectSysUserDTO;
 import com.ah.cloud.permissions.biz.domain.user.form.*;
+import com.ah.cloud.permissions.biz.domain.user.query.SelectUserApiQuery;
 import com.ah.cloud.permissions.biz.domain.user.query.SysUserExportQuery;
 import com.ah.cloud.permissions.biz.domain.user.query.SysUserQuery;
-import com.ah.cloud.permissions.biz.domain.user.vo.GetUserInfoVo;
-import com.ah.cloud.permissions.biz.domain.user.vo.SelectSysUserVo;
-import com.ah.cloud.permissions.biz.domain.user.vo.SysUserVo;
+import com.ah.cloud.permissions.biz.domain.user.vo.*;
+import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.*;
 import com.ah.cloud.permissions.biz.infrastructure.util.CollectionUtils;
@@ -28,6 +31,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.ResultHandler;
@@ -52,9 +56,15 @@ import java.util.stream.Collectors;
 @Component
 public class SysUserManager {
     @Resource
+    private SysApiService sysApiService;
+    @Resource
     private AccessManager accessManager;
     @Resource
     private SysUserHelper sysUserHelper;
+    @Resource
+    private SysRoleHelper sysRoleHelper;
+    @Resource
+    private SysRoleService sysRoleService;
     @Resource
     private SysUserChecker sysUserChecker;
     @Resource
@@ -71,10 +81,15 @@ public class SysUserManager {
     private SysUserMenuExtService sysUserMenuExtService;
     @Resource
     private SysUserRoleExtService sysUserRoleExtService;
+    @Resource
+    private SysDeptManager sysDeptManager;
+    @Resource
+    private SysUserIntroManager sysUserIntroManager;
 
     /**
      * 添加新用户
      * 记录操作日志 TODO
+     *
      * @param form
      */
     public void addSysUser(SysUserAddForm form) {
@@ -108,6 +123,7 @@ public class SysUserManager {
     /**
      * 逻辑删除用户
      * 记录操作日志 TODO
+     *
      * @param id
      */
     public void deleteSysUserById(Long id) {
@@ -161,14 +177,18 @@ public class SysUserManager {
                         () -> sysUserExtService.list(
                                 new QueryWrapper<SysUser>().lambda()
                                         .like(
-                                                !StringUtils.isEmpty(query.getNickName()),
+                                                StringUtils.isNotBlank(query.getNickName()),
                                                 SysUser::getNickName, query.getNickName())
                                         .eq(
-                                                !StringUtils.isEmpty(query.getPhone()),
+                                                StringUtils.isNotBlank(query.getPhone()),
                                                 SysUser::getPhone, query.getPhone())
                                         .like(
-                                                !StringUtils.isEmpty(query.getEmail()),
+                                                StringUtils.isNotBlank(query.getEmail()),
                                                 SysUser::getEmail, query.getEmail())
+                                        .eq(
+                                                StringUtils.isNotBlank(query.getDeptCode()),
+                                                SysUser::getDeptCode, query.getDeptCode()
+                                        )
                                         .eq(
                                                 SysUser::getDeleted,
                                                 DeletedEnum.NO.value)
@@ -178,8 +198,9 @@ public class SysUserManager {
 
     /**
      * 设置用户角色
-     *
+     * <p>
      * 记录操作日志 TODO
+     *
      * @param form
      */
     @Transactional(rollbackFor = Exception.class)
@@ -206,22 +227,88 @@ public class SysUserManager {
 
     /**
      * 设置用户菜单
+     *
      * @param form
      */
     @Transactional(rollbackFor = Exception.class)
     public void setSysMenuForUser(SysUserMenuAddForm form) {
-        setSysMenuForUser(form.getUserId(), form.getMenuIdList());
+        Long userId = form.getUserId();
+        List<Long> menuIdList = form.getMenuIdList();
+        /*
+        先删除原有的用户菜单列表, 再重新添加
+         */
+        sysUserMenuExtService.delete(
+                new QueryWrapper<SysUserMenu>().lambda()
+                        .eq(SysUserMenu::getUserId, userId)
+                        .eq(SysUserMenu::getDeleted, DeletedEnum.NO.value)
+        );
+
+        if (CollectionUtils.isEmpty(menuIdList)) {
+            log.warn("SysUserManager[setSysMenuForUser] delete SysUserMenu allData, userId={}", userId);
+            return;
+        }
+        List<SysUserMenu> sysUserMenuList = sysUserHelper.getSysUserMenuEntityList(userId, menuIdList);
+        sysUserMenuExtService.saveBatch(sysUserMenuList);
         // 异步处理用户权限更新
         ThreadPoolManager.updateUserThreadPool.execute(() -> accessManager.updateUserCache(form.getUserId()));
     }
 
     /**
      * 设置用户api
+     *
      * @param form
      */
     @Transactional(rollbackFor = Exception.class)
     public void setSysApiForUser(SysUserApiAddForm form) {
-        setSysApiForUser(form.getUserId(), form.getApiCodeList());
+        Long userId = form.getUserId();
+        List<String> apiCodeList = form.getApiCodeList();
+        /*
+        先删除原有的用户权限列表, 再重新添加
+         */
+        sysUserApiExtService.delete(
+                new QueryWrapper<SysUserApi>().lambda()
+                        .eq(SysUserApi::getUserId, userId)
+                        .in(SysUserApi::getApiCode, apiCodeList)
+                        .eq(SysUserApi::getDeleted, DeletedEnum.NO.value)
+        );
+        if (CollectionUtils.isEmpty(apiCodeList)) {
+            return;
+        }
+        // 去重apiCode
+        List<SysUserApi> sysUserApiList = sysUserHelper.getSysUserApiEntityList(userId, apiCodeList);
+        sysUserApiExtService.saveBatch(sysUserApiList);
+        // 异步处理用户权限更新
+        ThreadPoolManager.updateUserThreadPool.execute(() -> accessManager.updateUserCache(userId));
+    }
+
+    /**
+     * 取消用户api
+     *
+     * @param form
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void cancelSysApiForUser(SysUserApiAddForm form) {
+        List<String> apiCodeList = form.getApiCodeList();
+        if (CollectionUtils.isEmpty(apiCodeList)) {
+            return;
+        }
+        List<SysUserApi> sysUserApiList = sysUserApiExtService.list(
+                new QueryWrapper<SysUserApi>().lambda()
+                        .eq(SysUserApi::getUserId, form.getUserId())
+                        .in(SysUserApi::getApiCode, apiCodeList)
+                        .eq(SysUserApi::getDeleted, DeletedEnum.NO.value)
+        );
+
+        String userNameBySession = SecurityUtils.getUserNameBySession();
+        List<SysUserApi> cancelSysUserApiList = sysUserApiList.stream()
+                .map(sysUserApi -> {
+                    SysUserApi cancelSysUserApi = new SysUserApi();
+                    cancelSysUserApi.setId(sysUserApi.getId());
+                    cancelSysUserApi.setDeleted(sysUserApi.getId());
+                    cancelSysUserApi.setModifier(userNameBySession);
+                    return cancelSysUserApi;
+                }).collect(Collectors.toList());
+        sysUserApiExtService.updateBatchById(cancelSysUserApiList);
         // 异步处理用户权限更新
         ThreadPoolManager.updateUserThreadPool.execute(() -> accessManager.updateUserCache(form.getUserId()));
     }
@@ -229,6 +316,7 @@ public class SysUserManager {
 
     /**
      * 获取当前用户菜单路由
+     *
      * @return
      */
     public List<RouterVo> listRouterVoByUserId(Long userId) {
@@ -270,50 +358,15 @@ public class SysUserManager {
         return sysMenuManager.assembleMenuRouteByUser(userMenuSet);
     }
 
-    private void setSysMenuForUser(Long userId, List<Long> menuIdList) {
-        /*
-        先删除原有的用户菜单列表, 再重新添加
-         */
-        sysUserMenuExtService.delete(
-                new QueryWrapper<SysUserMenu>().lambda()
-                        .eq(SysUserMenu::getUserId, userId)
-                        .in(SysUserMenu::getMenuId, menuIdList)
-                        .eq(SysUserMenu::getDeleted, DeletedEnum.NO.value)
-        );
-
-        if (CollectionUtils.isEmpty(menuIdList)) {
-            log.warn("SysUserManager[setSysMenuForUser] delete SysUserMenu allData, userId={}", userId);
-            return;
-        }
-        List<SysUserMenu> sysUserMenuList = sysUserHelper.getSysUserMenuEntityList(userId, menuIdList);
-        sysUserMenuExtService.saveBatch(sysUserMenuList);
-    }
-
-    private void setSysApiForUser(Long userId, Collection<String> apiCodeList) {
-        /*
-        先删除原有的用户权限列表, 再重新添加
-         */
-        sysUserApiExtService.delete(
-                new QueryWrapper<SysUserApi>().lambda()
-                        .eq(SysUserApi::getUserId, userId)
-                        .in(SysUserApi::getApiCode, apiCodeList)
-                        .eq(SysUserApi::getDeleted, DeletedEnum.NO.value)
-        );
-        if (CollectionUtils.isEmpty(apiCodeList)) {
-            return;
-        }
-        // 去重apiCode
-        List<SysUserApi> sysUserApiList = sysUserHelper.getSysUserApiEntityList(userId, apiCodeList);
-        sysUserApiExtService.saveBatch(sysUserApiList);
-    }
-
     /**
      * 上传用户头像
+     *
      * @param request
      * @return
      */
     public String uploadUserAvatar(HttpServletRequest request) {
-        Long userId = SecurityUtils.getBaseUserInfo().getUserId();
+        String file = request.getParameter("file");
+        Long userId = SecurityUtils.getUserIdBySession();
         String url = resourceManager.uploadUrl(request, userId);
         SysUser updateSysUser = new SysUser();
         updateSysUser.setUserId(userId);
@@ -332,6 +385,7 @@ public class SysUserManager {
 
     /**
      * 根据用户id集合获取系统用户
+     *
      * @param userIds
      * @return
      */
@@ -345,6 +399,7 @@ public class SysUserManager {
 
     /**
      * 根据用户id获取当前部门负责人id
+     *
      * @param proposerId
      * @return
      */
@@ -358,6 +413,7 @@ public class SysUserManager {
 
     /**
      * 获取用户选择list
+     *
      * @return
      */
     public List<SelectSysUserVo> selectSysUserVoList() {
@@ -373,6 +429,7 @@ public class SysUserManager {
 
     /**
      * 获取用户选择list
+     *
      * @return
      */
     public List<SelectSysUserDTO> selectSysUserDTOList() {
@@ -388,6 +445,7 @@ public class SysUserManager {
 
     /**
      * 流式查询用户导出列表
+     *
      * @param query
      * @param resultHandler
      */
@@ -397,6 +455,7 @@ public class SysUserManager {
 
     /**
      * 批量导入用户数据
+     *
      * @param sysUserList
      */
     public void batchImportSysUser(List<SysUser> sysUserList) {
@@ -405,6 +464,7 @@ public class SysUserManager {
 
     /**
      * 获取当前登录人信息
+     *
      * @return
      */
     public GetUserInfoVo getCurrentUserInfo() {
@@ -417,9 +477,15 @@ public class SysUserManager {
 
     /**
      * 更新用户
+     *
      * @param form
      */
     public void updateSysUser(SysUserUpdateForm form) {
+        /*
+        参数校验
+         */
+        sysUserChecker.checkSysUserAddForm(form);
+
         SysUser existSysUser = sysUserExtService.getOne(
                 new QueryWrapper<SysUser>().lambda()
                         .eq(SysUser::getId, form.getId())
@@ -430,5 +496,131 @@ public class SysUserManager {
         }
         SysUser updateSysUser = sysUserHelper.convertToEntity(form);
         sysUserExtService.updateById(updateSysUser);
+    }
+
+    /**
+     * 根据用户id查询用户已分配和未分配的角色集合
+     *
+     * @param userId
+     * @return
+     */
+    public SelectUserRoleVo listSelectUserRoleByUserId(Long userId) {
+        if (Objects.isNull(userId) || Objects.equals(userId, PermissionsConstants.ZERO)) {
+            throw new BizException(ErrorCodeEnum.PARAM_ILLEGAL);
+        }
+        List<SysRole> sysRoleList = sysRoleService.list(
+                new QueryWrapper<SysRole>().lambda()
+                        .eq(SysRole::getDeleted, DeletedEnum.NO.value)
+        );
+        List<SysUserRole> sysUserRoleList = sysUserRoleExtService.list(
+                new QueryWrapper<SysUserRole>().lambda()
+                        .eq(SysUserRole::getUserId, userId)
+                        .eq(SysUserRole::getDeleted, DeletedEnum.NO.value)
+        );
+        List<String> sysUserRoleCodeList = sysUserRoleList.stream().map(SysUserRole::getRoleCode).collect(Collectors.toList());
+        Set<SelectUserRoleVo.RoleInfoVo> allocatedRoleSet = Sets.newHashSet();
+
+        List<SelectUserRoleVo.RoleInfoVo> roleInfoVoList = sysRoleHelper.convert2SelectUserRoleVoList(sysRoleList);
+        roleInfoVoList.stream().filter(item -> sysUserRoleCodeList.contains(item.getRoleCode())).forEach(allocatedRoleSet::add);
+        return SelectUserRoleVo.builder()
+                .allocatedRoleSet(allocatedRoleSet)
+                .allRoleSet(Sets.newHashSet(roleInfoVoList))
+                .build();
+    }
+
+    /**
+     * 根据用户id查询用户已分配接口集合
+     *
+     * @param query
+     * @return
+     */
+    public PageResult<SelectUserApiVo.ApiInfoVo> pageSelectUserApi(SelectUserApiQuery query) {
+        Long userId = query.getUserId();
+        if (Objects.isNull(userId) || Objects.equals(userId, PermissionsConstants.ZERO)) {
+            throw new BizException(ErrorCodeEnum.PARAM_ILLEGAL);
+        }
+        PageInfo<SysUserApi> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
+                .doSelectPageInfo(
+                        () -> sysUserApiExtService.list(
+                                new QueryWrapper<SysUserApi>().lambda()
+                                        .orderByDesc(SysUserApi::getCreatedTime)
+                                        .eq(SysUserApi::getUserId, userId)
+                                        .eq(StringUtils.isNotBlank(query.getApiCode()), SysUserApi::getApiCode, query.getApiCode())
+                                        .eq(SysUserApi::getDeleted, DeletedEnum.NO.value)
+                        )
+                );
+        PageResult<SelectUserApiVo.ApiInfoVo> pageResult = new PageResult<>();
+        pageResult.setPageSize(pageInfo.getPageSize());
+        pageResult.setPageNum(pageInfo.getPageNum());
+        pageResult.setTotal(pageInfo.getTotal());
+        List<SysUserApi> sysUserApiList = pageInfo.getList();
+        if (CollectionUtils.isNotEmpty(sysUserApiList)) {
+            List<String> apiCodeList = sysUserApiList.stream().map(SysUserApi::getApiCode).collect(Collectors.toList());
+            List<SysApi> sysApiList = sysApiService.list(
+                    new QueryWrapper<SysApi>().lambda()
+                            .select(SysApi::getApiName, SysApi::getApiCode, SysApi::getId)
+                            .in(SysApi::getApiCode, apiCodeList)
+                            .eq(SysApi::getDeleted, DeletedEnum.NO.value)
+            );
+            pageResult.setRows(
+                    sysApiList.stream()
+                            .map(item -> SelectUserApiVo.ApiInfoVo.builder().id(item.getId()).apiCode(item.getApiCode()).apiName(item.getApiName()).build())
+                            .collect(Collectors.toList())
+            );
+        }
+        return pageResult;
+    }
+
+    /**
+     * 根据用户id获取个人信息
+     *
+     * @param userId
+     * @return
+     */
+    public SysUserPersonalInfoVo findSysUserPersonalInfoVo(Long userId) {
+        if (Objects.equals(userId, PermissionsConstants.ZERO) || userId == null) {
+            userId = SecurityUtils.getUserIdBySession();
+            if (Objects.equals(userId, PermissionsConstants.ZERO)) {
+                throw new BizException(ErrorCodeEnum.LOGIN_INVALID);
+            }
+        }
+        return SysUserPersonalInfoVo.builder()
+                .baseUserInfo(this.findBaseUserInfoVoByUserId(userId))
+                .sysUserIntro(sysUserIntroManager.findSysUserIntroVoByUserId(userId))
+                .build();
+    }
+
+    /**
+     * 根据用户id查询用户基本信息
+     *
+     * @param userId
+     * @return
+     */
+    public BaseUserInfoVo findBaseUserInfoVoByUserId(Long userId) {
+        SysUser sysUser = sysUserExtService.getOneByUserId(userId);
+        String deptName = sysDeptManager.getDeptNameByCode(sysUser.getDeptCode());
+        return sysUserHelper.convertToBaseUserInfoVo(sysUser, deptName);
+    }
+
+    /**
+     * 修改用户昵称
+     *
+     * @param form
+     */
+    public void updatePersonalBaseUserInfo(SysUserInfoUpdateForm form) {
+        Long userId = SecurityUtils.getUserIdBySession();
+        if (Objects.equals(userId, PermissionsConstants.ZERO)) {
+            throw new BizException(ErrorCodeEnum.LOGIN_INVALID);
+        }
+        SysUser sysUser = sysUserExtService.getOneByUserId(userId);
+        if (Objects.isNull(sysUser)) {
+            throw new BizException(ErrorCodeEnum.USER_NOT_EXIST);
+        }
+        SysUser updateSysUser = sysUserHelper.convertToInfoUpdateForm(form);
+        updateSysUser.setId(sysUser.getId());
+        boolean result = sysUserExtService.updateById(updateSysUser);
+        if (!result) {
+            throw new BizException(ErrorCodeEnum.USER_INFO_UPDATE_FAILED);
+        }
     }
 }

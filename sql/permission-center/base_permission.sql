@@ -154,7 +154,7 @@ create table sys_role_api
 (
     id            bigint auto_increment comment '主键id'
         primary key,
-    role_id       bigint        default 0                 not null comment '角色id',
+    role_code     varchar(32)   default ''                not null comment '角色编码',
     api_code      varchar(32)                             not null comment '接口编码',
     is_available  tinyint(3) default 1 not null comment '是否可用',
     creator       varchar(64)                             not null comment '行记录创建者',
@@ -188,7 +188,7 @@ create table sys_menu_api
 (
     id            bigint auto_increment comment '主键id'
         primary key,
-    menu_id       bigint        default 0                 not null comment '菜单id',
+    menu_id       bigint(20) default 0 not null comment '菜单id',
     api_code      varchar(32)                             not null comment '接口编码',
     is_available  tinyint(3) default 1 not null comment '是否可用',
     creator       varchar(64)                             not null comment '行记录创建者',
@@ -388,3 +388,24 @@ create table sys_dict_detail
     deleted          bigint       default 0                 not null comment '是否删除',
     UNIQUE KEY uniq_code(dict_code, dict_detail_code, deleted)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '系统字典详情表';
+
+create table sys_user_intro
+(
+    id            bigint                                  not null comment '主键id'
+        primary key,
+    user_id       bigint                                  not null comment '用户id',
+    introduction  varchar(500)  default ''                not null comment '个人简介',
+    tags          varchar(500)  default ''                not null comment '标签',
+    location      varchar(500)  default ''                not null comment '位置',
+    birth_day     datetime      default null comment '生日',
+    skills        varchar(500)  default ''                not null comment '技能',
+    hobby         varchar(500)  default ''                not null comment '爱好',
+    creator       varchar(64)                             not null comment '行记录创建者',
+    modifier      varchar(64)                             not null comment '行记录最近更新人',
+    created_time  timestamp     default CURRENT_TIMESTAMP not null comment '行记录创建时间',
+    modified_time timestamp     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '行记录最近修改时间',
+    version       tinyint unsigned default 0 not null comment '行版本号',
+    extension     varchar(2048) default ''                not null comment '拓展字段',
+    deleted       bigint        default 0                 not null comment '是否删除',
+    UNIQUE KEY uniq_user_id(user_id, deleted)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT '系统用户简介表';

@@ -9,6 +9,9 @@ import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysDictDetail
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.github.pagehelper.PageInfo;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 
@@ -69,6 +72,7 @@ public class SysDictDetailHelper {
         return pageResult;
     }
 
+    @Mapper
     public interface Convert {
         SysDictDetailHelper.Convert INSTANCE = Mappers.getMapper(SysDictDetailHelper.Convert.class);
 
@@ -91,6 +95,9 @@ public class SysDictDetailHelper {
          * @param sysDictDetail
          * @return
          */
+        @Mappings({
+                @Mapping(target = "editName", expression = "java(com.ah.cloud.permissions.enums.YesOrNoEnum.getByType(sysDictDetail.getEdit()).getDesc())"),
+        })
         SysDictDetailVo convertToVo(SysDictDetail sysDictDetail);
 
         /**

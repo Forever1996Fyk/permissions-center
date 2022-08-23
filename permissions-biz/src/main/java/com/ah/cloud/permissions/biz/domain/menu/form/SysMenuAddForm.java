@@ -1,5 +1,7 @@
 package com.ah.cloud.permissions.biz.domain.menu.form;
 
+import com.ah.cloud.permissions.biz.infrastructure.annotation.EnumValid;
+import com.ah.cloud.permissions.enums.MenuTypeEnum;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
@@ -33,7 +35,7 @@ public class SysMenuAddForm {
     /**
      * 菜单类型
      */
-    @NotNull(message = "菜单类型不能为空")
+    @EnumValid(enumClass = MenuTypeEnum.class, enumMethod = "isValid")
     private Integer menuType;
 
     /**
@@ -47,19 +49,32 @@ public class SysMenuAddForm {
     private String component;
 
     /**
-     * 菜单url
+     * 菜单路径
      */
-    @NotEmpty(message = "菜单路径不能为空")
     private String menuPath;
 
     /**
      * 打开方式(1:页面内,2:外链)
      */
-    @NotNull(message = "打开方式不能为空")
     private Integer openType;
 
     /**
      * 菜单图标
      */
     private String menuIcon;
+
+    /**
+     * 激活页面路径
+     */
+    private String activeMenu;
+
+    /**
+     * 动态创建新的tab
+     */
+    private Integer dynamicNewTab;
+
+    /**
+     * 是否隐藏
+     */
+    private Integer hidden;
 }

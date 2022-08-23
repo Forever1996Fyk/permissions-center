@@ -76,6 +76,7 @@ public class SecurityUtils {
             BaseUserInfo baseUserInfo = getBaseUserInfo();
             return baseUserInfo.getUserId();
         } catch (Throwable throwable) {
+            log.error("SecurityUtils[getUserIdBySession] get userId from cache error, reason is {}", Throwables.getStackTraceAsString(throwable));
             return PermissionsConstants.ZERO;
         }
     }

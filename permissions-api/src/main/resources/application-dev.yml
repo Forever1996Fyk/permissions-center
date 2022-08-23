@@ -134,10 +134,6 @@ security:
       - /validateCode/sendCode
       - /validateCode/sendSmsCode
       - /validateCode/sendEmailCode
-      - /user/*
-      - /role/*
-      - /api/*
-      - /menu/*
 
 mq:
   redis:

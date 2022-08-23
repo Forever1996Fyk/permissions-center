@@ -1,6 +1,7 @@
 package com.ah.cloud.permissions.biz.application.manager;
 
 import com.ah.cloud.permissions.biz.application.helper.SysRoleHelper;
+import com.ah.cloud.permissions.biz.application.service.SysApiService;
 import com.ah.cloud.permissions.biz.application.service.SysRoleService;
 import com.ah.cloud.permissions.biz.application.service.SysUserRoleService;
 import com.ah.cloud.permissions.biz.application.service.ext.SysRoleApiExtService;
@@ -10,15 +11,17 @@ import com.ah.cloud.permissions.biz.domain.role.form.SysRoleAddForm;
 import com.ah.cloud.permissions.biz.domain.role.form.SysRoleApiAddForm;
 import com.ah.cloud.permissions.biz.domain.role.form.SysRoleMenuAddForm;
 import com.ah.cloud.permissions.biz.domain.role.form.SysRoleUpdateForm;
+import com.ah.cloud.permissions.biz.domain.role.query.SelectRoleApiQuery;
 import com.ah.cloud.permissions.biz.domain.role.query.SysRoleQuery;
+import com.ah.cloud.permissions.biz.domain.role.vo.SelectRoleApiVo;
 import com.ah.cloud.permissions.biz.domain.role.vo.SelectSysRoleVo;
 import com.ah.cloud.permissions.biz.domain.role.vo.SysRoleVO;
+import com.ah.cloud.permissions.biz.domain.user.vo.SelectUserApiVo;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysRole;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysRoleApi;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysRoleMenu;
-import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUserRole;
+import com.ah.cloud.permissions.biz.infrastructure.repository.bean.*;
+import com.ah.cloud.permissions.biz.infrastructure.util.CollectionUtils;
+import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
@@ -29,7 +32,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -46,6 +48,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SysRoleManager {
 
+    @Resource
+    private SysApiService sysApiService;
     @Resource
     private SysRoleHelper sysRoleHelper;
     @Resource
@@ -207,14 +211,16 @@ public class SysRoleManager {
      */
     @Transactional(rollbackFor = Exception.class)
     public void setSysApiForRole(SysRoleApiAddForm form) {
+        List<String> apiCodeList = form.getApiCodeList();
         // 删除原有的角色api信息
         sysRoleApiExtService.delete(
                 new QueryWrapper<SysRoleApi>().lambda()
                         .eq(SysRoleApi::getRoleCode, form.getRoleCode())
+                        .in(SysRoleApi::getApiCode, apiCodeList)
                         .eq(SysRoleApi::getDeleted, DeletedEnum.NO.value)
         );
         // 重新添加
-        if (CollectionUtils.isEmpty(form.getApiCodeList())) {
+        if (CollectionUtils.isEmpty(apiCodeList)) {
             log.warn("SysRoleManager[setSysApiForRole] delete SysRoleApi allData, roleId={}", form.getRoleCode());
             return;
         }
@@ -249,5 +255,78 @@ public class SysRoleManager {
         return sysRoleList.stream()
                 .map(sysRole -> SelectSysRoleDTO.builder().code(sysRole.getRoleCode()).name(sysRole.getRoleName()).build())
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 取消角色api
+     *
+     * @param form
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void cancelSysApiForRole(SysRoleApiAddForm form) {
+        List<String> apiCodeList = form.getApiCodeList();
+        if (CollectionUtils.isEmpty(apiCodeList)) {
+            return;
+        }
+        List<SysRoleApi> sysRoleApiList = sysRoleApiExtService.list(
+                new QueryWrapper<SysRoleApi>().lambda()
+                        .eq(SysRoleApi::getRoleCode, form.getRoleCode())
+                        .in(SysRoleApi::getApiCode, apiCodeList)
+                        .eq(SysRoleApi::getDeleted, DeletedEnum.NO.value)
+        );
+
+        String userNameBySession = SecurityUtils.getUserNameBySession();
+        List<SysRoleApi> cancelSysRoleApiList = sysRoleApiList.stream()
+                .map(sysRoleApi -> {
+                    SysRoleApi cancelSysRoleApi = new SysRoleApi();
+                    cancelSysRoleApi.setId(sysRoleApi.getId());
+                    cancelSysRoleApi.setDeleted(sysRoleApi.getId());
+                    cancelSysRoleApi.setModifier(userNameBySession);
+                    return cancelSysRoleApi;
+                }).collect(Collectors.toList());
+        sysRoleApiExtService.updateBatchById(cancelSysRoleApiList);
+    }
+
+    /**
+     * 根据角色编码分页获取角色的api信息
+     *
+     * @param query
+     * @return
+     */
+    public PageResult<SelectRoleApiVo.ApiInfoVo> pageSelectRoleApi(SelectRoleApiQuery query) {
+        String roleCode = query.getRoleCode();
+        if (StringUtils.isBlank(roleCode)) {
+            throw new BizException(ErrorCodeEnum.PARAM_ILLEGAL);
+        }
+        PageInfo<SysRoleApi> pageInfo = PageMethod.startPage(query.getPageNo(), query.getPageSize())
+                .doSelectPageInfo(
+                        () -> sysRoleApiExtService.list(
+                                new QueryWrapper<SysRoleApi>().lambda()
+                                        .orderByDesc(SysRoleApi::getCreatedTime)
+                                        .eq(SysRoleApi::getRoleCode, roleCode)
+                                        .eq(StringUtils.isNotBlank(query.getApiCode()), SysRoleApi::getApiCode, query.getApiCode())
+                                        .eq(SysRoleApi::getDeleted, DeletedEnum.NO.value)
+                        )
+                );
+        PageResult<SelectRoleApiVo.ApiInfoVo> pageResult = new PageResult<>();
+        pageResult.setPageSize(pageInfo.getPageSize());
+        pageResult.setPageNum(pageInfo.getPageNum());
+        pageResult.setTotal(pageInfo.getTotal());
+        List<SysRoleApi> sysRoleApiList = pageInfo.getList();
+        if (CollectionUtils.isNotEmpty(sysRoleApiList)) {
+            List<String> apiCodeList = sysRoleApiList.stream().map(SysRoleApi::getApiCode).collect(Collectors.toList());
+            List<SysApi> sysApiList = sysApiService.list(
+                    new QueryWrapper<SysApi>().lambda()
+                            .select(SysApi::getApiName, SysApi::getApiCode, SysApi::getId)
+                            .in(SysApi::getApiCode, apiCodeList)
+                            .eq(SysApi::getDeleted, DeletedEnum.NO.value)
+            );
+            pageResult.setRows(
+                    sysApiList.stream()
+                            .map(item -> SelectRoleApiVo.ApiInfoVo.builder().id(item.getId()).apiCode(item.getApiCode()).apiName(item.getApiName()).build())
+                            .collect(Collectors.toList())
+            );
+        }
+        return pageResult;
     }
 }

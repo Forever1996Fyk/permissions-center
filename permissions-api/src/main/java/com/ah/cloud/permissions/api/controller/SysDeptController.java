@@ -4,8 +4,12 @@ import com.ah.cloud.permissions.biz.application.manager.SysDeptManager;
 import com.ah.cloud.permissions.biz.domain.dept.form.DeptAddForm;
 import com.ah.cloud.permissions.biz.domain.dept.form.DeptUpdateForm;
 import com.ah.cloud.permissions.biz.domain.dept.query.SysDeptQuery;
+import com.ah.cloud.permissions.biz.domain.dept.query.SysDeptTreeSelectQuery;
+import com.ah.cloud.permissions.biz.domain.dept.vo.SysDeptTreeSelectVo;
 import com.ah.cloud.permissions.biz.domain.dept.vo.SysDeptTreeVo;
 import com.ah.cloud.permissions.biz.domain.dept.vo.SysDeptVo;
+import com.ah.cloud.permissions.biz.domain.menu.query.SysMenuTreeSelectQuery;
+import com.ah.cloud.permissions.biz.domain.menu.tree.SysMenuTreeSelectVo;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,7 +56,7 @@ public class SysDeptController {
      * @param id
      * @return
      */
-    @PostMapping("/delete/{id}")
+    @PostMapping("/deleteById/{id}")
     public ResponseResult<Void> deleteById(@PathVariable(value = "id") Long id) {
         sysDeptManager.deleteSysDept(id);
         return ResponseResult.ok();
@@ -76,6 +80,17 @@ public class SysDeptController {
     @GetMapping("/listSysDeptTree")
     public ResponseResult<List<SysDeptTreeVo>> listSysDeptTree(SysDeptQuery query) {
         return ResponseResult.ok(sysDeptManager.listSysDeptTree(query));
+    }
+
+    /**
+     * 获取部门树形选择结构列表
+     *
+     * @param query
+     * @return
+     */
+    @GetMapping("/listDeptSelectTree")
+    public ResponseResult<List<SysDeptTreeSelectVo>> listDeptSelectTree(SysDeptTreeSelectQuery query) {
+        return ResponseResult.ok(sysDeptManager.listDeptSelectTree(query));
     }
 
 }

@@ -41,6 +41,24 @@ public enum MenuTypeEnum {
      */
     private final String desc;
 
+    /**
+     * 判断是否按钮
+     * @param type
+     * @return
+     */
+    public static boolean isButton(Integer type) {
+        return Objects.equals(type, BUTTON.getType());
+    }
+
+    /**
+     * 判断是否按钮
+     * @param type
+     * @return
+     */
+    public static boolean isNotButton(Integer type) {
+        return !isButton(type);
+    }
+
     public static MenuTypeEnum getByType(Integer type) {
         MenuTypeEnum[] values = values();
         for (MenuTypeEnum value : values) {
@@ -49,6 +67,11 @@ public enum MenuTypeEnum {
             }
         }
         return UNKNOWN;
+    }
+
+    public static boolean isValid(Integer type) {
+        MenuTypeEnum menuTypeEnum = getByType(type);
+        return !Objects.equals(menuTypeEnum, UNKNOWN);
     }
 
     MenuTypeEnum(int type, String desc) {

@@ -126,5 +126,13 @@ public class SysMenu implements Serializable {
      */
     private Long deleted;
 
+    /**
+     * 激活页面路径
+     */
+    private String activeMenu;
 
+    /**
+     * 动态创建新的tab
+     */
+    private Integer dynamicNewTab;
 }

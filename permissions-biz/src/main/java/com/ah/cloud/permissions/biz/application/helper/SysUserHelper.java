@@ -4,7 +4,9 @@ import cn.hutool.core.util.RandomUtil;
 import com.ah.cloud.permissions.biz.domain.authority.DefaultAuthority;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserAddForm;
+import com.ah.cloud.permissions.biz.domain.user.form.SysUserInfoUpdateForm;
 import com.ah.cloud.permissions.biz.domain.user.form.SysUserUpdateForm;
+import com.ah.cloud.permissions.biz.domain.user.vo.BaseUserInfoVo;
 import com.ah.cloud.permissions.biz.domain.user.vo.GetUserInfoVo;
 import com.ah.cloud.permissions.biz.domain.user.vo.SysUserVo;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
@@ -121,12 +123,21 @@ public class SysUserHelper {
         return passwordEncoder.encode(oldPassword);
     }
 
+    /**
+     * 构建用户角色关联实体
+     * @param userId
+     * @param roleCodeList
+     * @return
+     */
     public List<SysUserRole> buildSysUserRoleEntityList(Long userId, List<String> roleCodeList) {
         List<SysUserRole> sysUserRoleList = Lists.newArrayList();
+        String userNameBySession = SecurityUtils.getUserNameBySession();
         for (String roleCode : roleCodeList) {
             SysUserRole sysUserRole = new SysUserRole();
             sysUserRole.setUserId(userId);
             sysUserRole.setRoleCode(roleCode);
+            sysUserRole.setCreator(userNameBySession);
+            sysUserRole.setModifier(userNameBySession);
             sysUserRoleList.add(sysUserRole);
         }
         return sysUserRoleList;
@@ -135,10 +146,13 @@ public class SysUserHelper {
 
     public List<SysUserMenu> getSysUserMenuEntityList(Long userId, List<Long> menuIdList) {
         List<SysUserMenu> sysUserMenuList = Lists.newArrayList();
+        String userNameBySession = SecurityUtils.getUserNameBySession();
         for (Long menuId : menuIdList) {
             SysUserMenu sysUserMenu = new SysUserMenu();
             sysUserMenu.setUserId(userId);
             sysUserMenu.setMenuId(menuId);
+            sysUserMenu.setCreator(userNameBySession);
+            sysUserMenu.setModifier(userNameBySession);
             sysUserMenuList.add(sysUserMenu);
         }
         return sysUserMenuList;
@@ -184,6 +198,25 @@ public class SysUserHelper {
         return sysUser;
     }
 
+    /**
+     * 数据转换
+     * @param sysUser
+     * @param deptName
+     * @return
+     */
+    public BaseUserInfoVo convertToBaseUserInfoVo(SysUser sysUser, String deptName) {
+        return SysUserConvert.INSTANCE.convertToBaseUserInfoVo(sysUser, deptName);
+    }
+
+    /**
+     * 数据转换
+     * @param form
+     * @return
+     */
+    public SysUser convertToInfoUpdateForm(SysUserInfoUpdateForm form) {
+        return SysUserConvert.INSTANCE.convertToInfoUpdateForm(form);
+    }
+
     @Mapper
     public interface SysUserConvert {
         SysUserHelper.SysUserConvert INSTANCE = Mappers.getMapper(SysUserHelper.SysUserConvert.class);
@@ -221,5 +254,25 @@ public class SysUserHelper {
          * @return
          */
         List<SysUserVo> convert(List<SysUser> sysUsers);
+
+        /**
+         * 数据转换
+         * @param sysUser
+         * @param deptName
+         * @return
+         */
+        @Mappings({
+                @Mapping(target = "sexName", expression = "java(com.ah.cloud.permissions.enums.SexEnum.getByType(sysUser.getSex()).getDesc())"),
+                @Mapping(target = "deptName", source = "deptName"),
+                @Mapping(target = "postName", source = "sysUser.postCode")
+        })
+        BaseUserInfoVo convertToBaseUserInfoVo(SysUser sysUser, String deptName);
+
+        /**
+         * 数据转换
+         * @param form
+         * @return
+         */
+        SysUser convertToInfoUpdateForm(SysUserInfoUpdateForm form);
     }
 }

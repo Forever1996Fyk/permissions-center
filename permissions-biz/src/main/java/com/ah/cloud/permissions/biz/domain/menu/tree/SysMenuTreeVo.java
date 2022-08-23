@@ -88,4 +88,15 @@ public class SysMenuTreeVo {
      * 打开类型名称
      */
     private String openTypeName;
+
+
+    /**
+     * 激活页面路径
+     */
+    private String activeMenu;
+
+    /**
+     * 动态创建新的tab
+     */
+    private Integer dynamicNewTab;
 }

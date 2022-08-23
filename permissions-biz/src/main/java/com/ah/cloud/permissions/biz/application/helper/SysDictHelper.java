@@ -7,6 +7,9 @@ import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysDict;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.github.pagehelper.PageInfo;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 
@@ -67,6 +70,7 @@ public class SysDictHelper {
         return pageResult;
     }
 
+    @Mapper
     public interface Convert {
         SysDictHelper.Convert INSTANCE = Mappers.getMapper(SysDictHelper.Convert.class);
 
@@ -75,6 +79,9 @@ public class SysDictHelper {
          * @param form
          * @return
          */
+        @Mappings({
+                @Mapping(target = "isChange", source = "change")
+        })
         SysDict convert(SysDictAddForm form);
 
         /**
@@ -82,6 +89,9 @@ public class SysDictHelper {
          * @param form
          * @return
          */
+        @Mappings({
+                @Mapping(target = "isChange", source = "change")
+        })
         SysDict convert(SysDictUpdateForm form);
 
         /**
@@ -89,6 +99,10 @@ public class SysDictHelper {
          * @param sysDict
          * @return
          */
+        @Mappings({
+                @Mapping(target = "changeName", expression = "java(com.ah.cloud.permissions.enums.YesOrNoEnum.getByType(sysDict.getIsChange()).getDesc())"),
+                @Mapping(target = "change", source = "isChange")
+        })
         SysDictVo convertToVo(SysDict sysDict);
 
         /**

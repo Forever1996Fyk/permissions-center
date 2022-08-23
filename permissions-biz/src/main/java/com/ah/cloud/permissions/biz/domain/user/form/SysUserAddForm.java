@@ -3,6 +3,7 @@ package com.ah.cloud.permissions.biz.domain.user.form;
 import com.ah.cloud.permissions.biz.infrastructure.annotation.EmailValid;
 import com.ah.cloud.permissions.biz.infrastructure.annotation.EnumValid;
 import com.ah.cloud.permissions.biz.infrastructure.annotation.PhoneNumberValid;
+import com.ah.cloud.permissions.enums.DataScopeEnum;
 import com.ah.cloud.permissions.enums.SexEnum;
 import lombok.Data;
 
@@ -46,4 +47,15 @@ public class SysUserAddForm {
      */
     @EnumValid(enumClass = SexEnum.class, enumMethod = "isValid")
     private Integer sex;
+
+    /**
+     * 部门编码
+     */
+    @NotEmpty(message = "部门编码不能为空")
+    private String deptCode;
+
+    /**
+     * 数据权限类型
+     */
+    private Integer dataScope;
 }

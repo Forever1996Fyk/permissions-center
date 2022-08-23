@@ -80,5 +80,16 @@ public class RouterVo {
          * 是否显示在菜单中显示隐藏一级路由
          */
         private boolean levelHidden;
+
+
+        /**
+         * 激活页面路径
+         */
+        private String activeMenu;
+
+        /**
+         * 动态创建新的tab
+         */
+        private boolean dynamicNewTab;
     }
 }

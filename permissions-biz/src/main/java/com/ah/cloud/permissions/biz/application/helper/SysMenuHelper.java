@@ -1,6 +1,7 @@
 package com.ah.cloud.permissions.biz.application.helper;
 
 import com.ah.cloud.permissions.biz.domain.menu.form.SysMenuAddForm;
+import com.ah.cloud.permissions.biz.domain.menu.form.SysMenuApiAddForm;
 import com.ah.cloud.permissions.biz.domain.menu.form.SysMenuUpdateForm;
 import com.ah.cloud.permissions.biz.domain.menu.tree.SysMenuTreeSelectVo;
 import com.ah.cloud.permissions.biz.domain.menu.tree.SysMenuTreeVo;
@@ -8,6 +9,8 @@ import com.ah.cloud.permissions.biz.domain.menu.vo.RouterVo;
 import com.ah.cloud.permissions.biz.domain.menu.vo.SysMenuVo;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysMenu;
+import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysMenuApi;
+import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysRoleApi;
 import com.ah.cloud.permissions.biz.infrastructure.util.AppUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.enums.MenuOpenTypeEnum;
@@ -103,6 +106,8 @@ public class SysMenuHelper {
                 .hidden(AppUtils.convertIntToBool(sysMenu.getHidden()))
                 .title(sysMenu.getMenuName())
                 .levelHidden(false)
+                .activeMenu(sysMenu.getActiveMenu())
+                .dynamicNewTab(AppUtils.convertIntToBool(sysMenu.getDynamicNewTab()))
                 .build();
     }
 
@@ -154,7 +159,7 @@ public class SysMenuHelper {
         return SysMenuTreeSelectVo.builder()
                 .id(String.valueOf(sysMenu.getId()))
                 .label(sysMenu.getMenuName())
-                .disabled(isHidden(sysMenu))
+                .disabled(false)
                 .selected(roleMenuIdSet.contains(sysMenu.getId()))
                 .build();
     }
@@ -185,6 +190,21 @@ public class SysMenuHelper {
 
     private SysMenuTreeVo buildMenuTreeVoByMenu(SysMenu sysMenu) {
         return SysMenuConvert.INSTANCE.convertToTree(sysMenu);
+    }
+
+    public List<SysMenuApi> getSysMenuApiEntityList(SysMenuApiAddForm form) {
+        List<SysMenuApi> sysMenuApiList = Lists.newArrayList();
+        String userNameBySession = SecurityUtils.getUserNameBySession();
+        for(String apiCode : form.getApiCodeList()) {
+            SysMenuApi sysMenuApi = new SysMenuApi();
+            sysMenuApi.setMenuId(form.getMenuId());
+            sysMenuApi.setMenuCode(form.getMenuCode());
+            sysMenuApi.setApiCode(apiCode);
+            sysMenuApi.setCreator(userNameBySession);
+            sysMenuApi.setModifier(userNameBySession);
+            sysMenuApiList.add(sysMenuApi);
+        }
+        return sysMenuApiList;
     }
 
     @Mapper

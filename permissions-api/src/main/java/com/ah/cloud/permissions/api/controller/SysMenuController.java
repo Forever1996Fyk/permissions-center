@@ -2,13 +2,22 @@ package com.ah.cloud.permissions.api.controller;
 
 import com.ah.cloud.permissions.biz.application.manager.SysMenuManager;
 import com.ah.cloud.permissions.biz.domain.menu.form.SysMenuAddForm;
+import com.ah.cloud.permissions.biz.domain.menu.form.SysMenuApiAddForm;
 import com.ah.cloud.permissions.biz.domain.menu.form.SysMenuUpdateForm;
+import com.ah.cloud.permissions.biz.domain.menu.query.SelectMenuApiQuery;
+import com.ah.cloud.permissions.biz.domain.menu.query.SysMenuButtonPermissionQuery;
 import com.ah.cloud.permissions.biz.domain.menu.query.SysMenuQuery;
 import com.ah.cloud.permissions.biz.domain.menu.query.SysMenuTreeSelectQuery;
 import com.ah.cloud.permissions.biz.domain.menu.tree.SysMenuTreeSelectVo;
 import com.ah.cloud.permissions.biz.domain.menu.tree.SysMenuTreeVo;
+import com.ah.cloud.permissions.biz.domain.menu.vo.SelectMenuApiVo;
+import com.ah.cloud.permissions.biz.domain.menu.vo.SysMenuButtonPermissionVo;
 import com.ah.cloud.permissions.biz.domain.menu.vo.SysMenuVo;
+import com.ah.cloud.permissions.biz.domain.role.form.SysRoleApiAddForm;
+import com.ah.cloud.permissions.biz.domain.role.query.SelectRoleApiQuery;
+import com.ah.cloud.permissions.biz.domain.role.vo.SelectRoleApiVo;
 import com.ah.cloud.permissions.biz.infrastructure.annotation.ApiMethodLog;
+import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -94,5 +103,52 @@ public class SysMenuController {
     @GetMapping("/listMenuSelectTree")
     public ResponseResult<List<SysMenuTreeSelectVo>> listMenuSelectTree(SysMenuTreeSelectQuery query) {
         return ResponseResult.ok(sysMenuManager.listMenuSelectTree(query));
+    }
+
+    /**
+     * 设置菜单api
+     *
+     * @param form
+     * @return
+     */
+    @ApiMethodLog
+    @PostMapping("/setSysApiForMenu")
+    public ResponseResult<Void> setSysApiForMenu(@Valid @RequestBody SysMenuApiAddForm form) {
+        sysMenuManager.setSysApiForMenu(form);
+        return ResponseResult.ok();
+    }
+
+
+    /**
+     * 取消角色接口权限
+     * @param form
+     * @return
+     */
+    @ApiMethodLog
+    @PostMapping("/cancelSysApiForMenu")
+    public ResponseResult<Void> cancelSysApiForMenu(@Valid @RequestBody SysMenuApiAddForm form) {
+        sysMenuManager.cancelSysApiForMenu(form);
+        return ResponseResult.ok();
+    }
+
+
+    /**
+     * 根据菜单编码分页获取菜单的api信息
+     * @param query
+     * @return
+     */
+    @GetMapping("/pageSelectMenuApi")
+    public ResponseResult<PageResult<SelectMenuApiVo.ApiInfoVo>> pageSelectRoleApi(SelectMenuApiQuery query) {
+        return ResponseResult.ok(sysMenuManager.pageSelectMenuApi(query));
+    }
+
+    /**
+     * 查询按钮权限集合
+     * @param query
+     * @return
+     */
+    @GetMapping("/listSysMenuButtonPermissionVo")
+    public ResponseResult<List<SysMenuButtonPermissionVo>> listSysMenuButtonPermissionVo(SysMenuButtonPermissionQuery query) {
+        return ResponseResult.ok(sysMenuManager.listSysMenuButtonPermissionVo(query));
     }
 }

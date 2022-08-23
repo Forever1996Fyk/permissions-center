@@ -27,7 +27,7 @@ public class CodeGeneratorUtil {
     public static void main(String[] args) {
 
         //todo 需要生成的表
-        String[] tables = new String[]{"sys_dict","sys_dict_detail"};
+        String[] tables = new String[]{"sys_user_intro"};
 
 
         //代码生成器

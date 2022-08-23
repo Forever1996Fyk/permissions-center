@@ -2,8 +2,10 @@ package com.ah.cloud.permissions.biz.infrastructure.util;
 
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -16,6 +18,7 @@ import java.util.Date;
  * @author: YuKai Fan
  * @create: 2022-04-27 16:29
  **/
+@Slf4j
 public class DateUtils {
 
     public static String pattern0 = "yyyy-MM-dd HH:mm:ss";
@@ -29,6 +32,38 @@ public class DateUtils {
     public static String pattern6 = "yyyy/MM/dd HH:mm:ss";
 
     public static String pattern5 = "yyyyMM";
+
+    /**
+     * 字符串转为date
+     * @param date
+     * @param pattern
+     * @return
+     */
+    public static Date parse(String date, String pattern) {
+        if (StringUtils.isBlank(date)) {
+            return null;
+        }
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+            return sdf.parse(date);
+        } catch (ParseException e) {
+            log.error("date:" + date + " format error");
+            return null;
+        }
+    }
+
+    /**
+     * 字符串转为date
+     * @param dateString
+     * @return
+     * @throws ParseException
+     */
+    public static Date parse(String dateString) {
+        if (StringUtils.isEmpty(dateString)) {
+            return null;
+        }
+        return parse(dateString, pattern0);
+    }
 
     /**
      * 获取当前时间 字符串

@@ -2,8 +2,13 @@ package com.ah.cloud.permissions.api.controller;
 
 import com.ah.cloud.permissions.biz.application.manager.SysRoleManager;
 import com.ah.cloud.permissions.biz.domain.role.form.*;
+import com.ah.cloud.permissions.biz.domain.role.query.SelectRoleApiQuery;
 import com.ah.cloud.permissions.biz.domain.role.query.SysRoleQuery;
+import com.ah.cloud.permissions.biz.domain.role.vo.SelectRoleApiVo;
 import com.ah.cloud.permissions.biz.domain.role.vo.SysRoleVO;
+import com.ah.cloud.permissions.biz.domain.user.form.SysUserApiAddForm;
+import com.ah.cloud.permissions.biz.domain.user.query.SelectUserApiQuery;
+import com.ah.cloud.permissions.biz.domain.user.vo.SelectUserApiVo;
 import com.ah.cloud.permissions.biz.infrastructure.annotation.ApiMethodLog;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
@@ -111,4 +116,29 @@ public class SysRoleController {
         sysRoleManager.setSysApiForRole(form);
         return ResponseResult.ok();
     }
+
+
+    /**
+     * 取消角色接口权限
+     * @param form
+     * @return
+     */
+    @ApiMethodLog
+    @PostMapping("/cancelSysApiForRole")
+    public ResponseResult<Void> cancelSysApiForRole(@Valid @RequestBody SysRoleApiAddForm form) {
+        sysRoleManager.cancelSysApiForRole(form);
+        return ResponseResult.ok();
+    }
+
+
+    /**
+     * 根据角色编码分页获取角色的api信息
+     * @param query
+     * @return
+     */
+    @GetMapping("/pageSelectRoleApi")
+    public ResponseResult<PageResult<SelectRoleApiVo.ApiInfoVo>> pageSelectRoleApi(SelectRoleApiQuery query) {
+        return ResponseResult.ok(sysRoleManager.pageSelectRoleApi(query));
+    }
+
 }

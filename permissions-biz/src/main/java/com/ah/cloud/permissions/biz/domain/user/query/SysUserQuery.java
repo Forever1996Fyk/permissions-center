@@ -26,4 +26,9 @@ public class SysUserQuery extends PageQuery {
      * 邮箱
      */
     private String email;
+
+    /**
+     * 部门编码
+     */
+    private String deptCode;
 }

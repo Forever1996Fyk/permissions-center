@@ -23,13 +23,11 @@ public class DeptAddForm {
     /**
      * 父部门编码
      */
-    @NotEmpty(message = "父部门编码不能为空")
     private String parentDeptCode;
 
     /**
      * 父部门id
      */
-    @NotNull(message = "父部门id不能为空")
     private Long parentId;
 
     /**

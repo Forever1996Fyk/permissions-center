@@ -85,4 +85,15 @@ public class SysUserVo {
      */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createdTime;
+
+    /**
+     * 部门编码
+     */
+    private String deptCode;
+
+
+    /**
+     * 数据权限
+     */
+    private Integer dataScope;
 }

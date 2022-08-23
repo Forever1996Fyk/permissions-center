@@ -29,7 +29,6 @@ public class SysDictAddForm {
     /**
      * 字典类型
      */
-    @NotNull(message = "字典类型不能为空")
     private Integer type;
 
     /**

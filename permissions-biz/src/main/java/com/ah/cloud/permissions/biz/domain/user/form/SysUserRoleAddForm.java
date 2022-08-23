@@ -29,5 +29,5 @@ public class SysUserRoleAddForm {
     /**
      * 角色id列表
      */
-    private List<String> roleIdList;
+    private List<Long> roleIdList;
 }

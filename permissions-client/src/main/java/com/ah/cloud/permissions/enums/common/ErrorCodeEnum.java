@@ -72,6 +72,7 @@ public enum ErrorCodeEnum implements ErrorCode {
     CURRENT_USER_IS_NOT_EXIST(400_0_003, "当前登录用户不存在"),
     ANONYMOUS_USER_HAS_NO_INFO(400_0_004, "当前匿名用户无具体信息"),
     USER_AVATAR_UPLOAD_FAILED(400_0_004, "头像上传失败"),
+    USER_INFO_UPDATE_FAILED(400_0_005, "用户信息修改失败, 请稍候再试"),
 
     /**
      * 验证码相关错误
@@ -145,6 +146,7 @@ public enum ErrorCodeEnum implements ErrorCode {
     DICT_NOT_EXISTED(1003_0_002, "当前字典不存在"),
     DICT_DETAIL_CODE_IS_EXISTED(1003_0_003, "当前字典编码[%s]下的详情编码[%s]已存在"),
     DICT_DETAIL_NOT_EXISTED(1003_0_004, "当前详情编码不存在"),
+
     ;
 
     private int code;

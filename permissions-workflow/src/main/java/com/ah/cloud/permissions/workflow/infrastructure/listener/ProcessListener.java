@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.flowable.engine.delegate.event.AbstractFlowableEngineEventListener;
 import org.flowable.engine.delegate.event.FlowableProcessStartedEvent;
 import org.flowable.engine.impl.persistence.entity.ExecutionEntity;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -25,7 +24,7 @@ public class ProcessListener extends AbstractFlowableEngineEventListener {
 
     @Override
     protected void processStarted(FlowableProcessStartedEvent event) {
-        log.info("ProcessListener[processStarted] processStarted event start, event is {}", JsonUtils.toJSONString(event));
+        log.info("ProcessListener[processStarted] processStarted event start, event is {}", JsonUtils.toJsonString(event));
         workflowTaskFormManager.addWorkflowProcessForm((ExecutionEntity) event.getEntity());
         log.info("ProcessListener[processStarted] process started end");
     }

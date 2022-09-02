@@ -3,7 +3,6 @@ package com.ah.cloud.permissions.task.infrastructure.handler;
 import cn.hutool.core.date.StopWatch;
 import cn.hutool.core.util.RandomUtil;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
-import com.ah.cloud.permissions.biz.infrastructure.util.CollectionUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.DateUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.FileUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
@@ -20,7 +19,6 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.boot.system.ApplicationHome;
@@ -28,7 +26,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @program: permissions-center
@@ -66,7 +63,7 @@ public abstract class AbstractExportHandler<T extends ExportBaseDTO> implements 
             log.info(stopWatch.prettyPrint());
             return ImmutablePair.of(task.getFileName(), resId);
         } catch (Exception e) {
-            log.error("{}[executeExport] export service failed, reason is {}, task is {}, bizType is {}", getLogMark(), Throwables.getStackTraceAsString(e), JsonUtils.toJSONString(task), bizType.getDesc());
+            log.error("{}[executeExport] export service failed, reason is {}, task is {}, bizType is {}", getLogMark(), Throwables.getStackTraceAsString(e), JsonUtils.toJsonString(task), bizType.getDesc());
             throw new ImportExportException(ImportExportErrorCodeEnum.EXPORT_EXECUTE_FAILED, task.getTaskNo());
         }
     }

@@ -42,11 +42,11 @@ public abstract class AbstractEdiAlarmHandler extends AbstractFeishuAlarmService
 
     @Override
     public void alarm(List<RetryBizConfigDTO> retryBizConfigDTOList) {
-        log.info("Scan alarm retry biz config, params is {}, alarmType is {}", JsonUtils.toJSONString(retryBizConfigDTOList), getEdiAlarmTypeEnum().getDesc());
+        log.info("Scan alarm retry biz config, params is {}, alarmType is {}", JsonUtils.toJsonString(retryBizConfigDTOList), getEdiAlarmTypeEnum().getDesc());
         List<EdiAlarmInfo> ediAlarmInfoList = Lists.newArrayList();
         for (RetryBizConfigDTO retryBizConfigDTO : retryBizConfigDTOList) {
             RetryBizRecordCountQuery query = buildEdiAlarmQuery(retryBizConfigDTO);
-            log.info("Scan alarm {} record query, params is {}", getEdiAlarmTypeEnum().getDesc(), JsonUtils.toJSONString(query));
+            log.info("Scan alarm {} record query, params is {}", getEdiAlarmTypeEnum().getDesc(), JsonUtils.toJsonString(query));
             int count = retryBizRecordAdapterService.count(query);
             log.info("Scan alarm {} record query, matchCount is {}, alarmMaxCount is {}", getEdiAlarmTypeEnum().getDesc(), count, retryConfiguration.getAlarmMaxCount());
             if (count >= retryConfiguration.getAlarmMaxCount()) {

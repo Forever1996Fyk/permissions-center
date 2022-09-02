@@ -1,29 +1,17 @@
 package com.ah.cloud.permissions.biz.application.manager;
 
 import com.ah.cloud.permissions.biz.application.helper.LocalUserHelper;
-import com.ah.cloud.permissions.biz.application.manager.login.LoginManager;
 import com.ah.cloud.permissions.biz.application.provider.access.AccessProvider;
 import com.ah.cloud.permissions.biz.application.strategy.cache.impl.RedisCacheHandleStrategy;
-import com.ah.cloud.permissions.biz.domain.api.dto.AuthorityApiDTO;
-import com.ah.cloud.permissions.biz.domain.token.AccessToken;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
 import com.ah.cloud.permissions.biz.domain.user.UserAuthorityDTO;
 import com.ah.cloud.permissions.biz.infrastructure.config.ApiProperties;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
-import com.ah.cloud.permissions.biz.infrastructure.exception.ApiAuthorityErrorException;
-import com.ah.cloud.permissions.biz.infrastructure.security.loader.ResourceLoader;
-import com.ah.cloud.permissions.biz.infrastructure.security.token.AppAuthenticationToken;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
-import com.ah.cloud.permissions.enums.ApiStatusEnum;
-import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.log.LogMessage;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -31,10 +19,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * @program: permissions-center
@@ -101,7 +86,7 @@ public class AccessManager implements InitializingBean {
      * @param uri
      * @return
      */
-    private boolean checkUriIsPermit(String uri) {
+    public boolean checkUriIsPermit(String uri) {
         return apiProperties.getPermitAll().stream()
                 .anyMatch(item -> PATH_MATCHER.match(item, uri));
     }
@@ -160,6 +145,6 @@ public class AccessManager implements InitializingBean {
         if (CollectionUtils.isEmpty(accessProviderList)) {
             throw new RuntimeException("加载AccessProvider失败, 不存在登录管理器");
         }
-        log.info("初始化AccessProvider集合数据:{}", JsonUtils.toJSONString(accessProviderList));
+        log.info("初始化AccessProvider集合数据:{}", JsonUtils.toJsonString(accessProviderList));
     }
 }

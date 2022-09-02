@@ -28,7 +28,7 @@ public class TaskEventListener extends AbstractFlowableEngineEventListener {
 
     @Override
     protected void taskCompleted(FlowableEngineEntityEvent event) {
-        log.info("TaskEventListener[taskCompleted] task completed run event start, event is {}", JsonUtils.toJSONString(event));
+        log.info("TaskEventListener[taskCompleted] task completed run event start, event is {}", JsonUtils.toJsonString(event));
         workflowTaskFormManager.addWorkflowTaskForm((TaskEntity) event.getEntity());
 
         // 更新流程

@@ -47,7 +47,7 @@ public class GroupChatNodeListenerConsumer extends AbstractBaseRedisConsumer<Mes
                 .build();
         GroupSession groupSession = groupSessionService.get(groupSessionKey);
         if (Objects.isNull(groupSession)) {
-            log.error("GroupChatNodeListenerConsumer[doHandleMessage] group chat send msg failed, message is {}, reason is groupSession is empty", JsonUtils.toJSONString(message));
+            log.error("GroupChatNodeListenerConsumer[doHandleMessage] group chat send msg failed, message is {}, reason is groupSession is empty", JsonUtils.toJsonString(message));
             return;
         }
     }

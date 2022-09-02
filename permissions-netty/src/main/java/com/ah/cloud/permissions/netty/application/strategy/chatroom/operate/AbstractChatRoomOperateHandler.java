@@ -36,7 +36,7 @@ public abstract class AbstractChatRoomOperateHandler implements ChatRoomOperateH
             log.error("{}[handle] current chatroom not existed, roomId is {}", getLogMark(), roomId);
             throw new BizException(ChatRoomErrorCodeEnum.OPERATE_FAILED_CHATROOM_NOT_EXISTED, String.valueOf(roomId));
         }
-        log.info("{}[handle] current chatroom start handle operate, params is {}", getLogMark(), JsonUtils.toJSONString(chatRoom));
+        log.info("{}[handle] current chatroom start handle operate, params is {}", getLogMark(), JsonUtils.toJsonString(chatRoom));
         doHandle(chatRoom);
     }
 

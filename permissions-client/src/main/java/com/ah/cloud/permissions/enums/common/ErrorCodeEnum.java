@@ -24,7 +24,6 @@ public enum ErrorCodeEnum implements ErrorCode {
      */
     PARAM_MISS(100_1_001,"缺少必要参数[%s]"),
     PARAM_ILLEGAL(100_1_002,"参数非法"),
-    LOGIN_INVALID(100_1_003, "登录失效，请重新登录"),
     PARAM_ILLEGAL_FIELD(100_1_004,"[%s]参数非法"),
 
     /**
@@ -42,6 +41,9 @@ public enum ErrorCodeEnum implements ErrorCode {
     TOKEN_EXCEPTION(100_3_002, "Token验证异常"),
     VERSION_ERROR(100_3_003, "数据版本异常，请重试"),
     SELECTOR_NOT_EXISTED(100_3_004, "[%s]选择处理器不存在"),
+    LOGIN_INVALID(100_3_005, "登录失效，请重新登录"),
+    LOGOUT_SUCCESS(100_3_006, "退出登录成功"),
+    VISITOR_MODE_CANNOT_ACCESS_RESOURCE(100_3_007, "游客模式无法访问资源"),
 
     /**
      * 授权相关响应码

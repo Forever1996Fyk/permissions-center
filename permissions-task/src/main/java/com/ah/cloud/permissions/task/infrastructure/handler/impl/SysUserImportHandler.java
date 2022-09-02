@@ -75,7 +75,7 @@ public class SysUserImportHandler extends AbstractImportHandler<SysUserImportDTO
         if (CollectionUtils.isNotEmpty(sysUserImportDTOList)) {
             doHandle(sysUserImportDTOList);
         }
-        return ImmutableTriple.of(JsonUtils.toJSONString(importBo.getErrorMsgMap()), importBo.getErrorCount(), importBo.getProcessStatus());
+        return ImmutableTriple.of(JsonUtils.toJsonString(importBo.getErrorMsgMap()), importBo.getErrorCount(), importBo.getProcessStatus());
     }
 
     private void doHandle(List<SysUserImportDTO> dataList) {

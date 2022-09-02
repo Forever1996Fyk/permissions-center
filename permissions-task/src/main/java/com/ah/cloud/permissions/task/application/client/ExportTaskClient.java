@@ -10,7 +10,6 @@ import com.ah.cloud.permissions.task.domain.enums.ImportExportBizTypeEnum;
 import com.ah.cloud.permissions.task.domain.enums.ImportExportTaskStatusEnum;
 import com.ah.cloud.permissions.task.infrastructure.constant.ImportExportTaskConstants;
 import com.ah.cloud.permissions.task.infrastructure.exception.ImportExportException;
-import com.ah.cloud.permissions.task.infrastructure.handler.AbstractExportHandler;
 import com.ah.cloud.permissions.task.infrastructure.handler.ExportHandler;
 import com.ah.cloud.permissions.task.infrastructure.handler.selector.ExportHandlerSelector;
 import com.ah.cloud.permissions.task.infrastructure.repository.bean.SysImportExportTask;
@@ -77,7 +76,7 @@ public class ExportTaskClient {
             }
         } catch (Exception e) {
             errorMsg = Throwables.getStackTraceAsString(e);
-            log.error("ExportTaskClient[exportTask] export task failed, reason is {}, task is {}", errorMsg, JsonUtils.toJSONString(task));
+            log.error("ExportTaskClient[exportTask] export task failed, reason is {}, task is {}", errorMsg, JsonUtils.toJsonString(task));
             statusEnum = ImportExportTaskStatusEnum.FAILED;
         }
         updateTaskStatusToFinished(filePair, statusEnum, errorMsg, task);
@@ -140,7 +139,7 @@ public class ExportTaskClient {
 
     public Long exportWithFile(List<SysUserImportErrorExportDTO> errorExportDTOList) {
         SysImportExportTask exportTask = new SysImportExportTask();
-        exportTask.setParam(JsonUtils.toJSONString(errorExportDTOList));
+        exportTask.setParam(JsonUtils.toJsonString(errorExportDTOList));
         exportTask.setTaskNo(ImportExportBizTypeEnum.COMM_IMPORT_ERROR_EXPORT.getDesc());
         try {
             ExportHandler exportHandler = selector.select(ImportExportBizTypeEnum.COMM_IMPORT_ERROR_EXPORT);

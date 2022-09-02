@@ -43,7 +43,7 @@ public class ComplexMessageBody<T> implements Transportable {
 
     private SendMessageBody.SendContent buildSendContent(MessageBody<T> body) {
         return SendMessageBody.SendContent.newBuilder()
-                .setBody(JsonUtils.toJSONString(body.getData()))
+                .setBody(JsonUtils.toJsonString(body.getData()))
                 .setFormat(NullUtils.of(body.getFormatEnum().getType()))
                 .setMsgId(NullUtils.of(body.getMsgId()))
                 .setMsgType(NullUtils.of(body.getMsgTypeEnum().getType()))

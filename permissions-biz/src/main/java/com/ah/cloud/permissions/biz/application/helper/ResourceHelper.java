@@ -30,7 +30,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.Objects;
 
@@ -115,7 +114,7 @@ public class ResourceHelper {
         try {
             resourceMetaData.setFileSize((long) dto.getInputStream().available());
         } catch (IOException e) {
-            log.error("ResourceHelper[convertToMetaEntity] file size error, dto:{}, reason:{}", JsonUtils.toJSONString(dto), Throwables.getStackTraceAsString(e));
+            log.error("ResourceHelper[convertToMetaEntity] file size error, dto:{}, reason:{}", JsonUtils.toJsonString(dto), Throwables.getStackTraceAsString(e));
             throw new BizException(FileErrorCodeEnum.FILE_INPUT_STREAM_ERROR);
         }
         resourceMetaData.setResId(resourceFile.getResId());

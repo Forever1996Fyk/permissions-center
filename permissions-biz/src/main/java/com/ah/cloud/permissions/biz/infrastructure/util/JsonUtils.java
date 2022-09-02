@@ -30,7 +30,7 @@ public class JsonUtils {
      * @param <T>
      * @return
      */
-    public static <T> String toJSONString(T t) {
+    public static <T> String toJsonString(T t) {
         if (Objects.isNull(t)) {
             return null;
         }
@@ -150,6 +150,20 @@ public class JsonUtils {
             log.error("jackson bytes to object  error, bytes:{}, className:{}, exception:{}", bytes, clazz.getName(), Throwables.getStackTraceAsString(e));
             return null;
         }
+    }
+
+    /**
+     * map转为bean
+     * @param map
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public static <T> T mapToBean(Map<String, Object> map, Class<T> clazz) {
+        if (map == null || map.size() <= 0) {
+            return null;
+        }
+        return OBJECT_MAPPER.convertValue(map, clazz);
     }
 
     /**

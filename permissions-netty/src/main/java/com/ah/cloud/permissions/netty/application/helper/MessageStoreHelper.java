@@ -26,7 +26,7 @@ public class MessageStoreHelper {
 
     public <T> MessageRecord convert(MessageBody<T> body) {
         MessageRecord messageRecord = new MessageRecord();
-        messageRecord.setContent(JsonUtils.toJSONString(body.getData()));
+        messageRecord.setContent(JsonUtils.toJsonString(body.getData()));
         messageRecord.setFromId(body.getFromId());
         messageRecord.setToId(body.getToId());
         messageRecord.setFormat(body.getFormatEnum().getType());
@@ -40,7 +40,7 @@ public class MessageStoreHelper {
     public <T> MessageOffline convertToOffline(MessageBody<T> body) {
         MessageOffline messageOffline = new MessageOffline();
         messageOffline.setMsgId(body.getMsgId());
-        messageOffline.setContent(JsonUtils.toJSONString(body.getData()));
+        messageOffline.setContent(JsonUtils.toJsonString(body.getData()));
         messageOffline.setMsgType(body.getMsgTypeEnum().getType());
         messageOffline.setToId(body.getToId());
         messageOffline.setMsgTime(new Date());

@@ -20,7 +20,6 @@ public class AppConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 //可跨域的域名，可以为 *
                 .allowedOrigins("*")
-                .allowCredentials(true)
                 //允许跨域的方法，可以单独配置
                 .allowedMethods("*")
                 //允许跨域的请求头，可以单独配置

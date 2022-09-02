@@ -132,7 +132,7 @@ public class WorkflowBusinessManager {
         }
         // 保存业务流程
         workflowBusiness.setProcessInstanceId(processInstance.getProcessInstanceId());
-        workflowBusiness.setBusinessParamJson(JsonUtils.toJSONString(BusinessVariablesManager.buildVariables(currentActiveTaskNode, form.getVariables())));
+        workflowBusiness.setBusinessParamJson(JsonUtils.toJsonString(BusinessVariablesManager.buildVariables(currentActiveTaskNode, form.getVariables())));
         boolean saveResult = workflowBusinessExtService.save(workflowBusiness);
         if (!saveResult) {
             throw new BizException(WorkflowErrorCodeEnum.WORKFLOW_BUSINESS_BUILD_FAILED);
@@ -155,7 +155,7 @@ public class WorkflowBusinessManager {
                         .eq(WorkflowBusiness::getDeleted, DeletedEnum.NO.value)
         );
         if (Objects.isNull(workflowBusiness)) {
-            log.error("WorkflowBusinessManager[updateWorkflowProcess] update workflow process failed, reason is WorkflowBusiness not existed, params is {}", JsonUtils.toJSONString(processId));
+            log.error("WorkflowBusinessManager[updateWorkflowProcess] update workflow process failed, reason is WorkflowBusiness not existed, params is {}", JsonUtils.toJsonString(processId));
             throw new BizException(WorkflowErrorCodeEnum.WORKFLOW_BUSINESS_NOT_EXISTED);
         }
         WorkflowBusiness updateWorkflowBusiness = new WorkflowBusiness();

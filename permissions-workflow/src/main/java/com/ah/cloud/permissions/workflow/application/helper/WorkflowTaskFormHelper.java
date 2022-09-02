@@ -7,7 +7,6 @@ import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.workflow.infrastructure.constant.WorkflowConstants;
 import org.flowable.engine.impl.persistence.entity.ExecutionEntity;
-import org.flowable.task.api.Task;
 import org.flowable.task.service.impl.persistence.entity.TaskEntity;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +35,7 @@ public class WorkflowTaskFormHelper {
         workflowBusinessTaskForm.setCode(formModel.getCode());
         workflowBusinessTaskForm.setContent(formModel.getContent());
         workflowBusinessTaskForm.setConfig(formModel.getConfig());
-        workflowBusinessTaskForm.setVariables(JsonUtils.toJSONString(taskEntity.getVariables()));
+        workflowBusinessTaskForm.setVariables(JsonUtils.toJsonString(taskEntity.getVariables()));
         workflowBusinessTaskForm.setCreator(SecurityUtils.getUserNameBySession());
         workflowBusinessTaskForm.setModifier(SecurityUtils.getUserNameBySession());
         return workflowBusinessTaskForm;
@@ -58,7 +57,7 @@ public class WorkflowTaskFormHelper {
         workflowBusinessTaskForm.setContent(formModel.getContent());
         workflowBusinessTaskForm.setConfig(formModel.getConfig());
         workflowBusinessTaskForm.setTaskKey(WorkflowConstants.DEFAULT_FORM_TASK_KEY);
-        workflowBusinessTaskForm.setVariables(JsonUtils.toJSONString(entity.getVariables()));
+        workflowBusinessTaskForm.setVariables(JsonUtils.toJsonString(entity.getVariables()));
         workflowBusinessTaskForm.setCreator(SecurityUtils.getUserNameBySession());
         workflowBusinessTaskForm.setModifier(SecurityUtils.getUserNameBySession());
         return workflowBusinessTaskForm;

@@ -59,7 +59,7 @@ public class DynamicThreadPoolRetryExecutor implements RetryExecutor {
                     retryCount = timeoutCount.incrementAndGet();
                 }
                 log.info("DynamicThreadPoolRetryExecutor[doRetry] retry slow, params is {}, ediType is {}, cost is {}, retryCount is {}"
-                        , JsonUtils.toJSONString(retryBizRecord)
+                        , JsonUtils.toJsonString(retryBizRecord)
                         , ediTypeEnum
                         , stopWatch.getTotalTimeMillis()
                         , retryCount);

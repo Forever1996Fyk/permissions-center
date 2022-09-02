@@ -71,7 +71,7 @@ public class MessageBody<T> implements Transportable {
     @Override
     public byte[] getBody() {
         SendMessageBody.SendContent sendContent = SendMessageBody.SendContent.newBuilder()
-                .setBody(JsonUtils.toJSONString(getData()))
+                .setBody(JsonUtils.toJsonString(getData()))
                 .setFormat(NullUtils.of(getFormatEnum().getType()))
                 .setMsgId(NullUtils.of(getMsgId()))
                 .setMsgType(NullUtils.of(getMsgTypeEnum().getType()))

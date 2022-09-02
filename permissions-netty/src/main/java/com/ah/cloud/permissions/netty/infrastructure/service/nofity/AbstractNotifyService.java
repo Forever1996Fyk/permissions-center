@@ -28,10 +28,10 @@ public abstract class AbstractNotifyService<T, N extends BaseNotify> implements 
     @Override
     public void notifyMessage(BaseNotify baseNotify) {
         try {
-            log.info("{}[notify] start handle notify, params is {}", getLogMark(), JsonUtils.toJSONString(baseNotify));
+            log.info("{}[notify] start handle notify, params is {}", getLogMark(), JsonUtils.toJsonString(baseNotify));
             doHandle(baseNotify);
         } catch (Exception e) {
-            log.error("{}[notify] handle notify failed, params is {}, reason is {}", getLogMark(), JsonUtils.toJSONString(baseNotify), Throwables.getStackTraceAsString(e));
+            log.error("{}[notify] handle notify failed, params is {}, reason is {}", getLogMark(), JsonUtils.toJsonString(baseNotify), Throwables.getStackTraceAsString(e));
         }
     }
 

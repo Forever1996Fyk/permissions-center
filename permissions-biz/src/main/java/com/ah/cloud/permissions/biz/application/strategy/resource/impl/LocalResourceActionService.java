@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -64,7 +63,7 @@ public class LocalResourceActionService extends AbstractResourceActionService {
                             .build()
             );
         } catch (IOException e) {
-            log.error("LocalResourceActionService[upload] local file upload error, params is {}, reason is {}", JsonUtils.toJSONString(dto), Throwables.getStackTraceAsString(e));
+            log.error("LocalResourceActionService[upload] local file upload error, params is {}, reason is {}", JsonUtils.toJsonString(dto), Throwables.getStackTraceAsString(e));
             resultDTO.setSuccess(false);
             resultDTO.setMessage(Throwables.getStackTraceAsString(e));
         }
@@ -102,7 +101,7 @@ public class LocalResourceActionService extends AbstractResourceActionService {
             FileInputStream inputStream = new FileInputStream(file);
             IOUtils.copy(inputStream, dto.getOutputStream());
         } catch (IOException e) {
-            log.error("LocalResourceActionService[download] resource download error, params is {}, reason is {}", JsonUtils.toJSONString(dto), Throwables.getStackTraceAsString(e));
+            log.error("LocalResourceActionService[download] resource download error, params is {}, reason is {}", JsonUtils.toJsonString(dto), Throwables.getStackTraceAsString(e));
             throw new BizException(FileErrorCodeEnum.FILE_RESOURCE_DOWNLOAD_ERROR, String.valueOf(dto.getResId()));
         }
     }

@@ -34,7 +34,7 @@ public abstract class AbstractUmengMsgCastBuilder implements UmengMsgCastBuilder
         try {
             return doBuilder(msgPush);
         } catch (Exception e) {
-            log.error("{} build msg cast error with exception, params is {}, reason is {}", getLogMark(), JsonUtils.toJSONString(msgPush), Throwables.getStackTraceAsString(e));
+            log.error("{} build msg cast error with exception, params is {}, reason is {}", getLogMark(), JsonUtils.toJsonString(msgPush), Throwables.getStackTraceAsString(e));
             throw new BizException(UmengErrorCodeEnum.MSG_APP_PUSH_BUILDER_CAST_FAILED);
         }
     }

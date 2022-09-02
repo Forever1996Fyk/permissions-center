@@ -28,9 +28,9 @@ public abstract class AbstractAlarmService implements AlarmService {
         String content = checkParamAndReturnContent(alarmParam);
         try {
             HttpClientResult httpClientResult = HttpClientUtils.doPost(alarmParam.getWebHook(), alarmParam.getExtraParams(), content);
-            System.out.println(JsonUtils.toJSONString(httpClientResult));
+            System.out.println(JsonUtils.toJsonString(httpClientResult));
         } catch (Exception e) {
-            log.error("{}[sendNotice] send failed http client error, params is {}, reason is {}", getLogMark(), JsonUtils.toJSONString(alarmParam), Throwables.getStackTraceAsString(e));
+            log.error("{}[sendNotice] send failed http client error, params is {}, reason is {}", getLogMark(), JsonUtils.toJsonString(alarmParam), Throwables.getStackTraceAsString(e));
             throw new BizException(ErrorCodeEnum.ALARM_PUSH_FAILED);
         }
     }
@@ -63,7 +63,7 @@ public abstract class AbstractAlarmService implements AlarmService {
         if (Objects.isNull(alarmParam.getContent())) {
             throw new BizException(ErrorCodeEnum.PARAM_MISS, "content");
         }
-        String content = JsonUtils.toJSONString(alarmParam.getContent());
+        String content = JsonUtils.toJsonString(alarmParam.getContent());
         if (content.length() > maxSize()) {
             throw new BizException(ErrorCodeEnum.ALARM_PUSH_FAILED_MSG_MAX_SIZE, String.valueOf(maxSize()));
         }

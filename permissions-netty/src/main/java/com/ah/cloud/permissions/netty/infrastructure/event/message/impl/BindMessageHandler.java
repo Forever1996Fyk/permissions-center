@@ -65,7 +65,7 @@ public class BindMessageHandler extends AbstractMessageHandler<BindMessage> {
         LocalUser localUser = tokenManager.getLocalUserByToken(message.getToken());
         if (Objects.isNull(localUser)) {
             // 用户未登录
-            log.warn("BindMessageHandler[doHandle] user bind failed token is wrong, body is {}", JsonUtils.toJSONString(body));
+            log.warn("BindMessageHandler[doHandle] user bind failed token is wrong, body is {}", JsonUtils.toJsonString(body));
             throw new IMBizException(IMErrorCodeEnum.BIND_SERVER_FAILED_TOKEN_ERROR);
         }
         Long userId = localUser.getUserInfo().getUserId();

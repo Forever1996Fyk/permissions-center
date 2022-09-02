@@ -72,7 +72,7 @@ public class RedisWebSecurityTokenServiceImpl implements WebSecurityTokenService
 
     @Override
     public AccessToken createToken(LocalUser localUser) {
-        log.info("RedisWebSecurityTokenServiceImpl[createToken] createToken localUser={}", JsonUtils.toJSONString(localUser));
+        log.info("RedisWebSecurityTokenServiceImpl[createToken] createToken localUser={}", JsonUtils.toJsonString(localUser));
         String accessToken = UUID.randomUUID().toString();
         /*
         设置token缓存

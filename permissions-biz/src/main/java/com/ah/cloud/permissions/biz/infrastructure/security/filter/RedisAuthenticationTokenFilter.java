@@ -3,18 +3,14 @@ package com.ah.cloud.permissions.biz.infrastructure.security.filter;
 import com.ah.cloud.permissions.biz.application.helper.AuthenticationHelper;
 import com.ah.cloud.permissions.biz.application.manager.AccessManager;
 import com.ah.cloud.permissions.biz.application.manager.TokenManager;
-import com.ah.cloud.permissions.biz.application.manager.UserAuthManager;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
 import com.ah.cloud.permissions.biz.infrastructure.exception.SecurityErrorException;
-import com.ah.cloud.permissions.biz.infrastructure.exception.UserAccountErrorException;
 import com.ah.cloud.permissions.biz.infrastructure.security.token.InMemoryAuthenticationToken;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -46,7 +42,7 @@ public class RedisAuthenticationTokenFilter extends OncePerRequestFilter {
     @Resource
     private AuthenticationHelper authenticationHelper;
     /**
-     * 验证码校验失败处理器
+     * 校验失败处理器
      */
     @Resource
     private AuthenticationFailureHandler authenticationFailureHandler;
@@ -59,7 +55,7 @@ public class RedisAuthenticationTokenFilter extends OncePerRequestFilter {
         try {
             String token = tokenManager.getToken(request);
             LocalUser localUser = tokenManager.getLocalUserByToken(token);
-            log.info("RedisAuthenticationTokenFilter[doFilterInternal] 根据token获取当前登录用户信息 localUser:{}", JsonUtils.toJSONString(localUser));
+            log.info("RedisAuthenticationTokenFilter[doFilterInternal] 根据token获取当前登录用户信息 localUser:{}", JsonUtils.toJsonString(localUser));
             if (ObjectUtils.isNotEmpty(localUser)) {
                 // 重新刷新token过期时间
                 tokenManager.refreshToken(token);

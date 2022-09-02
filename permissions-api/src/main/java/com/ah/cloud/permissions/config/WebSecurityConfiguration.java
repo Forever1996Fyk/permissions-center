@@ -1,12 +1,14 @@
-package com.ah.cloud.permissions.biz.infrastructure.config;
+package com.ah.cloud.permissions.config;
 
 import com.ah.cloud.permissions.biz.infrastructure.security.filter.RedisAuthenticationTokenFilter;
+import com.ah.cloud.permissions.biz.infrastructure.security.filter.SysModeFilter;
 import com.ah.cloud.permissions.biz.infrastructure.security.handler.AccessDeniedHandlerImpl;
 import com.ah.cloud.permissions.biz.infrastructure.security.handler.AuthenticationEntryPointImpl;
 import com.ah.cloud.permissions.biz.infrastructure.security.handler.LogoutSuccessHandlerImpl;
 import com.ah.cloud.permissions.biz.infrastructure.security.provider.ValidateCodeAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -71,6 +73,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Resource
     private RedisAuthenticationTokenFilter authenticationTokenFilter;
 
+    /**
+     * 系统mode 验证过滤器
+     */
+    @Lazy
+    @Resource
+    private SysModeFilter sysModeFilter;
+
     @Override
     public void configure(WebSecurity web) throws Exception {
         super.configure(web);
@@ -100,6 +109,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         // 添加Redis filter
         http.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(sysModeFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     /**

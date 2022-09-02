@@ -31,7 +31,7 @@ public class SessionHelper {
                 .msgId(body.getMsgId())
                 .msgType(body.getMsgTypeEnum().getType())
                 .timestamp(body.getTimestamp())
-                .content(JsonUtils.toJSONString(body.getData()))
+                .content(JsonUtils.toJsonString(body.getData()))
                 .fromId(body.getFromId())
                 .toId(body.getToId())
                 .build();

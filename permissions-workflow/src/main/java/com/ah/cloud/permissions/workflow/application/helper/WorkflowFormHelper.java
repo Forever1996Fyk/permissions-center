@@ -31,7 +31,7 @@ public class WorkflowFormHelper {
      */
     public WorkflowFormModel convert(AddForm form) {
         WorkflowFormModel workflowFormModel = Convert.INSTANCE.convert(form);
-        workflowFormModel.setContent(JsonUtils.toJSONString(form.getFields()));
+        workflowFormModel.setContent(JsonUtils.toJsonString(form.getFields()));
         return workflowFormModel;
     }
 

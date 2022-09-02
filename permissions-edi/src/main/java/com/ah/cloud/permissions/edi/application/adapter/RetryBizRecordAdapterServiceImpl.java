@@ -70,7 +70,7 @@ public class RetryBizRecordAdapterServiceImpl implements RetryBizRecordAdapterSe
 
     @Override
     public RetryBizRecordResultDTO addRetryRecord(AddRetryBizRecordDTO addDTO, EdiTypeEnum ediTypeEnum) {
-        log.info("RetryBizRecordAdapterServiceImpl[addRetryRecord] add retry recordId, params is {}, ediType is {}", JsonUtils.toJSONString(addDTO), ediTypeEnum);
+        log.info("RetryBizRecordAdapterServiceImpl[addRetryRecord] add retry recordId, params is {}, ediType is {}", JsonUtils.toJsonString(addDTO), ediTypeEnum);
         try {
             retryRecordChecker.check(addDTO);
             ImmutablePair<Long, String> pair = addAndGetRecord(addDTO, ediTypeEnum);
@@ -78,13 +78,13 @@ public class RetryBizRecordAdapterServiceImpl implements RetryBizRecordAdapterSe
         } catch (EdiException ediException) {
             log.error("RetryBizRecordAdapterServiceImpl[addRetryRecord] add retry recordId failed with ediException, reason is {}, params is {}, ediType is {}"
                     , Throwables.getStackTraceAsString(ediException)
-                    , JsonUtils.toJSONString(addDTO)
+                    , JsonUtils.toJsonString(addDTO)
                     , ediTypeEnum);
             throw ediException;
         } catch (Exception e) {
             log.error("RetryBizRecordAdapterServiceImpl[addRetryRecord] add retry recordId failed with exception, reason is {}, params is {}, ediType is {}"
                     , Throwables.getStackTraceAsString(e)
-                    , JsonUtils.toJSONString(addDTO)
+                    , JsonUtils.toJsonString(addDTO)
                     , ediTypeEnum);
             throw e;
         }

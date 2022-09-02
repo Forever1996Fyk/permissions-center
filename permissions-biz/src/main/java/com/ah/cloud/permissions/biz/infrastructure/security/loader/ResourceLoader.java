@@ -11,11 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -33,11 +35,13 @@ public class ResourceLoader implements InitializingBean {
     @Resource
     private RedisCacheHandleStrategy redisCacheHandleStrategy;
 
+    private static final AntPathMatcher PATH_MATCHER = new AntPathMatcher();
+
     @Override
     public void afterPropertiesSet() throws Exception {
         List<AuthorityApiDTO> allAuthorityApis = sysApiManager.getAllAuthorityApis();
         if (CollectionUtils.isEmpty(allAuthorityApis)) {
-            throw new RuntimeException("Project Run failed, cause api authority info list is empty");
+//            throw new RuntimeException("Project Run failed, cause api authority info list is empty");
         }
         // 重启时先清除缓存
         redisCacheHandleStrategy.removeCacheHashByKey(CacheConstants.AUTHORITY_API_PREFIX);
@@ -76,9 +80,21 @@ public class ResourceLoader implements InitializingBean {
      */
     public AuthorityApiDTO getCacheResourceByUri(String uri) {
         if (StringUtils.isBlank(uri)) {
+            log.error("ResourceLoader[getCacheResourceByUri] get apiCodeKey error, uri is empty");
             return null;
         }
-        return redisCacheHandleStrategy.getCacheHashByKey(CacheConstants.AUTHORITY_API_PREFIX, uri);
+        Map<String, AuthorityApiDTO> uriAndApiCodeMap = this.getUriAndApiCodeMap();
+        String apiCodeKey = uriAndApiCodeMap
+                .keySet()
+                .stream()
+                .filter(item -> PATH_MATCHER.match(item, uri))
+                .findAny()
+                .orElse(null);
+        if (StringUtils.isBlank(apiCodeKey)) {
+            log.error("ResourceLoader[getCacheResourceByUri] get apiCodeKey by uri result is empty, uri is {}, uriAndApiCodeMap is {}", uri, uriAndApiCodeMap);
+            return null;
+        }
+        return uriAndApiCodeMap.get(apiCodeKey);
     }
 
     /**

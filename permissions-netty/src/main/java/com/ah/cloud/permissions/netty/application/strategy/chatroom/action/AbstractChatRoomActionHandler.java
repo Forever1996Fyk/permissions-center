@@ -39,7 +39,7 @@ public abstract class AbstractChatRoomActionHandler implements ChatRoomActionHan
             log.error("{}[handle] current chatroom is disabled cannot send, roomId is {}, body is {}",
                     getLogMark(),
                     chatRoomSession.getRoomId(),
-                    JsonUtils.toJSONString(body));
+                    JsonUtils.toJsonString(body));
             throw new IMBizException(IMErrorCodeEnum.CHAT_ROOM_STATUE_DISABLED);
         }
 
@@ -47,23 +47,23 @@ public abstract class AbstractChatRoomActionHandler implements ChatRoomActionHan
             log.error("{}[handle] current chatroom is banned cannot send, roomId is {}, body is {}",
                     getLogMark(),
                     chatRoomSession.getRoomId(),
-                    JsonUtils.toJSONString(body));
+                    JsonUtils.toJsonString(body));
             throw new IMBizException(IMErrorCodeEnum.CHAT_ROOM_BANNED_CHAT);
         }
 
         try {
-            log.info("{}[handle] start chatroom message, params is {}", getLogMark(), JsonUtils.toJSONString(body));
+            log.info("{}[handle] start chatroom message, params is {}", getLogMark(), JsonUtils.toJsonString(body));
             doHandle(chatRoomSession, singleSession, body);
         } catch (IMBizException imBizException) {
             log.error("{}[handle] handle chatroom message error with IMBizException, params is {}, reason is {}",
                     getLogMark(),
-                    JsonUtils.toJSONString(body),
+                    JsonUtils.toJsonString(body),
                     Throwables.getStackTraceAsString(imBizException));
             throw imBizException;
         } catch (Throwable throwable) {
             log.error("{}[handle] handle chatroom message error with throwable, params is {}, reason is {}",
                     getLogMark(),
-                    JsonUtils.toJSONString(body),
+                    JsonUtils.toJsonString(body),
                     Throwables.getStackTraceAsString(throwable));
             throw throwable;
         }

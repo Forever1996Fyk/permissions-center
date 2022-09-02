@@ -21,12 +21,12 @@ public abstract class AbstractMessageHandler<T> implements MessageHandler {
 
     @Override
     public void handle(ChannelHandlerContext context, ReceiveMessageDTO dto) {
-        log.info("{}[handle] start handle message, params is {}", getLogMark(), JsonUtils.toJSONString(dto));
+        log.info("{}[handle] start handle message, params is {}", getLogMark(), JsonUtils.toJsonString(dto));
         try {
             MessageBody<T> body = convertToBody(dto);
             doHandle(context, body);
         } catch (Exception e) {
-            log.error("{}[handle] handle message failed params is {}, reason is {}", getLogMark(), JsonUtils.toJSONString(dto), Throwables.getStackTraceAsString(e));
+            log.error("{}[handle] handle message failed params is {}, reason is {}", getLogMark(), JsonUtils.toJsonString(dto), Throwables.getStackTraceAsString(e));
         }
     }
 

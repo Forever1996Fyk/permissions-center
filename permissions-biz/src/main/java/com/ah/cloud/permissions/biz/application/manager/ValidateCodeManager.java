@@ -1,6 +1,5 @@
 package com.ah.cloud.permissions.biz.application.manager;
 
-import com.ah.cloud.permissions.biz.application.manager.login.LoginManager;
 import com.ah.cloud.permissions.biz.application.provider.SendMode;
 import com.ah.cloud.permissions.biz.application.provider.ValidateCodeProvider;
 import com.ah.cloud.permissions.biz.domain.code.SendResult;
@@ -88,6 +87,6 @@ public class ValidateCodeManager implements InitializingBean {
         if (CollectionUtils.isEmpty(providers)) {
             throw new RuntimeException("加载ValidateCodeProvider失败, 不存在验证码处理管理器");
         }
-        log.info("初始化ValidateCodeProvider集合数据:{}", JsonUtils.toJSONString(providers));
+        log.info("初始化ValidateCodeProvider集合数据:{}", JsonUtils.toJsonString(providers));
     }
 }

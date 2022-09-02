@@ -137,7 +137,7 @@ public abstract class AbstractResourceActionService implements ResourceActionSer
                         .eq(ResourceMetaData::getDeleted, DeletedEnum.NO.value)
         );
         if (!Objects.isNull(existResourceMetaData)) {
-            log.info("{}[upload] file upload existed, uploadType is {},  params is {}", getLogMark(), positionTypeEnum, JsonUtils.toJSONString(dto));
+            log.info("{}[upload] file upload existed, uploadType is {},  params is {}", getLogMark(), positionTypeEnum, JsonUtils.toJsonString(dto));
             return resourceFileService.getOne(
                     new QueryWrapper<ResourceFile>().lambda()
                             .eq(ResourceFile::getResId, existResourceMetaData.getResId())
@@ -151,7 +151,7 @@ public abstract class AbstractResourceActionService implements ResourceActionSer
             log.error("{}[upload] file upload error, uploadType is {},  params is {}, reason is {}"
                     , getLogMark()
                     , positionTypeEnum
-                    , JsonUtils.toJSONString(dto)
+                    , JsonUtils.toJsonString(dto)
                     , Objects.isNull(resultDTO) ? "上传返回结果为空" : resultDTO.getMessage());
             throw new BizException(FileErrorCodeEnum.FILE_UPLOAD_ERROR, dto.getFileName());
         }

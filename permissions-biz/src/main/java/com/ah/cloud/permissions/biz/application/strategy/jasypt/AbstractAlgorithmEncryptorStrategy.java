@@ -27,7 +27,7 @@ public abstract class AbstractAlgorithmEncryptorStrategy implements AlgorithmEnc
             throw new BizException(JasyptErrorCodeEnum.JASYPT_ENCRYPT_IS_NULL);
         }
         EncryptResult encryptResult = doEncrypt(algorithmType.getEncrypt());
-        log.info("{}[encrypt] result is {}", getLogMark(), JsonUtils.toJSONString(encryptResult));
+        log.info("{}[encrypt] result is {}", getLogMark(), JsonUtils.toJsonString(encryptResult));
         return encryptResult;
     }
 
@@ -39,7 +39,7 @@ public abstract class AbstractAlgorithmEncryptorStrategy implements AlgorithmEnc
             throw new BizException(JasyptErrorCodeEnum.JASYPT_DECRYPT_IS_NULL);
         }
         DecryptResult decryptResult = doDecrypt(algorithmType.getDecrypt());
-        log.info("{}[decrypt] result is {}", getLogMark(), JsonUtils.toJSONString(decryptResult));
+        log.info("{}[decrypt] result is {}", getLogMark(), JsonUtils.toJsonString(decryptResult));
         return decryptResult;
     }
 

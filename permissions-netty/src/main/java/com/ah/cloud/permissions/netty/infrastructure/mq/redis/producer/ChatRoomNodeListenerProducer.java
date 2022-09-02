@@ -27,10 +27,10 @@ public class ChatRoomNodeListenerProducer extends AbstractBaseRedisProducer<Chat
         ProducerResult<Void> result = new ProducerResult<>();
         try {
             redisCacheHandleStrategy.publishMessage(rebuildChannel(message.getRoomId()), message);
-            log.info("{} message publish success, msg is [{}]", getChannel(), JsonUtils.toJSONString(message));
+            log.info("{} message publish success, msg is [{}]", getChannel(), JsonUtils.toJsonString(message));
             result.setSuccess(true);
         } catch (Throwable throwable) {
-            log.error("{} message publish failed, msg is [{}], reason is {}", getChannel(), JsonUtils.toJSONString(message), Throwables.getStackTraceAsString(throwable));
+            log.error("{} message publish failed, msg is [{}], reason is {}", getChannel(), JsonUtils.toJsonString(message), Throwables.getStackTraceAsString(throwable));
             result.setSuccess(false);
             result.setMsg(throwable.getMessage());
         }

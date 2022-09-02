@@ -68,7 +68,7 @@ public class RetryBizConfigAdapterServiceImpl implements RetryBizConfigAdapterSe
 
     @Override
     public void addBizRetryConfig(AddCfgBizRetryForm form) {
-        log.info("RetryBizConfigAdapterServiceImpl[addBizRetryConfig] params is {}", JsonUtils.toJSONString(form));
+        log.info("RetryBizConfigAdapterServiceImpl[addBizRetryConfig] params is {}", JsonUtils.toJsonString(form));
         boolean result;
         if (form.isTech()) {
             EdiCfgTechBizRetry ediCfgTechBizRetry = retryBizConfigHelper.convertToTech(form);
@@ -84,7 +84,7 @@ public class RetryBizConfigAdapterServiceImpl implements RetryBizConfigAdapterSe
 
     @Override
     public void updateBizRetryConfig(UpdateCfgBizRetryForm form) {
-        log.info("RetryBizConfigAdapterServiceImpl[updateBizRetryConfig] params is {}", JsonUtils.toJSONString(form));
+        log.info("RetryBizConfigAdapterServiceImpl[updateBizRetryConfig] params is {}", JsonUtils.toJsonString(form));
         // 清除缓存
         retryBizConfigLocalCache.invalidateAll();
         retryTechBizConfigLocalCache.invalidateAll();

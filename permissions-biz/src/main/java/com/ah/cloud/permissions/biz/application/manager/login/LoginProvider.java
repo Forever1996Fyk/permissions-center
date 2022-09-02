@@ -1,7 +1,6 @@
 package com.ah.cloud.permissions.biz.application.manager.login;
 
 import com.ah.cloud.permissions.biz.domain.login.LoginForm;
-import com.ah.cloud.permissions.biz.domain.token.AccessToken;
 import com.ah.cloud.permissions.biz.domain.token.Token;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +30,7 @@ public class LoginProvider implements InitializingBean {
         if (CollectionUtils.isEmpty(loginManagerList)) {
             throw new RuntimeException("加载LoginManager失败, 不存在登录管理器");
         }
-        log.info("初始化LoginManager集合数据:{}", JsonUtils.toJSONString(loginManagerList));
+        log.info("初始化LoginManager集合数据:{}", JsonUtils.toJsonString(loginManagerList));
     }
 
     /**

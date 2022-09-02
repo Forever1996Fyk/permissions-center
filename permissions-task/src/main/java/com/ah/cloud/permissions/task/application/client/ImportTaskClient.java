@@ -1,20 +1,17 @@
 package com.ah.cloud.permissions.task.application.client;
 
-import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.enums.task.ImportExportErrorCodeEnum;
 import com.ah.cloud.permissions.task.application.service.SysImportExportTaskService;
 import com.ah.cloud.permissions.task.domain.enums.ImportExportBizTypeEnum;
 import com.ah.cloud.permissions.task.domain.enums.ImportExportTaskStatusEnum;
 import com.ah.cloud.permissions.task.infrastructure.exception.ImportExportException;
-import com.ah.cloud.permissions.task.infrastructure.handler.AbstractImportHandler;
 import com.ah.cloud.permissions.task.infrastructure.handler.ImportHandler;
 import com.ah.cloud.permissions.task.infrastructure.handler.selector.ImportHandlerSelector;
 import com.ah.cloud.permissions.task.infrastructure.repository.bean.SysImportExportTask;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONUtil;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +42,7 @@ public class ImportTaskClient {
         log.info("ImportTaskClient[importWithTask] taskId={}, 开始执行", taskId);
         //【0.加载任务和校验任务状态】
         SysImportExportTask importTask = loadAndCheckTask(taskId);
-        log.info("ImportTaskClient[importWithTask] taskId={}, importTask={}, 开始执行", taskId, JsonUtils.toJSONString(importTask));
+        log.info("ImportTaskClient[importWithTask] taskId={}, importTask={}, 开始执行", taskId, JsonUtils.toJsonString(importTask));
         try {
              /*
             1 更新导出任务为导出中, 增加version确保内容没有被篡改, 通过状态位做乐观锁防止定时任务重复执行同样的任务
@@ -68,7 +65,7 @@ public class ImportTaskClient {
              */
             updateImportTaskStatusWithOpLock(importTask, ImportExportTaskStatusEnum.PROCESSING, triple.getRight());
         } catch (Exception exception) {
-            log.error("ImportTaskClient[importWithTask] 导入任务执行出错, task is {}, caused by {}", JsonUtils.toJSONString(importTask), Throwables.getStackTraceAsString(exception));
+            log.error("ImportTaskClient[importWithTask] 导入任务执行出错, task is {}, caused by {}", JsonUtils.toJsonString(importTask), Throwables.getStackTraceAsString(exception));
             updateImportTaskStatusWithOpLock(importTask, ImportExportTaskStatusEnum.PROCESSING, ImportExportTaskStatusEnum.FAILED);
         }
     }
@@ -102,11 +99,11 @@ public class ImportTaskClient {
         );
         if (!update2ProcessingResult) {
             log.warn("ImportTaskClient[importWithTask] update importTask {} status fail, from status is {}, to status is {}",
-                    JsonUtils.toJSONString(importTask), fromStatusEnum, toStatusEnum);
+                    JsonUtils.toJsonString(importTask), fromStatusEnum, toStatusEnum);
             throw new ImportExportException(ImportExportErrorCodeEnum.CURRENT_TASK_STATUS_ERROR);
         }
         log.info("ImportTaskClient[importWithTask] update importTask {} status success, from status is {}, to status is {}",
-                JsonUtils.toJSONString(importTask), fromStatusEnum, toStatusEnum);
+                JsonUtils.toJsonString(importTask), fromStatusEnum, toStatusEnum);
         //执行更新成功后更新版本号
         importTask.setVersion(update.getVersion());
     }

@@ -10,6 +10,11 @@ permission:
       port: 9090
     decrypt:
       decrypt-secret-key: permission
+
+elasticsearch:
+  hostname: localhost
+  port: 9200
+
 spring:
   redis:
     ################### redis 单机版 start ##########################
@@ -134,6 +139,7 @@ security:
       - /validateCode/sendCode
       - /validateCode/sendSmsCode
       - /validateCode/sendEmailCode
+      - /es/**
 
 mq:
   redis:

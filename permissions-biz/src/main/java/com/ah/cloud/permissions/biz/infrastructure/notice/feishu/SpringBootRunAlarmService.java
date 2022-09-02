@@ -1,6 +1,5 @@
 package com.ah.cloud.permissions.biz.infrastructure.notice.feishu;
 
-import cn.hutool.core.date.DateUtil;
 import com.ah.cloud.permissions.biz.domain.notice.alarm.AlarmParam;
 import com.ah.cloud.permissions.biz.domain.notice.alarm.feishu.GeneralFeishuBotAlarmMsg;
 import com.ah.cloud.permissions.biz.domain.notice.content.feishu.TextContent;
@@ -57,7 +56,7 @@ public class SpringBootRunAlarmService extends AbstractFeishuAlarmService {
         AlarmParam alarmParam = AlarmParam.builder().webHook(WEB_HOOK).content(alarmMsg).build();
         // 发送消息
         sendNotice(alarmParam);
-        log.info("项目启动提醒 {}", JsonUtils.toJSONString(alarmMsg));
+        log.info("项目启动提醒 {}", JsonUtils.toJsonString(alarmMsg));
 
     }
 

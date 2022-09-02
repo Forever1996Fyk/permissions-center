@@ -50,12 +50,12 @@ public abstract class AbstractValidateCodeProvider implements ValidateCodeProvid
         } catch (BizException e) {
             log.error("AbstractValidateCodeProvider[send] 验证码发送失败 BizException:{}, param:{}",
                     Throwables.getStackTraceAsString(e),
-                    JsonUtils.toJSONString(sendMode));
+                    JsonUtils.toJsonString(sendMode));
             throw e;
         } catch (Exception e) {
             log.error("AbstractValidateCodeProvider[send] 验证码发送失败 Exception:{}, param:{}",
                     Throwables.getStackTraceAsString(e),
-                    JsonUtils.toJSONString(sendMode));
+                    JsonUtils.toJsonString(sendMode));
             throw new BizException(ErrorCodeEnum.UNKNOWN_ERROR);
         }
         return sendResult;
@@ -82,12 +82,12 @@ public abstract class AbstractValidateCodeProvider implements ValidateCodeProvid
         } catch (BizException e) {
             log.error("AbstractValidateCodeProvider[validate] 验证码发送失败 BizException:{}, param:{}",
                     Throwables.getStackTraceAsString(e),
-                    JsonUtils.toJSONString(sendMode));
+                    JsonUtils.toJsonString(sendMode));
             throw e;
         } catch (Exception e) {
             log.error("AbstractValidateCodeProvider[validate] 验证码发送失败 Exception:{}, param:{}",
                     Throwables.getStackTraceAsString(e),
-                    JsonUtils.toJSONString(sendMode));
+                    JsonUtils.toJsonString(sendMode));
             throw new BizException(ErrorCodeEnum.UNKNOWN_ERROR);
         }
         return validateResult;

@@ -71,7 +71,7 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
 
         ModelMetaInfoDTO metaInfoDTO = ModelMetaInfoDTO.builder().build();
         metaInfoDTO.setModelDesc(dto.getModelDesc());
-        model.setMetaInfo(JsonUtils.toJSONString(metaInfoDTO));
+        model.setMetaInfo(JsonUtils.toJsonString(metaInfoDTO));
         // 保存模型
         repositoryService.saveModel(model);
         return model.getId();
@@ -95,7 +95,7 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
         ModelMetaInfoDTO metaInfoDTO = ModelMetaInfoDTO.builder().build();
         metaInfoDTO.setModelDesc(dto.getModelDesc());
         metaInfoDTO.setVersion(model.getVersion() + 1);
-        model.setMetaInfo(JsonUtils.toJSONString(metaInfoDTO));
+        model.setMetaInfo(JsonUtils.toJsonString(metaInfoDTO));
         // 更新模型 如果id存在则更新，否则新增
         repositoryService.saveModel(model);
     }
@@ -172,7 +172,7 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
 
         byte[] modelEditorSource = repositoryService.getModelEditorSource(modelId);
         if (modelEditorSource == null || modelEditorSource.length == 0) {
-            log.error("ProcessModelManager[deployModel] deploy model failed, reason is modelEditorSource is empty, params is {}", JsonUtils.toJSONString(dto));
+            log.error("ProcessModelManager[deployModel] deploy model failed, reason is modelEditorSource is empty, params is {}", JsonUtils.toJsonString(dto));
             throw new BizException(WorkflowErrorCodeEnum.WORKFLOW_PROCESS_MODEL_RELATE_RESOURCE_NOT_EXISTED, modelId);
         }
         ByteArrayInputStream inputStream = new ByteArrayInputStream(modelEditorSource);

@@ -51,7 +51,7 @@ public class ChatRoomNodeListenerConsumer extends AbstractBaseRedisConsumer<Chat
                 .build();
         ChatRoomSession chatRoomSession = groupSessionService.get(groupSessionKey);
         if (Objects.isNull(chatRoomSession)) {
-            log.warn("ChatRoomNodeListenerConsumer[doHandleMessage] chatroom send msg failed, message is {}, reason is chatRoomSession is empty", JsonUtils.toJSONString(message));
+            log.warn("ChatRoomNodeListenerConsumer[doHandleMessage] chatroom send msg failed, message is {}, reason is chatRoomSession is empty", JsonUtils.toJsonString(message));
             return;
         }
         ChatRoomMessage chatRoomMessage = ChatRoomMessage.builder()

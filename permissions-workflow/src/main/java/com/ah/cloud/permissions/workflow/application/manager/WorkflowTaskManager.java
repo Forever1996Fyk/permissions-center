@@ -134,7 +134,7 @@ public class WorkflowTaskManager {
     public void completeTask(CompleteTaskForm form) {
         Task task = processTaskService.getOneByTaskId(form.getTaskId());
         if (Objects.isNull(task)) {
-            log.error("ProcessTaskManager[completeTask] handle task failed, reason task not existed, params is {}", JsonUtils.toJSONString(form));
+            log.error("ProcessTaskManager[completeTask] handle task failed, reason task not existed, params is {}", JsonUtils.toJsonString(form));
             throw new BizException(WorkflowErrorCodeEnum.WORKFLOW_TASK_NOT_EXISTED);
         }
         // 完成任务

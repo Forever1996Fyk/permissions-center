@@ -6,7 +6,6 @@ import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,14 +20,14 @@ public abstract class AbstractMsgPushService implements MsgPushService {
 
     @Override
     public void sendAppPushMsg(MsgPush msgPush) {
-        log.info("{}[sendAppPushMsg] start handle push msg, params is {}", getLogMark(), JsonUtils.toJSONString(msgPush));
+        log.info("{}[sendAppPushMsg] start handle push msg, params is {}", getLogMark(), JsonUtils.toJsonString(msgPush));
         try {
             pushMsg(msgPush);
         } catch (BizException bizException) {
-            log.error("{}[sendAppPushMsg] push msg error with bizException, params is {}, reason is {}", getLogMark(), JsonUtils.toJSONString(msgPush), Throwables.getStackTraceAsString(bizException));
+            log.error("{}[sendAppPushMsg] push msg error with bizException, params is {}, reason is {}", getLogMark(), JsonUtils.toJsonString(msgPush), Throwables.getStackTraceAsString(bizException));
             throw bizException;
         } catch (Throwable throwable) {
-            log.error("{}[sendAppPushMsg] push msg error with throwable, params is {}, reason is {}", getLogMark(), JsonUtils.toJSONString(msgPush), Throwables.getStackTraceAsString(throwable));
+            log.error("{}[sendAppPushMsg] push msg error with throwable, params is {}, reason is {}", getLogMark(), JsonUtils.toJsonString(msgPush), Throwables.getStackTraceAsString(throwable));
             throw new BizException(ErrorCodeEnum.UNKNOWN_ERROR);
         }
     }

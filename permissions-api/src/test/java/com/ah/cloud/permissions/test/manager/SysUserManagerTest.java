@@ -1,6 +1,5 @@
 package com.ah.cloud.permissions.test.manager;
 
-import com.ah.cloud.permissions.biz.application.manager.SysMenuManager;
 import com.ah.cloud.permissions.biz.application.manager.SysUserManager;
 import com.ah.cloud.permissions.biz.domain.menu.vo.RouterVo;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
@@ -24,6 +23,6 @@ public class SysUserManagerTest extends BaseTest {
     public void testListRouterVoByUserId() {
         List<RouterVo> routerVoList =
                 sysUserManager.listRouterVoByUserId(100000L);
-        System.out.println("routerList : " + JsonUtils.toJSONString(routerVoList));
+        System.out.println("routerList : " + JsonUtils.toJsonString(routerVoList));
     }
 }

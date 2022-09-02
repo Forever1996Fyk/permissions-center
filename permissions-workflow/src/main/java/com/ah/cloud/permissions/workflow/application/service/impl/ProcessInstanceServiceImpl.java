@@ -75,7 +75,7 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
                 .processDefinitionId(processDefinition.getId())
                 .variables(startProcessDTO.getVariables())
                 .start();
-        log.info("ProcessInstanceManager[startProcess] start process get instance is {}", JsonUtils.toJSONString(processInstance));
+        log.info("ProcessInstanceManager[startProcess] start process get instance is {}", JsonUtils.toJsonString(processInstance));
         return processInstance;
     }
 

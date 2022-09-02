@@ -120,7 +120,7 @@ public class ResourceFileHelper {
         try {
             resourceMetaData.setFileSize((long) dto.getInputStream().available());
         } catch (IOException e) {
-            log.error("ResourceHelper[convertToMetaEntity] file size error, dto:{}, reason:{}", JsonUtils.toJSONString(dto), Throwables.getStackTraceAsString(e));
+            log.error("ResourceHelper[convertToMetaEntity] file size error, dto:{}, reason:{}", JsonUtils.toJsonString(dto), Throwables.getStackTraceAsString(e));
             throw new BizException(FileErrorCodeEnum.FILE_INPUT_STREAM_ERROR);
         }
         resourceMetaData.setResId(resourceFile.getResId());

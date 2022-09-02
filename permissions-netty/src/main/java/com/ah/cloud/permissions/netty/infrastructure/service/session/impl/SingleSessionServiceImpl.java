@@ -2,7 +2,6 @@ package com.ah.cloud.permissions.netty.infrastructure.service.session.impl;
 
 import com.ah.cloud.permissions.biz.application.helper.RedisKeyHelper;
 import com.ah.cloud.permissions.biz.application.strategy.cache.impl.RedisCacheHandleStrategy;
-import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.SpringUtils;
 import com.ah.cloud.permissions.netty.domain.session.DistributionSession;
@@ -42,7 +41,7 @@ public class SingleSessionServiceImpl implements SessionService<SingleSession, S
                 .port(session.getPort())
                 .host(session.getHost())
                 .build();
-        redisCacheHandleStrategy.setCacheObject(sessionKey, JsonUtils.toJSONString(distributionSession));
+        redisCacheHandleStrategy.setCacheObject(sessionKey, JsonUtils.toJsonString(distributionSession));
     }
 
     @Override

@@ -18,7 +18,6 @@ import org.quartz.JobExecutionException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -65,7 +64,7 @@ public abstract class AbstractQuartzJob implements Job {
         } catch (Exception e) {
             jobExecuteStatusEnum = JobExecuteStatusEnum.FAILED;
             errorMessage = Throwables.getStackTraceAsString(e);
-            log.error("{}[execute] execute quartz job error, params:{}, exception:{}", getLogMark(), JsonUtils.toJSONString(scheduleJobDTO), errorMessage);
+            log.error("{}[execute] execute quartz job error, params:{}, exception:{}", getLogMark(), JsonUtils.toJsonString(scheduleJobDTO), errorMessage);
         }
         quartzJobTaskManager.updateQuartzJobTask(quartzJobTask, jobExecuteStatusEnum, errorMessage);
     }

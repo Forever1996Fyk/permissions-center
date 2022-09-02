@@ -17,9 +17,7 @@ import org.springframework.util.AntPathMatcher;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * @program: permissions-center
@@ -98,8 +96,8 @@ public abstract class AbstractAccessProvider implements AccessProvider {
          */
         if (!checkUserHasAuthorities(authorities, authorityApiDTO.getApiCode())) {
             log.warn("AccessManager[access] currentUser has no permissions access localUser={}, authorityApiDTO={}",
-                    JsonUtils.toJSONString(localUser),
-                    JsonUtils.toJSONString(authorityApiDTO)
+                    JsonUtils.toJsonString(localUser),
+                    JsonUtils.toJsonString(authorityApiDTO)
             );
             return Boolean.FALSE;
         }

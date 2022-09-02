@@ -27,10 +27,10 @@ public abstract class AbstractBaseRedisProducer<T> implements NewProducer<T> {
         ProducerResult<Void> result = new ProducerResult<>();
         try {
             redisCacheHandleStrategy.publishMessage(getChannel(), t);
-            log.info("{} message publish success, msg is [{}]", getChannel(), JsonUtils.toJSONString(t));
+            log.info("{} message publish success, msg is [{}]", getChannel(), JsonUtils.toJsonString(t));
             result.setSuccess(true);
         } catch (Throwable throwable) {
-            log.error("{} message publish failed, msg is [{}], reason is {}", getChannel(), JsonUtils.toJSONString(t), Throwables.getStackTraceAsString(throwable));
+            log.error("{} message publish failed, msg is [{}], reason is {}", getChannel(), JsonUtils.toJsonString(t), Throwables.getStackTraceAsString(throwable));
             result.setSuccess(false);
             result.setMsg(throwable.getMessage());
         }

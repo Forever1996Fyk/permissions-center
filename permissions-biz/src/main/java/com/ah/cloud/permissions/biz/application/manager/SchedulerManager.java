@@ -138,7 +138,7 @@ public class SchedulerManager {
         try {
             scheduler.triggerJob(scheduleHelper.getJobKey(job.getJobId(), job.getJobGroup()), dataMap);
         } catch (SchedulerException e) {
-            log.error("SchedulerManager[triggerJob] trigger schedule job error, job:{},  reason is {}", JsonUtils.toJSONString(job), Throwables.getStackTraceAsString(e));
+            log.error("SchedulerManager[triggerJob] trigger schedule job error, job:{},  reason is {}", JsonUtils.toJsonString(job), Throwables.getStackTraceAsString(e));
             throw new BizException(ErrorCodeEnum.QUARTZ_JOB_TRIGGER_FAILED, String.valueOf(job.getJobId()));
         }
     }
@@ -151,7 +151,7 @@ public class SchedulerManager {
         try {
             scheduler.resumeJob(scheduleHelper.getJobKey(job.getJobId(), job.getJobGroup()));
         } catch (SchedulerException e) {
-            log.error("SchedulerManager[resumeJob] resume schedule job error, job:{},  reason is {}", JsonUtils.toJSONString(job), Throwables.getStackTraceAsString(e));
+            log.error("SchedulerManager[resumeJob] resume schedule job error, job:{},  reason is {}", JsonUtils.toJsonString(job), Throwables.getStackTraceAsString(e));
             throw new BizException(ErrorCodeEnum.QUARTZ_JOB_RESUME_FAILED, String.valueOf(job.getJobId()));
         }
     }
@@ -164,7 +164,7 @@ public class SchedulerManager {
         try {
             scheduler.pauseJob(scheduleHelper.getJobKey(job.getJobId(), job.getJobGroup()));
         } catch (SchedulerException e) {
-            log.error("SchedulerManager[pauseJob] pause schedule job error, job:{},  reason is {}", JsonUtils.toJSONString(job), Throwables.getStackTraceAsString(e));
+            log.error("SchedulerManager[pauseJob] pause schedule job error, job:{},  reason is {}", JsonUtils.toJsonString(job), Throwables.getStackTraceAsString(e));
             throw new BizException(ErrorCodeEnum.QUARTZ_JOB_PAUSE_FAILED, String.valueOf(job.getJobId()));
         }
     }

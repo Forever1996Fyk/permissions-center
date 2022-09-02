@@ -12,6 +12,7 @@
         <module>permissions-netty</module>
         <module>permissions-workflow</module>
         <module>permissions-edi</module>
+        <module>permissions-elasticsearch</module>
     </modules>
 
     <parent>
@@ -72,6 +73,9 @@
 
         <!-- 加密 -->
         <jasypt.version>3.0.4</jasypt.version>
+
+        <!-- Elasticsearch -->
+        <elasticsearch.version>7.9.3</elasticsearch.version>
     </properties>
 
     <dependencyManagement>
@@ -109,6 +113,11 @@
             <dependency>
                 <groupId>com.ah.cloud</groupId>
                 <artifactId>permissions-edi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ah.cloud</groupId>
+                <artifactId>permissions-elasticsearch</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -324,6 +333,18 @@
                 <groupId>com.github.ulisesbocchio</groupId>
                 <artifactId>jasypt-spring-boot-starter</artifactId>
                 <version>${jasypt.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.elasticsearch.client/elasticsearch-rest-high-level-client -->
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-high-level-client</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${elasticsearch.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

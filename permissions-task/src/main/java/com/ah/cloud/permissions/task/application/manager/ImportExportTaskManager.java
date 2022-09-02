@@ -109,7 +109,7 @@ public class ImportExportTaskManager {
      * @return
      */
     public Long addTask(ImportExportTaskAddDTO addDTO) {
-        log.info("ImportExportTaskManager[addTask], param is {}", JsonUtils.toJSONString(addDTO));
+        log.info("ImportExportTaskManager[addTask], param is {}", JsonUtils.toJsonString(addDTO));
         SysImportExportTask sysImportExportTask = importExportHelper.convertToEntity(addDTO);
         boolean result = sysImportExportTaskService.save(sysImportExportTask);
         if (!result) {

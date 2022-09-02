@@ -44,7 +44,7 @@ public class BusinessVariablesManager {
      */
     public static String addVariables(String businessParamJson, Task currentActiveTaskNode, Map<String, Object> variables) {
         if (StringUtils.isBlank(businessParamJson)) {
-            return JsonUtils.toJSONString(buildVariables(currentActiveTaskNode, variables));
+            return JsonUtils.toJsonString(buildVariables(currentActiveTaskNode, variables));
         }
         List<BusinessVariablesDTO> businessVariablesList = JsonUtils.jsonToList(businessParamJson, BusinessVariablesDTO.class);
         BusinessVariablesDTO businessVariablesDTO = BusinessVariablesDTO.builder()
@@ -54,6 +54,6 @@ public class BusinessVariablesManager {
                 .variables(variables)
                 .build();
         businessVariablesList.add(businessVariablesDTO);
-        return JsonUtils.toJSONString(businessVariablesDTO);
+        return JsonUtils.toJsonString(businessVariablesDTO);
     }
 }

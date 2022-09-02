@@ -26,11 +26,19 @@
         </dependency>
         <dependency>
             <groupId>com.ah.cloud</groupId>
+            <artifactId>permissions-elasticsearch</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ah.cloud</groupId>
             <artifactId>permissions-workflow</artifactId>
         </dependency>
         <dependency>
             <groupId>com.ah.cloud</groupId>
             <artifactId>permissions-edi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ah.cloud</groupId>
+            <artifactId>permissions-elasticsearch</artifactId>
         </dependency>
         <dependency>
             <groupId>com.ah.cloud</groupId>

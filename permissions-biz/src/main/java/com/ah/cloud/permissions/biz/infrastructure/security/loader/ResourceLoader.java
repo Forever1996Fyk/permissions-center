@@ -41,7 +41,7 @@ public class ResourceLoader implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         List<AuthorityApiDTO> allAuthorityApis = sysApiManager.getAllAuthorityApis();
         if (CollectionUtils.isEmpty(allAuthorityApis)) {
-            throw new RuntimeException("Project Run failed, cause api authority info list is empty");
+//            throw new RuntimeException("Project Run failed, cause api authority info list is empty");
         }
         // 重启时先清除缓存
         redisCacheHandleStrategy.removeCacheHashByKey(CacheConstants.AUTHORITY_API_PREFIX);

@@ -81,7 +81,7 @@ public class GroupSendClientService extends AbstractSendClientService<GroupSessi
                 if (Objects.isNull(distributionSession)) {
                     // 第三方推送
                     MsgAppPushUserDTO msgAppPushUserDTO = MsgAppPushUserDTO.builder()
-                            .content(JsonUtils.toJSONString(body.getData()))
+                            .content(JsonUtils.toJsonString(body.getData()))
                             .userIdList(Sets.newHashSet(singleSessionKey.getSessionId()))
                             .pushMsgModeEnum(PushMsgModeEnum.SINGLE_PUSH)
                             .msgSourceEnum(body.getMsgSourceEnum())

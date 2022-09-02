@@ -29,10 +29,10 @@ public abstract class AbstractTaskCandidateService implements TaskCandidateServi
 
     @Override
     public TaskCandidateDTO getTaskCandidate(GetTaskCandidateDTO getTaskCandidateDTO) {
-        log.info("{}[getTaskCandidate] get task candidate, param is {}", getLogMark(), JsonUtils.toJSONString(getTaskCandidateDTO));
+        log.info("{}[getTaskCandidate] get task candidate, param is {}", getLogMark(), JsonUtils.toJsonString(getTaskCandidateDTO));
         TaskCandidateDTO taskCandidateDTO = doGet(getTaskCandidateDTO);
         if (Objects.isNull(taskCandidateDTO)) {
-            log.error("{}[getTaskCandidate] get task candidate failed, reason is taskCandidateDTO empty, params is {}", getLogMark(), JsonUtils.toJSONString(getTaskCandidateDTO));
+            log.error("{}[getTaskCandidate] get task candidate failed, reason is taskCandidateDTO empty, params is {}", getLogMark(), JsonUtils.toJsonString(getTaskCandidateDTO));
             throw new BizException(WorkflowErrorCodeEnum.WORKFLOW_TASK_FAILED_USER_TASK);
         }
         List<TaskCandidateDTO.Candidate> candidateList = taskCandidateDTO.getCandidateList();
@@ -54,7 +54,7 @@ public abstract class AbstractTaskCandidateService implements TaskCandidateServi
      * @param taskCandidateDTO
      */
     protected void handleNoGoodCandidates(GetTaskCandidateDTO getTaskCandidateDTO, TaskCandidateDTO taskCandidateDTO) {
-        log.error("{}[getTaskCandidate] get task candidate failed, reason is no good candidate, params is {}", getLogMark(), JsonUtils.toJSONString(getTaskCandidateDTO));
+        log.error("{}[getTaskCandidate] get task candidate failed, reason is no good candidate, params is {}", getLogMark(), JsonUtils.toJsonString(getTaskCandidateDTO));
         throw new BizException(WorkflowErrorCodeEnum.WORKFLOW_TASK_FAILED_NO_GOOD_CANDIDATE);
     }
 

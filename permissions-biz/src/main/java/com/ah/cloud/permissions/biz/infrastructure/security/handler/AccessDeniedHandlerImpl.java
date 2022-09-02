@@ -31,7 +31,7 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
         ErrorCodeEnum errorCodeEnum = SecurityExceptionHandler.extractErrorCodeEnum(e);
         response.setStatus(errorCodeEnum.getCode());
         response.getWriter()
-                .print(JsonUtils.toJSONString(
+                .print(JsonUtils.toJsonString(
                         ResponseResult.newResponse(errorCodeEnum)
                 ));
         log.error("[权限端点异常处理] ==> [请求地址为: {}, 异常信息为:{}]", request.getRequestURI(), Throwables.getStackTraceAsString(e));

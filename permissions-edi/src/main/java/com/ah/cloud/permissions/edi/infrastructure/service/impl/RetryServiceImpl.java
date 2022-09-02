@@ -80,7 +80,7 @@ public class RetryServiceImpl implements RetryService {
 
     @Override
     public EdiResult<Void> retry(RetryBizRecord retryBizRecord, EdiTypeEnum ediTypeEnum, boolean force) {
-        log.info("RetryServiceImpl[retry] start single retry, params is {}, ediType is {}", JsonUtils.toJSONString(retryBizRecord), ediTypeEnum);
+        log.info("RetryServiceImpl[retry] start single retry, params is {}, ediType is {}", JsonUtils.toJsonString(retryBizRecord), ediTypeEnum);
         try {
             this.filter(retryBizRecord, ediTypeEnum, force);
         } catch (EdiException ediException) {
@@ -112,7 +112,7 @@ public class RetryServiceImpl implements RetryService {
         if (CollectionUtils.isEmpty(errorMsgList)) {
             return EdiResult.ofSuccess();
         }
-        return EdiResult.ofFail(EdiErrorCodeEnum.RETRY_RECORD_BIZ_ERROR, JsonUtils.toJSONString(errorMsgList));
+        return EdiResult.ofFail(EdiErrorCodeEnum.RETRY_RECORD_BIZ_ERROR, JsonUtils.toJsonString(errorMsgList));
     }
 
     private void filter(RetryBizRecord retryBizRecord, EdiTypeEnum ediTypeEnum, boolean force) {

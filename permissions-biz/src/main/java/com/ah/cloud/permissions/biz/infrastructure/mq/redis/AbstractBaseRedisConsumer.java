@@ -6,8 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
-import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.Topic;
 import org.springframework.stereotype.Component;
@@ -32,9 +30,9 @@ public abstract class AbstractBaseRedisConsumer<T> implements MessageListener, I
         T t = convert(message.getBody());
         try {
             doHandleMessage(t);
-            log.info("{} handle message success, params is {}", channel, JsonUtils.toJSONString(t));
+            log.info("{} handle message success, params is {}", channel, JsonUtils.toJsonString(t));
         } catch (Throwable throwable) {
-            log.info("{} handle message is error with throwable, params is {}, reason is {} ", channel, JsonUtils.toJSONString(t), Throwables.getStackTraceAsString(throwable));
+            log.info("{} handle message is error with throwable, params is {}, reason is {} ", channel, JsonUtils.toJsonString(t), Throwables.getStackTraceAsString(throwable));
         }
     }
 

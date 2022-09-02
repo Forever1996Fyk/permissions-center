@@ -18,11 +18,7 @@ public class JasyptTest extends BaseTest {
 
     @Test
     public void datasourceEncryptor() {
-        String url = "jdbc:mysql://49.234.219.109:3306/permission-center?serverTimezone=GMT%2B8&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false";
-        String username = "root";
-        String password = "permission_2022..";
-        System.out.println("db url: " + stringEncryptor.encrypt(url));
-        System.out.println("db username: " + stringEncryptor.encrypt(username));
-        System.out.println("db password: " + stringEncryptor.encrypt(password));
+        String pw = "zky_prod123!@#";
+        System.out.println("db pw: " + stringEncryptor.encrypt(pw));
     }
 }

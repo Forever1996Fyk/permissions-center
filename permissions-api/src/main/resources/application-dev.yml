@@ -165,6 +165,10 @@ system:
       uri: http://localhost:8080/showImage/
   mode: visitor
 
+jasypt:
+  encryptor:
+    password: permission
+
 edi:
   retry:
     runTime: 3000 # 快慢线程池切换 单个任务执行超过3000ms定义为慢任务

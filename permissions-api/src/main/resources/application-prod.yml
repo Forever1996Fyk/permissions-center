@@ -18,11 +18,11 @@ elasticsearch:
 spring:
   redis:
     ################### redis 单机版 start ##########################
-    host: p(jlntwUv5DX3uDiFbj+JiQiuLRrjrMqzW)
+    host: p(R36IBjDtI7e4/+LpezKKz8ZWW6QHL3ug)
     port: 6379
-    password: p(YM3AQrYJQBNT7lcbIVsi8hQwXsYhr4I9)
+    password: p(l1bU7NB8TkBk9Cd7ICXB3qCfm/UYmkYZ)
     timeout: 6000
-    database: 0
+    database: 8
     lettuce:
       pool:
         # 连接池最大连接数（使用负值表示没有限制）,如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)
@@ -164,7 +164,7 @@ system:
     path: /upload
   local:
     file:
-      uri: http://localhost:8080/showImage/
+      uri: http://api-v1.lovexiaoming.top/showImage/
   mode: visitor
 
 edi:

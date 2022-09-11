@@ -98,7 +98,7 @@ public class WorkflowTaskAssignRuleHelper {
          * @param form
          * @return
          */
-        @Mapping(target = "options", expression = "java(com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils.toJSONString(form.getOptions()))")
+        @Mapping(target = "options", expression = "java(com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils.toJsonString(form.getOptions()))")
         WorkflowTaskAssignRule convert(AssignRuleTaskAddForm form);
 
         /**
@@ -107,7 +107,7 @@ public class WorkflowTaskAssignRuleHelper {
          * @param form
          * @return
          */
-        @Mapping(target = "options", expression = "java(com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils.toJSONString(form.getOptions()))")
+        @Mapping(target = "options", expression = "java(com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils.toJsonString(form.getOptions()))")
         WorkflowTaskAssignRule convert(AssignRuleTaskUpdateForm form);
 
         /**

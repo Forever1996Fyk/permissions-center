@@ -1,11 +1,11 @@
 server:
-  port: 8080
+  port: 6060
 
 # 建议放一些通用的、与环境无关、与系统相关的配置在这里
 # SpringBoot的相关配置
 spring:
   profiles:
-    active: dev
+    active: prod
   application:
     name: permissions-api
   mvc:

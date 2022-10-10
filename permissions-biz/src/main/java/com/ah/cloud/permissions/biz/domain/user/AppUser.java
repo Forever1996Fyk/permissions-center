@@ -13,15 +13,15 @@ import java.util.Collection;
 
 /**
  * @program: permissions-center
- * @description: 本地用户基本信息
+ * @description:
  * @author: YuKai Fan
- * @create: 2021-12-17 17:04
+ * @create: 2022/9/29 12:12
  **/
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LocalUser implements BaseUserDetails<AccessToken> {
+public class AppUser implements BaseUserDetails<AccessToken> {
     /**
      * 账号
      */
@@ -35,12 +35,7 @@ public class LocalUser implements BaseUserDetails<AccessToken> {
     /**
      * 用户基本信息
      */
-    private BaseUserInfo userInfo;
-
-    /**
-     * 用户权限信息
-     */
-    private AuthorityInfo authorityInfo;
+    private AppUserInfo userInfo;
 
     /**
      * 设备信息
@@ -71,11 +66,6 @@ public class LocalUser implements BaseUserDetails<AccessToken> {
      * 账号没有锁定
      */
     private boolean accountNonLocked;
-
-    /**
-     * 权限是否变更
-     */
-    private boolean authorityChanged;
 
     /**
      * 用户token
@@ -109,6 +99,6 @@ public class LocalUser implements BaseUserDetails<AccessToken> {
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorityInfo.getAuthorities();
+        return null;
     }
 }

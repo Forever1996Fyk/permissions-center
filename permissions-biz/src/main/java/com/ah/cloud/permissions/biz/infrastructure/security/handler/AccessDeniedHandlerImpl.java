@@ -17,6 +17,7 @@ import java.io.IOException;
 /**
  * @program: permissions-center
  * @description: 权限异常处理类
+ * 这个本身是处理 拒绝访问的异常，按理说是不需要 加入Spring Bean, 但是为了以后可能出现 其他需要Spring的需求，例如: 需要数据库记录日志等, 所以这里还是用的@Component注解
  * @author: YuKai Fan
  * @create: 2021-12-24 16:40
  **/

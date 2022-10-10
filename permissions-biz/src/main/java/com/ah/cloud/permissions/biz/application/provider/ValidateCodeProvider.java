@@ -2,7 +2,10 @@ package com.ah.cloud.permissions.biz.application.provider;
 
 import com.ah.cloud.permissions.biz.domain.code.SendResult;
 import com.ah.cloud.permissions.biz.domain.code.ValidateResult;
+import com.ah.cloud.permissions.biz.infrastructure.function.VoidFunction;
 import com.ah.cloud.permissions.enums.RepositoryModeEnum;
+
+import java.util.function.Supplier;
 
 /**
  * @program: permissions-center
@@ -33,7 +36,25 @@ public interface ValidateCodeProvider {
      * @param sourceCode
      * @return
      */
-    ValidateResult validate(SendMode sendMode, String sourceCode);
+    ValidateResult<Void> validate(SendMode sendMode, String sourceCode);
+
+    /**
+     * 校验验证码
+     * @param sendMode
+     * @param sourceCode
+     * @param function
+     * @return
+     */
+    ValidateResult<Void> validate(SendMode sendMode, String sourceCode, VoidFunction function);
+
+    /**
+     * 校验验证码
+     * @param sendMode
+     * @param sourceCode
+     * @param supplier
+     * @return
+     */
+    <R> ValidateResult<R> validate(SendMode sendMode, String sourceCode, Supplier<R> supplier);
 
     /**
      * 获取验证码

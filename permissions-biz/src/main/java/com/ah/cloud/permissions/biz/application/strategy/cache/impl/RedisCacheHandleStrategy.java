@@ -42,9 +42,7 @@ public class RedisCacheHandleStrategy implements CacheHandleStrategy {
 
     @Override
     public <T> T getCacheObject(String key) {
-        return Optional
-                .ofNullable((T) redisTemplate.opsForValue().get(key))
-                .orElseThrow(() -> new BizException(ErrorCodeEnum.SYSTEM_ERROR));
+        return (T) redisTemplate.opsForValue().get(key);
     }
 
     @Override

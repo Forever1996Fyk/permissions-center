@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ValidateResult {
+public class ValidateResult<R> {
     /**
      * 结果码
      */
@@ -35,10 +35,15 @@ public class ValidateResult {
     private ErrorCodeEnum errorCodeEnum;
 
     /**
+     * 返回数据
+     */
+    private R data;
+
+    /**
      * 构建校验结果
      * @return
      */
-    public static ValidateResult buildSuccessResult() {
+    public static <R> ValidateResult<R> buildSuccessResult() {
         return buildResult(ErrorCodeEnum.SUCCESS);
     }
 
@@ -47,8 +52,8 @@ public class ValidateResult {
      * @param errorCodeEnum
      * @return
      */
-    public static ValidateResult buildResult(ErrorCodeEnum errorCodeEnum) {
-        return ValidateResult.builder()
+    public static <R> ValidateResult<R> buildResult(ErrorCodeEnum errorCodeEnum) {
+        return ValidateResult.<R>builder()
                 .code(errorCodeEnum.getCode())
                 .message(errorCodeEnum.getMsg())
                 .errorCodeEnum(errorCodeEnum)
@@ -61,8 +66,8 @@ public class ValidateResult {
      * @param args
      * @return
      */
-    public static ValidateResult buildResult(ErrorCodeEnum errorCodeEnum, String... args) {
-        return ValidateResult.builder()
+    public static <R> ValidateResult<R> buildResult(ErrorCodeEnum errorCodeEnum, String... args) {
+        return ValidateResult.<R>builder()
                 .code(errorCodeEnum.getCode())
                 .message(AppUtils.getErrorMsg(errorCodeEnum, args))
                 .errorCodeEnum(errorCodeEnum)

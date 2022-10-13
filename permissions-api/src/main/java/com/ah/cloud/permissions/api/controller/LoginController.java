@@ -8,6 +8,8 @@ import com.ah.cloud.permissions.biz.domain.login.UsernamePasswordLoginForm;
 import com.ah.cloud.permissions.biz.domain.login.ValidateCodeLoginForm;
 import com.ah.cloud.permissions.biz.domain.token.AccessToken;
 import com.ah.cloud.permissions.biz.domain.token.Token;
+import com.ah.cloud.permissions.biz.infrastructure.annotation.EnableDecrypt;
+import com.ah.cloud.permissions.biz.infrastructure.annotation.ParamsDecrypt;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,8 +40,9 @@ public class LoginController {
      * @param form
      * @return
      */
+    @EnableDecrypt
     @PostMapping("/usernamePasswordLogin")
-    public ResponseResult<Token> usernamePasswordLogin(@RequestBody @Valid UsernamePasswordLoginForm form) {
+    public ResponseResult<Token> usernamePasswordLogin(@RequestBody @Valid @ParamsDecrypt UsernamePasswordLoginForm form) {
         return ResponseResult.ok(loginProvider.getAccessToken(form));
     }
 

@@ -1,4 +1,4 @@
-package com.ah.cloud.permissions.biz.domain.jasypt.dto;
+package com.ah.cloud.permissions.biz.domain.jasypt.dto.result;
 
 import lombok.*;
 

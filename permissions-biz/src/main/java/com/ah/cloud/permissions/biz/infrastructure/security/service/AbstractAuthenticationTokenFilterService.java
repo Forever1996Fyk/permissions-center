@@ -2,6 +2,7 @@ package com.ah.cloud.permissions.biz.infrastructure.security.service;
 
 import com.ah.cloud.permissions.biz.domain.token.Token;
 import com.ah.cloud.permissions.biz.infrastructure.constant.TokenConstants;
+import com.ah.cloud.permissions.biz.infrastructure.util.CollectionUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +35,7 @@ public abstract class AbstractAuthenticationTokenFilterService<T extends Token, 
             2.2 根据请求来源和token从redis中获取当前登录人信息
          */
         Map<String, String> tokenMap = tokenService.getToken(request);
-        if (!tokenMap.containsKey(TokenConstants.TOKEN_MAP_KEY)) {
+        if (CollectionUtils.isEmpty(tokenMap) || !tokenMap.containsKey(TokenConstants.TOKEN_MAP_KEY)) {
             return;
         }
         String token = tokenMap.get(TokenConstants.TOKEN_MAP_KEY);

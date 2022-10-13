@@ -1,5 +1,6 @@
 package com.ah.cloud.permissions.biz.domain.login;
 
+import com.ah.cloud.permissions.biz.infrastructure.annotation.ParamDecrypt;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -21,6 +22,7 @@ public class UsernamePasswordLoginForm implements LoginForm {
     /**
      * 密码
      */
+    @ParamDecrypt
     @NotBlank(message = "密码不能为空")
     private String password;
 }

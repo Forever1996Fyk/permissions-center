@@ -47,10 +47,6 @@ public class RedisAuthenticationTokenFilter extends OncePerRequestFilter {
         从 request 中提取到token，获取当前登录用户
          */
         try {
-            String requestSource = request.getHeader(PermissionsConstants.REQUEST_SOURCE_HEAD);
-            if (StringUtils.isBlank(requestSource)) {
-                return;
-            }
             if (Objects.isNull(this.authenticationTokenFilterService)) {
                 return;
             }

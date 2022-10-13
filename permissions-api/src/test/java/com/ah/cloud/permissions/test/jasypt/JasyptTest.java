@@ -1,11 +1,10 @@
 package com.ah.cloud.permissions.test.jasypt;
 
-import com.ah.cloud.permissions.biz.infrastructure.util.JasyptUtils;
-import com.ah.cloud.permissions.test.BaseTest;
-import org.jasypt.encryption.StringEncryptor;
-import org.junit.Test;
+import com.ah.cloud.permissions.biz.application.strategy.jasypt.AESAlgorithmEncryptorStrategy;
+import com.ah.cloud.permissions.biz.infrastructure.jasypt.encrypt.RSAStringEncryptor;
+import org.jasypt.util.text.AES256TextEncryptor;
 
-import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * @program: permissions-center
@@ -15,11 +14,9 @@ import javax.annotation.Resource;
  **/
 public class JasyptTest {
 
-    public static void main(String[] args) {
-        String redisIp = "47.98.43.22";
-        String pw = "zky_prod321#@!";
-        String slat = "permission";
-        System.out.println("redisIp: " + JasyptUtils.encrypt(slat, redisIp));
-        System.out.println("pw: " + JasyptUtils.encrypt(slat, pw));
+    public static void main(String[] args) throws Exception {
+        AES256TextEncryptor encryptor = new AES256TextEncryptor();
+        encryptor.setPassword("286c7874e0d14fd89ffe041e61a1820c");
+        System.out.println(encryptor.encrypt("123456"));
     }
 }

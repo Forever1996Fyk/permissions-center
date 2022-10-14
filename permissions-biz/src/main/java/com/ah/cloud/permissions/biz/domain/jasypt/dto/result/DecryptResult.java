@@ -20,4 +20,9 @@ public class DecryptResult implements HandleResult {
      * 解密结果
      */
     String result;
+
+    /**
+     * bytes 结果
+     */
+    byte[] resultBytes;
 }

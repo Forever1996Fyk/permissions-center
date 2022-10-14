@@ -48,11 +48,6 @@ public class LocalUser implements BaseUserDetails<AccessToken> {
     private DeviceInfo deviceInfo;
 
     /**
-     * 当前用户的登录token
-     */
-    private String accessToken;
-
-    /**
      * 认证是否过期
      */
     private Boolean credentialsNonExpired;

@@ -42,7 +42,7 @@ public class LoginController {
      */
     @EnableDecrypt
     @PostMapping("/usernamePasswordLogin")
-    public ResponseResult<Token> usernamePasswordLogin(@RequestBody @Valid @ParamsDecrypt UsernamePasswordLoginForm form) {
+    public ResponseResult<Token> usernamePasswordLogin(@RequestBody @Valid @ParamsDecrypt(scope = ParamsDecrypt.DecryptScope.ALL) UsernamePasswordLoginForm form) {
         return ResponseResult.ok(loginProvider.getAccessToken(form));
     }
 

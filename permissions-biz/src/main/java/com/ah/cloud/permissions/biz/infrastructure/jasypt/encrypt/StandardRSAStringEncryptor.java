@@ -1,5 +1,7 @@
 package com.ah.cloud.permissions.biz.infrastructure.jasypt.encrypt;
 
+import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
+import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.BadPaddingException;
@@ -7,6 +9,7 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -56,6 +59,21 @@ public class StandardRSAStringEncryptor implements RSAStringEncryptor {
      * RSA 位数 如果采用2048 上面最大加密和最大解密则须填写:  245 256
      */
     private static final int INITIALIZE_LENGTH = 1024;
+
+    /**
+     * 公钥
+     */
+    private final String publicKey;
+
+    /**
+     * 私钥
+     */
+    private final String privateKey;
+
+    public StandardRSAStringEncryptor(String publicKey, String privateKey) {
+        this.publicKey = publicKey;
+        this.privateKey = privateKey;
+    }
 
     @Override
     public Map<String, Object> genKeyPair() throws Exception {
@@ -138,12 +156,22 @@ public class StandardRSAStringEncryptor implements RSAStringEncryptor {
 
     @Override
     public String encrypt(String message) {
-        return null;
+        try {
+            byte[] bytes = encryptByPublicKey(Base64.decodeBase64(message), publicKey);
+            return Base64.encodeBase64String(bytes);
+        } catch (Exception e) {
+            throw new BizException(ErrorCodeEnum.PARAM_PARSING_FIELD);
+        }
     }
 
     @Override
     public String decrypt(String encryptedMessage) {
-        return null;
+        try {
+            byte[] bytes = decryptByPrivateKey(Base64.decodeBase64(encryptedMessage), privateKey);
+            return new String(bytes, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new BizException(ErrorCodeEnum.PARAM_PARSING_FIELD);
+        }
     }
 
     private static byte[] getBytes(byte[] data, Key key, Cipher cipher) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException, IOException {

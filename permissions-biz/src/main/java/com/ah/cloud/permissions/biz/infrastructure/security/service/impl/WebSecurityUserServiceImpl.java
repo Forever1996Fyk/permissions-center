@@ -48,7 +48,7 @@ public class WebSecurityUserServiceImpl implements SecurityUserService<LocalUser
         key: token
         value: userId
          */
-        redisCacheHandleStrategy.setCacheObjectByExpire(getTokenKey(localUser.getAccessToken()), String.valueOf(localUser.getUserInfo().getUserId()), EXPIRES_IN, TimeUnit.SECONDS);
+        redisCacheHandleStrategy.setCacheObjectByExpire(getTokenKey(localUser.getToken().getAccessToken()), String.valueOf(localUser.getUserInfo().getUserId()), EXPIRES_IN, TimeUnit.SECONDS);
         accessManager.setUserAuthRedisCache(localUser.getUserInfo().getUserId(), localUser);
     }
 

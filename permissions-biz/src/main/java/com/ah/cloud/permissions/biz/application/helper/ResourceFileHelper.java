@@ -21,6 +21,7 @@ import com.ah.cloud.permissions.enums.*;
 import com.ah.cloud.permissions.enums.common.FileErrorCodeEnum;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
@@ -29,15 +30,15 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @program: permissions-center
@@ -55,16 +56,19 @@ public class ResourceFileHelper {
      * @return
      */
     public ResourceFileForm getDataByRequest(HttpServletRequest request) {
-        Map parameterMap = request.getParameterMap();
+        Map<String, String[]> parameterMap = (Map<String, String[]>) request.getParameterMap();
         if (CollectionUtils.isEmpty(parameterMap)) {
             return ResourceFileForm.defaultForm();
         }
-        Object o = parameterMap.get(RequestConstants.FILE_DATA_KEY);
-        if (Objects.isNull(o)) {
-            return ResourceFileForm.defaultForm();
+        Map<String, Object> formMap = Maps.newHashMap();
+        for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
+            formMap.put(entry.getKey(), Objects.isNull(entry.getValue()) ? null : entry.getValue()[0]);
         }
-        return (ResourceFileForm) o;
+        ResourceFileForm resourceFileForm = JsonUtils.mapToBean(formMap, ResourceFileForm.class);
+        resourceFileForm.check();
+        return resourceFileForm;
     }
+
 
     /**
      * 从Http request 获取当前文件信息
@@ -150,21 +154,27 @@ public class ResourceFileHelper {
      * 构建上传文件dto
      * @param multipartFile
      * @param form
-     * @param ownerId
      * @return
      */
-    public UploadFileDTO buildUploadFileDTO(MultipartFile multipartFile, ResourceFileForm form, Long ownerId) {
-        UploadFileDTO uploadFileDTO = UploadFileDTO.builder()
-                .fileName(multipartFile.getOriginalFilename())
-                .isPublic(YesOrNoEnum.getByType(form.getIsPublic()))
-                .fileTypeEnum(FileUtils.getFileType(FileSuffixTypeEnum.getByType(FileUtils.getFileSuffix(multipartFile.getOriginalFilename()))))
-                .resourceBizTypeEnum(ResourceBizTypeEnum.getByType(form.getBizType()))
-                .build();
-        if (!Objects.equals(form.getExpireTime(), PermissionsConstants.NEGATIVE_ONE_LONG)) {
-            Instant instant = Instant.now().plus(form.getExpireTime(), TimeTypeEnum.convertToChronoUnit(form.getTimeUnit()));
-            uploadFileDTO.setExpirationTime(instant);
+    public UploadFileDTO buildUploadFileDTO(MultipartFile multipartFile, ResourceFileForm form) {
+        try {
+            byte[] bytes = FileCopyUtils.copyToByteArray(multipartFile.getInputStream());
+            UploadFileDTO uploadFileDTO = UploadFileDTO.builder()
+                    .fileName(multipartFile.getOriginalFilename())
+                    .isPublic(YesOrNoEnum.getByType(form.getIsPublic()))
+                    .fileTypeEnum(FileUtils.getFileType(FileSuffixTypeEnum.getByType(FileUtils.getFileSuffix(multipartFile.getOriginalFilename()))))
+                    .resourceBizTypeEnum(ResourceBizTypeEnum.getByType(form.getBizType()))
+                    .inputStream(new ByteArrayInputStream(bytes))
+                    .build();
+            if (!Objects.equals(form.getExpireTime(), PermissionsConstants.NEGATIVE_ONE_LONG)) {
+                Instant instant = Instant.now().plus(form.getExpireTime(), TimeTypeEnum.convertToChronoUnit(form.getTimeUnit()));
+                uploadFileDTO.setExpirationTime(instant);
+            }
+            return uploadFileDTO;
+        } catch (IOException e) {
+            log.error("MultipartFile InputStream error with IOException, reason is {}", Throwables.getStackTraceAsString(e));
+            throw new RuntimeException(e);
         }
-        return uploadFileDTO;
     }
 
     /**

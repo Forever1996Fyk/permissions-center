@@ -6,8 +6,10 @@ import com.ah.cloud.permissions.biz.domain.jasypt.dto.Decrypt;
 import com.ah.cloud.permissions.biz.domain.jasypt.dto.Encrypt;
 import com.ah.cloud.permissions.biz.infrastructure.annotation.ParamDecrypt;
 import com.ah.cloud.permissions.biz.infrastructure.annotation.ParamsDecrypt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -20,9 +22,11 @@ import java.util.Objects;
  * @author: YuKai Fan
  * @create: 2022/10/12 15:06
  **/
+@Component
 public class AbstractDecryptRequestAdvice<E extends Encrypt, D extends Decrypt> implements DecryptRequestAdvice<E, D> {
     private final AlgorithmEncryptorSelector selector;
 
+    @Autowired
     public AbstractDecryptRequestAdvice(AlgorithmEncryptorSelector selector) {
         this.selector = selector;
     }

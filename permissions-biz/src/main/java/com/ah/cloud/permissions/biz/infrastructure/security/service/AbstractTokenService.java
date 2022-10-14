@@ -84,7 +84,7 @@ public abstract class AbstractTokenService<T extends Token, U extends BaseUserDe
      * @return
      */
     protected boolean isJwt() {
-        return true;
+        return false;
     }
 
     /**

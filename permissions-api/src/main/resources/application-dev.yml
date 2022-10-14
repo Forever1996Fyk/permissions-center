@@ -159,11 +159,11 @@ mq:
 
 system:
   upload:
-    path: /upload
+    path: /Users/fanyukai/Desktop/upload
   local:
     file:
-      uri: http://localhost:8080/showImage/
-  mode: visitor
+      uri: http://localhost:8080/showImage
+  mode: developer
 
 jasypt:
   encryptor:

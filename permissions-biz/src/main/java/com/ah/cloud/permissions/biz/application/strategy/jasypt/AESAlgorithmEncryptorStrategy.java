@@ -26,11 +26,11 @@ public class AESAlgorithmEncryptorStrategy extends AbstractAlgorithmEncryptorStr
 
     public AESAlgorithmEncryptorStrategy() {
         this.encryptor = new AES256TextEncryptor();
+        this.encryptor.setPassword(DEFAULT_PUBLIC_KEY);
     }
 
     @Override
     protected DecryptResult doDecrypt(Decrypt decrypt) {
-        encryptor.setPassword(StringUtils.isBlank(decrypt.getSalt()) ? DEFAULT_PUBLIC_KEY : decrypt.getSalt());
         return DecryptResult.builder()
                 .result(encryptor.decrypt(decrypt.getCipher()))
                 .build();
@@ -38,7 +38,6 @@ public class AESAlgorithmEncryptorStrategy extends AbstractAlgorithmEncryptorStr
 
     @Override
     protected EncryptResult doEncrypt(Encrypt encrypt) {
-        encryptor.setPassword(StringUtils.isBlank(encrypt.getSalt()) ? DEFAULT_PUBLIC_KEY : encrypt.getSalt());
         return EncryptResult.builder()
                 .result(encryptor.encrypt(encrypt.getOriginal()))
                 .build();

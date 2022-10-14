@@ -25,6 +25,7 @@ public enum ErrorCodeEnum implements ErrorCode {
     PARAM_MISS(100_1_001,"缺少必要参数[%s]"),
     PARAM_ILLEGAL(100_1_002,"参数非法"),
     PARAM_ILLEGAL_FIELD(100_1_004,"[%s]参数非法"),
+    PARAM_PARSING_FIELD(100_1_005,"参数解析失败"),
 
     /**
      * 公共业务异常

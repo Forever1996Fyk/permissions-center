@@ -51,15 +51,28 @@ public class ResourceFileManager {
     /**
      * 上传文件
      * @param request
-     * @param ownerId
+     * @param form
      * @return
      */
-    public Long upload(HttpServletRequest request, Long ownerId) {
-        ResourceFileForm form = resourceFileHelper.getDataByRequest(request);
+    public Long upload(HttpServletRequest request, ResourceFileForm form) {
         MultipartFile multipartFile = resourceFileHelper.getMultipartFileFromRequest(request);
         ResourceActionService resourceActionService = selector.select();
-        UploadFileDTO uploadFileDTO = resourceFileHelper.buildUploadFileDTO(multipartFile, form, ownerId);
+        UploadFileDTO uploadFileDTO = resourceFileHelper.buildUploadFileDTO(multipartFile, form);
         return resourceActionService.uploadFile(uploadFileDTO);
+    }
+
+    /**
+     * 上传文件
+     * @param request
+     * @param form
+     * @return
+     */
+    public String uploadForUrl(HttpServletRequest request) {
+        ResourceFileForm fileForm = resourceFileHelper.getDataByRequest(request);
+        MultipartFile multipartFile = resourceFileHelper.getMultipartFileFromRequest(request);
+        ResourceActionService resourceActionService = selector.select();
+        UploadFileDTO uploadFileDTO = resourceFileHelper.buildUploadFileDTO(multipartFile, fileForm);
+        return resourceActionService.uploadFileUrl(uploadFileDTO);
     }
 
     /**

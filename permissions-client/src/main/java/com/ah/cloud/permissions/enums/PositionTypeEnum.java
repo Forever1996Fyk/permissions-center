@@ -17,6 +17,12 @@ public enum PositionTypeEnum {
      * 阿里云oss上传
      */
     ALIYUN_OSS(2, "阿里云OSS"),
+
+
+    /**
+     * minio oss文件上传
+     */
+    MINIO_OSS(3, "MINIO OSS"),
     ;
 
     /**

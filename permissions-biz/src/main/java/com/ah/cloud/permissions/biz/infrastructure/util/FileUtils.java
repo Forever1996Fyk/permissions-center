@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.math.BigInteger;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -22,20 +23,38 @@ import java.security.NoSuchAlgorithmException;
 public class FileUtils {
 
     /**
-     * 上传本地文件
+     * 文件转化
      *
-     * @param inputStream
-     * @param path
-     * @param fileName
-     * @throws IOException
+     * @param filePath
      */
-    public static void uploadLocal(InputStream inputStream, String path, String fileName) throws IOException {
-        File file = new File(path);
-        if (!file.exists()) {
-            file.mkdirs();
+    public static File transferTo(String filePath) throws IOException {
+        File file = new File(filePath);
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
         }
-        FileOutputStream outputStream = new FileOutputStream(file + "/" + fileName);
-        IOUtils.copy(inputStream, outputStream);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        return file;
+    }
+
+    /**
+     * 文件转化
+     *
+     * @param fis      文件输入流
+     * @param filePath 文件路径
+     * @return void
+     * @author YuKai Fan
+     * @date 2020/6/11 22:14
+     */
+    public static void transferTo(InputStream fis, String filePath) throws IOException {
+        byte[] buffer = new byte[4096];
+        OutputStream fos = Files.newOutputStream(transferTo(filePath).toPath());
+        int len;
+        while ((len = fis.read(buffer)) != -1) {
+            fos.write(buffer, 0, len);
+        }
+        fos.flush();
     }
 
     /**
@@ -66,7 +85,7 @@ public class FileUtils {
         String[] fullFileNameArray = new String[2];
         int lastIndexOf = StringUtils.lastIndexOf(fullFileName, PermissionsConstants.DOT_SEPARATOR);
         fullFileNameArray[0] = StringUtils.substring(fullFileName, 0, lastIndexOf);
-        fullFileNameArray[1] = StringUtils.substring(fullFileName, lastIndexOf, lastIndexOf + 1);
+        fullFileNameArray[1] = StringUtils.substring(fullFileName, lastIndexOf + 1, fullFileName.length());
         return fullFileNameArray;
     }
 

@@ -183,3 +183,9 @@ edi:
       secret: VokIeaTfHwUBiXARWmyhMc
       maxCount: 1 #告警记录阈值
       minute: 30 #告警时间阈值
+
+minio:
+  endpoint: http://localhost:9000
+  username: develop
+  password: fyk961222..
+  accessUri: http://localhost:9000

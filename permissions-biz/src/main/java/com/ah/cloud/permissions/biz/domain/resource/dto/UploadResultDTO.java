@@ -1,5 +1,6 @@
 package com.ah.cloud.permissions.biz.domain.resource.dto;
 
+import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -51,6 +52,21 @@ public class UploadResultDTO {
          * 资源名称
          */
         private String resourceName;
+    }
+
+    public static UploadResultDTO ofSuccess(ResultData resultData) {
+        return UploadResultDTO.builder()
+                .success(true)
+                .data(resultData)
+                .message(ErrorCodeEnum.SUCCESS.getMsg())
+                .build();
+    }
+
+    public static UploadResultDTO ofFailed(String message) {
+        return UploadResultDTO.builder()
+                .success(false)
+                .message(message)
+                .build();
     }
 
 

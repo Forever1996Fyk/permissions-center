@@ -78,6 +78,11 @@
 
         <!-- Elasticsearch -->
         <elasticsearch.version>7.9.3</elasticsearch.version>
+
+        <minio.version>8.3.0</minio.version>
+
+        <!-- 覆盖SpringBoot中okhttp3的旧版本声明，解决MinIO 8.3.x的依赖冲突 -->
+        <okhttp3.version>4.8.1 </okhttp3.version>
     </properties>
 
     <dependencyManagement>
@@ -354,6 +359,11 @@
                 <groupId>org.elasticsearch</groupId>
                 <artifactId>elasticsearch</artifactId>
                 <version>${elasticsearch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

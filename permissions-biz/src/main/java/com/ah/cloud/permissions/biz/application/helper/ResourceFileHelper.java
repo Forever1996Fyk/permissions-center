@@ -35,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.Instant;
@@ -165,6 +166,7 @@ public class ResourceFileHelper {
                     .fileTypeEnum(FileUtils.getFileType(FileSuffixTypeEnum.getByType(FileUtils.getFileSuffix(multipartFile.getOriginalFilename()))))
                     .resourceBizTypeEnum(ResourceBizTypeEnum.getByType(form.getBizType()))
                     .inputStream(new ByteArrayInputStream(bytes))
+                    .bytes(bytes)
                     .build();
             if (!Objects.equals(form.getExpireTime(), PermissionsConstants.NEGATIVE_ONE_LONG)) {
                 Instant instant = Instant.now().plus(form.getExpireTime(), TimeTypeEnum.convertToChronoUnit(form.getTimeUnit()));

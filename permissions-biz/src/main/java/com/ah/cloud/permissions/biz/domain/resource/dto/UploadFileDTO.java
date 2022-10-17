@@ -51,4 +51,9 @@ public class UploadFileDTO {
      * 文件流
      */
     private InputStream inputStream;
+
+    /**
+     * 文件数据
+     */
+    private byte[] bytes;
 }

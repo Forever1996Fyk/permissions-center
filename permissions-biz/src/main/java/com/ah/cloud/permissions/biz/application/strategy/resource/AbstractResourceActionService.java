@@ -129,21 +129,25 @@ public abstract class AbstractResourceActionService implements ResourceActionSer
 
     private ResourceFile doUpload(UploadFileDTO dto) {
         PositionTypeEnum positionTypeEnum = getPositionTypeEnum();
-        String fileMd5 = FileUtils.getFileMD5(dto.getInputStream());
-        String fileSha1 = FileUtils.getFileSHA1(dto.getInputStream());
-        ResourceMetaData existResourceMetaData = resourceMetaDataService.getOne(
-                new QueryWrapper<ResourceMetaData>().lambda()
-                        .eq(ResourceMetaData::getFileMd5, fileMd5)
-                        .eq(ResourceMetaData::getFileSha1, fileSha1)
-                        .eq(ResourceMetaData::getDeleted, DeletedEnum.NO.value)
-        );
-        if (!Objects.isNull(existResourceMetaData)) {
-            log.info("{}[upload] file upload existed, uploadType is {},  params is {}", getLogMark(), positionTypeEnum, JsonUtils.toJsonString(dto));
-            return resourceFileService.getOne(
-                    new QueryWrapper<ResourceFile>().lambda()
-                            .eq(ResourceFile::getResId, existResourceMetaData.getResId())
-            );
-        }
+        /*
+        这里需要注意的是，通过文件流获取fileMd5和Sha1的值，会直接直接把文件流读完，
+        导致后面上传文件时，文件流为空的情况出现
+         */
+        String fileMd5 = FileUtils.getFileMD5(dto.getBytes());
+        String fileSha1 = FileUtils.getFileSHA1(dto.getBytes());
+//        ResourceMetaData existResourceMetaData = resourceMetaDataService.getOne(
+//                new QueryWrapper<ResourceMetaData>().lambda()
+//                        .eq(ResourceMetaData::getFileMd5, fileMd5)
+//                        .eq(ResourceMetaData::getFileSha1, fileSha1)
+//                        .eq(ResourceMetaData::getDeleted, DeletedEnum.NO.value)
+//        );
+//        if (!Objects.isNull(existResourceMetaData)) {
+//            log.info("{}[upload] file upload existed, uploadType is {},  params is {}", getLogMark(), positionTypeEnum, dto);
+//            return resourceFileService.getOne(
+//                    new QueryWrapper<ResourceFile>().lambda()
+//                            .eq(ResourceFile::getResId, existResourceMetaData.getResId())
+//            );
+//        }
         // 构建资源文件信息
         ResourceFile resourceFile = resourceHelper.convertToEntity(dto);
         // 上传文件

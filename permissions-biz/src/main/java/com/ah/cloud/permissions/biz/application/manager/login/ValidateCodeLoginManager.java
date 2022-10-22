@@ -5,9 +5,10 @@ import com.ah.cloud.permissions.biz.domain.login.LoginForm;
 import com.ah.cloud.permissions.biz.domain.login.ValidateCodeLoginForm;
 import com.ah.cloud.permissions.biz.domain.token.AccessToken;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
-import com.ah.cloud.permissions.biz.infrastructure.security.service.TokenService;
-import com.ah.cloud.permissions.biz.infrastructure.security.service.WebSecurityTokenService;
+import com.ah.cloud.permissions.biz.infrastructure.security.service.impl.WebSecurityUserServiceImpl;
+import com.ah.cloud.permissions.biz.infrastructure.security.service.impl.WebTokenServiceImpl;
 import com.ah.cloud.permissions.biz.infrastructure.security.token.ValidateCodeAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -22,17 +23,14 @@ import javax.annotation.Resource;
 public class ValidateCodeLoginManager extends AbstractLoginManager<ValidateCodeAuthenticationToken, AccessToken, LocalUser> {
     @Resource
     private AuthenticationHelper authenticationHelper;
-    @Resource
-    private WebSecurityTokenService webSecurityTokenService;
+
+    public ValidateCodeLoginManager(WebSecurityUserServiceImpl webSecurityUserService, AuthenticationManager authenticationManager) {
+        super(new WebTokenServiceImpl(), webSecurityUserService, authenticationManager);
+    }
 
     @Override
     protected ValidateCodeAuthenticationToken buildAuthentication(LoginForm loginForm) {
         return authenticationHelper.buildValidateCodeAuthenticationToken((ValidateCodeLoginForm) loginForm);
-    }
-
-    @Override
-    public TokenService<AccessToken, LocalUser> getTokenService() {
-        return webSecurityTokenService;
     }
 
     @Override

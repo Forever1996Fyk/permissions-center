@@ -4,6 +4,7 @@ import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.sequence.enums.ProducerTypeEnum;
 import com.ah.cloud.permissions.biz.infrastructure.sequence.enums.SequenceErrorCodeEnum;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +21,10 @@ import java.util.Objects;
 @Slf4j
 @Component
 public class ProducerManager {
-    @Resource
-    private List<SequenceProducer> producerList;
+    /**
+     * todo
+     */
+    private List<SequenceProducer> producerList = Lists.newArrayList();
 
     /**
      * 当前正在使用的类型

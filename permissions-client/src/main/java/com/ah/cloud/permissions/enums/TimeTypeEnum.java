@@ -89,25 +89,10 @@ public enum TimeTypeEnum {
     public static TimeTypeEnum getByType(Integer type) {
         TimeTypeEnum[] values = values();
         for (TimeTypeEnum value : values) {
-            if (Objects.equals(value, type)) {
+            if (Objects.equals(value.getType(), type)) {
                 return value;
             }
         }
         return SECONDS;
-    }
-
-    public TimeUnit convertTimeUnit() {
-        switch (this) {
-            case SECONDS:
-                return TimeUnit.SECONDS;
-            case MINUTES:
-                return TimeUnit.MINUTES;
-            case HOURS:
-                return TimeUnit.HOURS;
-            case DAYS:
-                return TimeUnit.DAYS;
-            default:
-                return TimeUnit.SECONDS;
-        }
     }
 }

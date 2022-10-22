@@ -1,7 +1,8 @@
 package com.ah.cloud.permissions.biz.application.strategy.jasypt;
 
 import com.ah.cloud.permissions.biz.domain.jasypt.dto.*;
-import com.ah.cloud.permissions.enums.jasypt.AlgorithmTypeEnum;
+import com.ah.cloud.permissions.biz.domain.jasypt.dto.result.DecryptResult;
+import com.ah.cloud.permissions.biz.domain.jasypt.dto.result.EncryptResult;
 
 /**
  * @program: permissions-center

@@ -22,6 +22,11 @@ public enum FileErrorCodeEnum implements ErrorCode {
     FILE_CONVERT_FROM_REQUEST_ERROR(2_10_0_007, "文件转换错误"),
     FILE_RESOURCE_NOT_EXISTED(2_10_0_007, "当前资源[%s]不存在"),
     FILE_RESOURCE_REAL_DELETE_FAILED(2_10_0_008, "当前资源[%s]真实文件删除失败"),
+
+    /**
+     * bucket
+     */
+    BUCKET_CREATE_FAILED(2_11_0_001, "文件Bucket创建失败"),
     ;
 
 

@@ -1,7 +1,9 @@
 package com.ah.cloud.permissions.enums;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @program: permissions-center
@@ -14,42 +16,48 @@ public enum RequestSourceEnum {
     /**
      * 未知
      */
-    UNKNOWN(-1, "未知"),
+    UNKNOWN("unknown", "未知"),
+
     /**
      * 网页端
      */
-    WEB(1, "网页端"),
+    WEB("web", "网页端"),
+
+    /**
+     * 移动端
+     */
+    MT("mt", "移动端"),
     /**
      * 安卓端
      */
-    ANDROID(2, "安卓端"),
+    ANDROID("android", "安卓端"),
     /**
      * iOS端
      */
-    IOS(3, "iOS端"),
+    IOS("ios", "iOS端"),
     /**
      * 微信小程序
      */
-    WX_MINI_APP(4, "微信小程序"),
+    WX_MINI_APP("wx_mini_app", "微信小程序"),
     /**
      * 支付宝小程序
      */
-    ALIPAY_MINI(5, "支付宝小程序"),
+    ALIPAY_MINI("alipay_mini", "支付宝小程序"),
     /**
      * 安卓pad
      */
-    ANDROID_PAD(6, "安卓pad"),
+    ANDROID_PAD("android_pad", "安卓pad"),
     /**
      * ipad
      */
-    IPAD(7, "ipad"),
+    IPAD("ipad", "ipad"),
     ;
 
-    private final int type;
+    private final String type;
 
     private final String desc;
 
-    RequestSourceEnum(int type, String desc) {
+    RequestSourceEnum(String type, String desc) {
         this.type = type;
         this.desc = desc;
     }
@@ -68,6 +76,13 @@ public enum RequestSourceEnum {
         }
     };
 
+    public static RequestSourceEnum getByType(String type) {
+        return Arrays.stream(values())
+                .filter(requestSourceEnum -> Objects.equals(requestSourceEnum.getType(), type))
+                .findAny()
+                .orElse(UNKNOWN);
+    }
+
     /**
      * 移动端来源
      * @return
@@ -76,7 +91,7 @@ public enum RequestSourceEnum {
         return MT_SOURCE_LIST.contains(this);
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 

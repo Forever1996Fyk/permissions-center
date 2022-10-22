@@ -23,6 +23,12 @@ public class PermissionsConstants {
      */
     public static final String TOKEN_KEY_PREFIX = "ACCESS:";
 
+
+    /**
+     * redis app token key prefix
+     */
+    public static final String APP_TOKEN_KEY_PREFIX = "APP_ACCESS:";
+
     /**
      * redis token key
      */
@@ -37,6 +43,12 @@ public class PermissionsConstants {
      * 认证请求头
      */
     public static final String TOKEN_HEAD = "Authorization";
+
+
+    /**
+     * 请求来源请求头
+     */
+    public static final String REQUEST_SOURCE_HEAD = "RequestSource";
 
     /**
      * 用户默认密码

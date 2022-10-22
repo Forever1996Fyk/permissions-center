@@ -14,6 +14,7 @@ import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.ResourceFile;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.ResourceMetaData;
 import com.ah.cloud.permissions.domain.common.PageResult;
+import com.ah.cloud.permissions.enums.PositionTypeEnum;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
 import com.ah.cloud.permissions.enums.common.FileErrorCodeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -51,15 +52,27 @@ public class ResourceFileManager {
     /**
      * 上传文件
      * @param request
-     * @param ownerId
+     * @param form
      * @return
      */
-    public Long upload(HttpServletRequest request, Long ownerId) {
-        ResourceFileForm form = resourceFileHelper.getDataByRequest(request);
+    public Long upload(HttpServletRequest request, ResourceFileForm form) {
         MultipartFile multipartFile = resourceFileHelper.getMultipartFileFromRequest(request);
         ResourceActionService resourceActionService = selector.select();
-        UploadFileDTO uploadFileDTO = resourceFileHelper.buildUploadFileDTO(multipartFile, form, ownerId);
+        UploadFileDTO uploadFileDTO = resourceFileHelper.buildUploadFileDTO(multipartFile, form);
         return resourceActionService.uploadFile(uploadFileDTO);
+    }
+
+    /**
+     * 上传文件
+     * @param request
+     * @return
+     */
+    public String uploadForUrl(HttpServletRequest request) {
+        ResourceFileForm fileForm = resourceFileHelper.getDataByRequest(request);
+        MultipartFile multipartFile = resourceFileHelper.getMultipartFileFromRequest(request);
+        ResourceActionService resourceActionService = selector.select(PositionTypeEnum.MINIO_OSS);
+        UploadFileDTO uploadFileDTO = resourceFileHelper.buildUploadFileDTO(multipartFile, fileForm);
+        return resourceActionService.uploadFileUrl(uploadFileDTO);
     }
 
     /**

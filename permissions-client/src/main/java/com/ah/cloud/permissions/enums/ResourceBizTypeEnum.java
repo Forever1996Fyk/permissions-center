@@ -74,4 +74,9 @@ public enum ResourceBizTypeEnum {
         }
         return UNKNOWN;
     }
+
+    public static boolean isValid(Integer type) {
+        ResourceBizTypeEnum bizTypeEnum = getByType(type);
+        return !Objects.equals(bizTypeEnum, UNKNOWN);
+    }
 }

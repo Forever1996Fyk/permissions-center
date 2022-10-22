@@ -1,16 +1,15 @@
-package com.ah.cloud.permissions.biz.infrastructure.security.filter;
+package com.ah.cloud.permissions.filter;
 
 import com.ah.cloud.permissions.biz.application.manager.AccessManager;
 import com.ah.cloud.permissions.biz.domain.api.dto.AuthorityApiDTO;
 import com.ah.cloud.permissions.biz.infrastructure.exception.SecurityErrorException;
 import com.ah.cloud.permissions.biz.infrastructure.exception.WriteApiCannotAccessException;
+import com.ah.cloud.permissions.biz.infrastructure.security.handler.AuthenticationEntryPointImpl;
 import com.ah.cloud.permissions.biz.infrastructure.security.loader.ResourceLoader;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
-import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -45,11 +44,12 @@ public class SysModeFilter extends OncePerRequestFilter {
     private AccessManager accessManager;
     @Resource
     private ResourceLoader resourceLoader;
+
     /**
      * 校验失败处理器
      */
     @Resource
-    private AuthenticationFailureHandler authenticationFailureHandler;
+    private AuthenticationEntryPointImpl authenticationEntryPoint;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -61,12 +61,12 @@ public class SysModeFilter extends OncePerRequestFilter {
         AuthorityApiDTO authorityApiDTO = resourceLoader.getCacheResourceByUri(uri);
         if (Objects.isNull(authorityApiDTO)) {
             log.error("SysModeFilter[doFilterInternal] get AuthorityApiDTO by uri result is empty, uri is {}", uri);
-            authenticationFailureHandler.onAuthenticationFailure(request, response, new SecurityErrorException(ErrorCodeEnum.UNKNOWN_PERMISSION));
+            authenticationEntryPoint.commence(request, response, new SecurityErrorException(ErrorCodeEnum.UNKNOWN_PERMISSION));
             return;
         }
         if (StringUtils.equals(mode, VISITOR_MODE) && authorityApiDTO.getReadOrWriteEnum().isWrite()) {
             log.error("SysModeFilter[doFilterInternal] current mode is visitor, cannot access write type api");
-            authenticationFailureHandler.onAuthenticationFailure(request, response, new WriteApiCannotAccessException(ErrorCodeEnum.VISITOR_MODE_CANNOT_ACCESS_RESOURCE));
+            authenticationEntryPoint.commence(request, response, new WriteApiCannotAccessException(ErrorCodeEnum.VISITOR_MODE_CANNOT_ACCESS_RESOURCE));
             return;
         }
         filterChain.doFilter(request, response);

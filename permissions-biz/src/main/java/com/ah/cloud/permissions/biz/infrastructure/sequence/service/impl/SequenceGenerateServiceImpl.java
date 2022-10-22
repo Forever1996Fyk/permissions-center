@@ -6,6 +6,7 @@ import com.ah.cloud.permissions.biz.infrastructure.sequence.model.BizSequence;
 import com.ah.cloud.permissions.biz.infrastructure.sequence.repository.SequenceRepository;
 import com.ah.cloud.permissions.biz.infrastructure.sequence.service.SequenceGenerateService;
 import com.ah.cloud.permissions.biz.infrastructure.sequence.service.SequenceTypeService;
+import com.ah.cloud.permissions.biz.infrastructure.util.CollectionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,7 +48,7 @@ public class SequenceGenerateServiceImpl implements SequenceGenerateService, Ini
     /**
      * 线程数是否切换
      */
-    @Value("${sequence_schedule_switch}")
+    @Value("${sequence_schedule_switch:false}")
     private boolean sequenceScheduleSwitch;
 
 
@@ -59,6 +60,10 @@ public class SequenceGenerateServiceImpl implements SequenceGenerateService, Ini
     @Override
     public void afterPropertiesSet() throws Exception {
         List<String> typeConfig = sequenceTypeService.getSequenceTypeConfig();
+        if (CollectionUtils.isEmpty(typeConfig)) {
+            log.warn("SequenceGenerateServiceImpl run load Sequence Type Config is empty");
+            return;
+        }
         if (sequenceCache == null) {
             sequenceCache = new SequenceCache<>(
                     typeConfig,

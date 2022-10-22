@@ -1,11 +1,16 @@
 package com.ah.cloud.permissions.config;
 
+import com.ah.cloud.permissions.biz.infrastructure.security.config.AbstractWebSecurityConfigurerAdapter;
 import com.ah.cloud.permissions.biz.infrastructure.security.filter.RedisAuthenticationTokenFilter;
-import com.ah.cloud.permissions.biz.infrastructure.security.filter.SysModeFilter;
 import com.ah.cloud.permissions.biz.infrastructure.security.handler.AccessDeniedHandlerImpl;
 import com.ah.cloud.permissions.biz.infrastructure.security.handler.AuthenticationEntryPointImpl;
-import com.ah.cloud.permissions.biz.infrastructure.security.handler.LogoutSuccessHandlerImpl;
+import com.ah.cloud.permissions.biz.infrastructure.security.handler.impl.WebLogoutSuccessHandlerImpl;
 import com.ah.cloud.permissions.biz.infrastructure.security.provider.ValidateCodeAuthenticationProvider;
+import com.ah.cloud.permissions.biz.infrastructure.security.service.AuthenticationTokenFilterService;
+import com.ah.cloud.permissions.biz.infrastructure.security.service.impl.WebAuthenticationTokenFilterServiceImpl;
+import com.ah.cloud.permissions.filter.SysModeFilter;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -13,15 +18,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationEntryPointFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
@@ -35,25 +37,15 @@ import javax.annotation.Resource;
  **/
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+@NoArgsConstructor
+public class WebSecurityConfiguration extends AbstractWebSecurityConfigurerAdapter {
 
     /**
-     * 退出处理类
+     * 系统mode 验证过滤器
      */
+    @Lazy
     @Resource
-    private LogoutSuccessHandlerImpl logoutSuccessHandler;
-
-    /**
-     * 认证失败处理类
-     */
-    @Resource
-    private AuthenticationEntryPointImpl unauthorizedHandler;
-
-    /**
-     * 无权限处理类
-     */
-    @Resource
-    private AccessDeniedHandlerImpl accessDeniedHandler;
+    private SysModeFilter sysModeFilter;
 
     /**
      * 默认的账号密码登录校验
@@ -67,53 +59,39 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Resource(name="userDetailsServiceImpl")
     private UserDetailsService usernamePasswordUserDetailsService;
 
-    /**
-     * token 验证过滤器
-     */
-    @Resource
-    private RedisAuthenticationTokenFilter authenticationTokenFilter;
+    private AuthenticationEntryPoint authenticationEntryPoint;
+
+    private AuthenticationTokenFilterService authenticationTokenFilterService;
 
     /**
-     * 系统mode 验证过滤器
+     * 注入需要的处理器
+     * @param accessDeniedHandler
+     * @param unauthorizedHandler
+     * @param logoutSuccessHandler
      */
-    @Lazy
-    @Resource
-    private SysModeFilter sysModeFilter;
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        super.configure(web);
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        // 禁用session
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                // 禁用 cors和csrf
-                .cors().and()
-                .csrf().disable()
-                // 认证失败处理类
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler).and()
-                // 调整为让 Spring Security 不创建和使用 session, 因为前后端分离项目, 使用token验证方式, 不需要session
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests()
-                // 可认证访问接口
-                .anyRequest()
-                // 自定义接口权限认证
-                .access("@accessManager.access(request, authentication)")
-                .and()
-                .headers().frameOptions().disable();
-
-        http.logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler);
-
-        // 添加Redis filter
-        http.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(sysModeFilter, UsernamePasswordAuthenticationFilter.class);
+    @Autowired
+    public WebSecurityConfiguration(AccessDeniedHandlerImpl accessDeniedHandler, AuthenticationEntryPointImpl unauthorizedHandler, WebLogoutSuccessHandlerImpl logoutSuccessHandler, WebAuthenticationTokenFilterServiceImpl authenticationTokenFilterService) {
+        super(accessDeniedHandler, logoutSuccessHandler, unauthorizedHandler);
+        this.authenticationEntryPoint = unauthorizedHandler;
+        this.authenticationTokenFilterService = authenticationTokenFilterService;
     }
 
     /**
-     * 密码校验，从数据库中校验密码
+     * 添加自定义过滤器
+     * @param httpSecurity
+     */
+    @Override
+    protected void addFilter(HttpSecurity httpSecurity) {
+        AuthenticationEntryPointFailureHandler failureHandler = new AuthenticationEntryPointFailureHandler(this.authenticationEntryPoint);
+        RedisAuthenticationTokenFilter redisAuthenticationTokenFilter = new RedisAuthenticationTokenFilter(failureHandler, this.authenticationTokenFilterService);
+        httpSecurity.addFilterBefore(redisAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(sysModeFilter, RedisAuthenticationTokenFilter.class);
+    }
+
+    /**
+     * 配置认证提供者 AuthenticationProvider
+     *
+     *  重写此类的目的是为了 添加自定义的AuthenticationProvider, 从而添加到对应的集合中, 在注入到ProviderManager里, 完成自定义功能
      * @param auth
      * @throws Exception
      */
@@ -124,11 +102,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     /**
+     * 这段可以看源码, super.authenticationManager()其实是调用我们上面重写的 configure(AuthenticationManagerBuilder auth)
+     * 所以最终代码会走到 this.authenticationManager = this.localConfigureAuthenticationBldr.build();
+     * 在深入源码看，会走到 AuthenticationManagerBuilder.performBuild()方法，而此方法构造出来的对象其实是 AuthenticationManager的一个实现类  ProviderManager
+     * 而 ProviderManager 是真正根据 Authentication 获取到对应的 AuthenticationProvider 的实现类
+     * AuthenticationProvider 则是处理调用UserDetailsService的入口
      *
+     * @Bean 这里就可以不用@Bean注解注入，
+     * 因为父类AbstractWebSecurityConfigurerAdapter实现了super.authenticationManagerBean()的注入
      * @return
      * @throws Exception
      */
-    @Bean
     @Override
     public AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
@@ -143,19 +127,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public AuthenticationFailureHandler authenticationFailureHandler() {
-        return new AuthenticationEntryPointFailureHandler(unauthorizedHandler);
-    }
-
     /**
      * 重新注入DaoAuthenticationProvider
      *
      * 设置setHideUserNotFoundExceptions为false, 可以抛出UsernameNotFoundException
      * @return
      */
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider() {
+    private DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setHideUserNotFoundExceptions(false);
         daoAuthenticationProvider.setUserDetailsService(usernamePasswordUserDetailsService);
@@ -170,8 +148,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      * 设置setHideUserNotFoundExceptions为false, 可以抛出UsernameNotFoundException
      * @return
      */
-    @Bean
-    public ValidateCodeAuthenticationProvider validateCodeAuthenticationProvider() {
+    private ValidateCodeAuthenticationProvider validateCodeAuthenticationProvider() {
         ValidateCodeAuthenticationProvider validateCodeAuthenticationProvider = new ValidateCodeAuthenticationProvider();
         validateCodeAuthenticationProvider.setUserDetailsService(validateCodeUserDetailsService);
         return validateCodeAuthenticationProvider;

@@ -3,6 +3,8 @@ package com.ah.cloud.permissions.biz.application.strategy.selector;
 import com.ah.cloud.permissions.biz.application.strategy.jasypt.AlgorithmEncryptorStrategy;
 import com.ah.cloud.permissions.biz.application.strategy.jasypt.BasicAlgorithmEncryptorStrategy;
 import com.ah.cloud.permissions.biz.domain.jasypt.dto.*;
+import com.ah.cloud.permissions.biz.domain.jasypt.dto.result.DecryptResult;
+import com.ah.cloud.permissions.biz.domain.jasypt.dto.result.EncryptResult;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

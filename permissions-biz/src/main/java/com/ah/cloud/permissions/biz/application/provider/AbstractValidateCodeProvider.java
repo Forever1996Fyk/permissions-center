@@ -6,11 +6,14 @@ import com.ah.cloud.permissions.biz.application.strategy.facroty.CacheHandleStra
 import com.ah.cloud.permissions.biz.domain.code.SendResult;
 import com.ah.cloud.permissions.biz.domain.code.ValidateResult;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
+import com.ah.cloud.permissions.biz.infrastructure.function.VoidFunction;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.function.Supplier;
 
 /**
  * @program: permissions-center
@@ -68,8 +71,8 @@ public abstract class AbstractValidateCodeProvider implements ValidateCodeProvid
     }
 
     @Override
-    public ValidateResult validate(SendMode sendMode, String sourceCode) {
-        ValidateResult validateResult = ValidateResult.buildSuccessResult();
+    public ValidateResult<Void> validate(SendMode sendMode, String sourceCode) {
+        ValidateResult<Void> validateResult = ValidateResult.buildSuccessResult();
         try {
             String code = get(sendMode);
             if (StringUtils.isEmpty(code) || StringUtils.isEmpty(sourceCode)) {
@@ -79,6 +82,63 @@ public abstract class AbstractValidateCodeProvider implements ValidateCodeProvid
             if (StringUtils.equals(code, sourceCode)) {
                 throw new BizException(ErrorCodeEnum.VALIDATE_CODE_DISCORD);
             }
+            delete(sendMode);
+        } catch (BizException e) {
+            log.error("AbstractValidateCodeProvider[validate] 验证码发送失败 BizException:{}, param:{}",
+                    Throwables.getStackTraceAsString(e),
+                    JsonUtils.toJsonString(sendMode));
+            throw e;
+        } catch (Exception e) {
+            log.error("AbstractValidateCodeProvider[validate] 验证码发送失败 Exception:{}, param:{}",
+                    Throwables.getStackTraceAsString(e),
+                    JsonUtils.toJsonString(sendMode));
+            throw new BizException(ErrorCodeEnum.UNKNOWN_ERROR);
+        }
+        return validateResult;
+    }
+
+    @Override
+    public ValidateResult<Void> validate(SendMode sendMode, String sourceCode, VoidFunction function) {
+        ValidateResult<Void> validateResult = ValidateResult.buildSuccessResult();
+        try {
+            String code = get(sendMode);
+            if (StringUtils.isEmpty(code) || StringUtils.isEmpty(sourceCode)) {
+                throw new BizException(ErrorCodeEnum.VALIDATE_CODE_INVALID);
+            }
+
+            if (StringUtils.equals(code, sourceCode)) {
+                throw new BizException(ErrorCodeEnum.VALIDATE_CODE_DISCORD);
+            }
+            function.apply();
+            delete(sendMode);
+        } catch (BizException e) {
+            log.error("AbstractValidateCodeProvider[validate] 验证码发送失败 BizException:{}, param:{}",
+                    Throwables.getStackTraceAsString(e),
+                    JsonUtils.toJsonString(sendMode));
+            throw e;
+        } catch (Exception e) {
+            log.error("AbstractValidateCodeProvider[validate] 验证码发送失败 Exception:{}, param:{}",
+                    Throwables.getStackTraceAsString(e),
+                    JsonUtils.toJsonString(sendMode));
+            throw new BizException(ErrorCodeEnum.UNKNOWN_ERROR);
+        }
+        return validateResult;
+    }
+
+    @Override
+    public <R> ValidateResult<R> validate(SendMode sendMode, String sourceCode, Supplier<R> supplier) {
+        ValidateResult<R> validateResult = ValidateResult.buildSuccessResult();
+        try {
+            String code = get(sendMode);
+            if (StringUtils.isEmpty(code) || StringUtils.isEmpty(sourceCode)) {
+                throw new BizException(ErrorCodeEnum.VALIDATE_CODE_INVALID);
+            }
+
+            if (StringUtils.equals(code, sourceCode)) {
+                throw new BizException(ErrorCodeEnum.VALIDATE_CODE_DISCORD);
+            }
+            validateResult.setData(supplier.get());
+            delete(sendMode);
         } catch (BizException e) {
             log.error("AbstractValidateCodeProvider[validate] 验证码发送失败 BizException:{}, param:{}",
                     Throwables.getStackTraceAsString(e),

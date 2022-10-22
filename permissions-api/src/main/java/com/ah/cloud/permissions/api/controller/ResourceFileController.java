@@ -1,6 +1,7 @@
 package com.ah.cloud.permissions.api.controller;
 
 import com.ah.cloud.permissions.biz.application.manager.ResourceFileManager;
+import com.ah.cloud.permissions.biz.domain.resource.form.ResourceFileForm;
 import com.ah.cloud.permissions.biz.domain.resource.query.ResourceFileQuery;
 import com.ah.cloud.permissions.biz.domain.resource.vo.ResourceFileDetailVo;
 import com.ah.cloud.permissions.biz.domain.resource.vo.ResourceFileVo;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 /**
  * @program: permissions-center
@@ -28,11 +30,20 @@ public class ResourceFileController {
 
     /**
      * 文件上传
-     * @return
+     * @return 文件资源id
      */
     @PostMapping("/upload")
-    public ResponseResult<Long> upload(HttpServletRequest request) {
-        return ResponseResult.ok(resourceFileManager.upload(request, PermissionsConstants.ZERO));
+    public ResponseResult<Long> upload(@RequestBody @Valid ResourceFileForm form, HttpServletRequest request) {
+        return ResponseResult.ok(resourceFileManager.upload(request, form));
+    }
+
+    /**
+     * 文件上传
+     * @return 文件地址
+     */
+    @PostMapping("/uploadForUrl")
+    public ResponseResult<String> uploadForUrl(HttpServletRequest request) {
+        return ResponseResult.ok(resourceFileManager.uploadForUrl(request));
     }
 
     /**

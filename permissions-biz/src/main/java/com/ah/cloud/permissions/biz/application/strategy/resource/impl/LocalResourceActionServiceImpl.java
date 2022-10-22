@@ -26,14 +26,14 @@ import java.io.IOException;
 
 /**
  * @program: permissions-center
- * @description:
+ * @description: 一般不用本地文件上传
  * @author: YuKai Fan
  * @create: 2022-05-07 09:34
  **/
 @Slf4j
 @Component
-public class LocalResourceActionService extends AbstractResourceActionService {
-    private final static String LOG_MARK = "LocalResourceActionService";
+public class LocalResourceActionServiceImpl extends AbstractResourceActionService {
+    private final static String LOG_MARK = "LocalResourceActionServiceImpl";
 
     /**
      * 本地上传路径
@@ -53,7 +53,7 @@ public class LocalResourceActionService extends AbstractResourceActionService {
         // 生成资源名称, 即存储在服务器上的文件名
         String resourceName = AppUtils.simpleUUID() + PermissionsConstants.DOT_SEPARATOR + FileUtils.getFileSuffix(dto.getFileName());
         try {
-            FileUtils.uploadLocal(dto.getInputStream(), path, resourceName);
+            FileUtils.transferTo(dto.getInputStream(), path + "/" + resourceName);
             resultDTO.setSuccess(true);
             resultDTO.setData(
                     UploadResultDTO.ResultData.builder()
@@ -63,7 +63,7 @@ public class LocalResourceActionService extends AbstractResourceActionService {
                             .build()
             );
         } catch (IOException e) {
-            log.error("LocalResourceActionService[upload] local file upload error, params is {}, reason is {}", JsonUtils.toJsonString(dto), Throwables.getStackTraceAsString(e));
+            log.error("LocalResourceActionServiceImpl[upload] local file upload error, params is {}, reason is {}", dto, Throwables.getStackTraceAsString(e));
             resultDTO.setSuccess(false);
             resultDTO.setMessage(Throwables.getStackTraceAsString(e));
         }
@@ -101,7 +101,7 @@ public class LocalResourceActionService extends AbstractResourceActionService {
             FileInputStream inputStream = new FileInputStream(file);
             IOUtils.copy(inputStream, dto.getOutputStream());
         } catch (IOException e) {
-            log.error("LocalResourceActionService[download] resource download error, params is {}, reason is {}", JsonUtils.toJsonString(dto), Throwables.getStackTraceAsString(e));
+            log.error("LocalResourceActionServiceImpl[download] resource download error, params is {}, reason is {}", JsonUtils.toJsonString(dto), Throwables.getStackTraceAsString(e));
             throw new BizException(FileErrorCodeEnum.FILE_RESOURCE_DOWNLOAD_ERROR, String.valueOf(dto.getResId()));
         }
     }

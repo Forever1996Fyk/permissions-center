@@ -87,6 +87,27 @@ public class JsonUtils {
     }
 
     /**
+     * json string转为map
+     *
+     * @param json
+     * @param <T>
+     * @return
+     */
+    public static Map<String, String> stringToMap2(String json) {
+        if (StringUtils.isEmpty(json)) {
+            return null;
+        }
+        try {
+            log.info("jackson jsonString to map, params:{}", json);
+            TypeReference<Map<String, String>> typeRef = new TypeReference<Map<String, String>>() {};
+            return OBJECT_MAPPER.readValue(json, typeRef);
+        } catch (JsonProcessingException e) {
+            log.error("jackson jsonString to object  error, params:{}, exception:{}", json, Throwables.getStackTraceAsString(e));
+            return null;
+        }
+    }
+
+    /**
      * json字符串转成list
      *
      * @param jsonString

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @program: permissions-center
- * @description:
+ * @description:O
  * @author: YuKai Fan
  * @create: 2022-07-04 15:04
  **/

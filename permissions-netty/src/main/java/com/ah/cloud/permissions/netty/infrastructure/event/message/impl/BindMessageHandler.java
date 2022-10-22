@@ -1,6 +1,5 @@
 package com.ah.cloud.permissions.netty.infrastructure.event.message.impl;
 
-import com.ah.cloud.permissions.biz.application.manager.TokenManager;
 import com.ah.cloud.permissions.biz.domain.user.DeviceInfo;
 import com.ah.cloud.permissions.biz.domain.user.LocalUser;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
@@ -13,8 +12,8 @@ import com.ah.cloud.permissions.netty.application.manager.SessionManager;
 import com.ah.cloud.permissions.netty.domain.message.BindMessage;
 import com.ah.cloud.permissions.netty.domain.message.body.MessageBody;
 import com.ah.cloud.permissions.netty.domain.notify.OfflineNotify;
-import com.ah.cloud.permissions.netty.domain.session.key.SingleSessionKey;
 import com.ah.cloud.permissions.netty.domain.session.SingleSession;
+import com.ah.cloud.permissions.netty.domain.session.key.SingleSessionKey;
 import com.ah.cloud.permissions.netty.infrastructure.config.NettyProperties;
 import com.ah.cloud.permissions.netty.infrastructure.event.message.AbstractMessageHandler;
 import com.ah.cloud.permissions.netty.infrastructure.event.message.MessageHandler;
@@ -42,8 +41,6 @@ import java.util.Objects;
 public class BindMessageHandler extends AbstractMessageHandler<BindMessage> {
     private final static String LOG_MARK = "BindMessageHandler";
     @Resource
-    private TokenManager tokenManager;
-    @Resource
     private SessionHelper sessionHelper;
     @Resource
     private NotifySelector notifySelector;
@@ -62,7 +59,8 @@ public class BindMessageHandler extends AbstractMessageHandler<BindMessage> {
     @Override
     protected void doHandle(ChannelHandlerContext context, MessageBody<BindMessage> body) {
         BindMessage message = body.getData();
-        LocalUser localUser = tokenManager.getLocalUserByToken(message.getToken());
+        // todo 获取当前登录人信息
+        LocalUser localUser = LocalUser.builder().build();
         if (Objects.isNull(localUser)) {
             // 用户未登录
             log.warn("BindMessageHandler[doHandle] user bind failed token is wrong, body is {}", JsonUtils.toJsonString(body));

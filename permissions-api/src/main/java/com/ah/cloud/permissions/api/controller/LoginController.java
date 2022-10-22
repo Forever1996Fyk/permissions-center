@@ -3,10 +3,13 @@ package com.ah.cloud.permissions.api.controller;
 import com.ah.cloud.permissions.api.assembler.ValidateCodeAssembler;
 import com.ah.cloud.permissions.biz.application.manager.ValidateCodeManager;
 import com.ah.cloud.permissions.biz.application.manager.login.LoginProvider;
+import com.ah.cloud.permissions.biz.domain.code.ValidateResult;
 import com.ah.cloud.permissions.biz.domain.login.UsernamePasswordLoginForm;
 import com.ah.cloud.permissions.biz.domain.login.ValidateCodeLoginForm;
 import com.ah.cloud.permissions.biz.domain.token.AccessToken;
 import com.ah.cloud.permissions.biz.domain.token.Token;
+import com.ah.cloud.permissions.biz.infrastructure.annotation.EnableDecrypt;
+import com.ah.cloud.permissions.biz.infrastructure.annotation.ParamsDecrypt;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,8 +40,9 @@ public class LoginController {
      * @param form
      * @return
      */
+    @EnableDecrypt
     @PostMapping("/usernamePasswordLogin")
-    public ResponseResult<Token> usernamePasswordLogin(@RequestBody @Valid UsernamePasswordLoginForm form) {
+    public ResponseResult<Token> usernamePasswordLogin(@RequestBody @Valid @ParamsDecrypt(scope = ParamsDecrypt.DecryptScope.ALL) UsernamePasswordLoginForm form) {
         return ResponseResult.ok(loginProvider.getAccessToken(form));
     }
 
@@ -49,7 +53,10 @@ public class LoginController {
      */
     @PostMapping("/validateCodeLogin")
     public ResponseResult<Token> validateCodeLogin(@RequestBody @Valid ValidateCodeLoginForm form) {
-        validateCodeManager.validateCode(assembler.convert(form.getSender()), form.getValidateCode());
-        return ResponseResult.ok(loginProvider.getAccessToken(form));
+        ValidateResult<Token> result = validateCodeManager.validateCode(
+                assembler.convert(form.getSender())
+                , form.getValidateCode()
+                , () -> loginProvider.getAccessToken(form));
+        return ResponseResult.ok(result.getData());
     }
 }

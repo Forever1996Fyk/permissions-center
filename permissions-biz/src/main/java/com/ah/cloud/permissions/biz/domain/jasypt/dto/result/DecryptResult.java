@@ -1,4 +1,4 @@
-package com.ah.cloud.permissions.biz.domain.jasypt.dto;
+package com.ah.cloud.permissions.biz.domain.jasypt.dto.result;
 
 import lombok.*;
 
@@ -14,10 +14,15 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class EncryptResult implements HandleResult{
+public class DecryptResult implements HandleResult {
 
     /**
-     * 加密结果
+     * 解密结果
      */
     String result;
+
+    /**
+     * bytes 结果
+     */
+    byte[] resultBytes;
 }

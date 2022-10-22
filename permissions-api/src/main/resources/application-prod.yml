@@ -12,17 +12,17 @@ permission:
       decrypt-secret-key: permission
 
 elasticsearch:
-  hostname: p(jlntwUv5DX3uDiFbj+JiQiuLRrjrMqzW)
-  port: 9200
+  hostname: $[xdKWgSsmi/E57j5kwrGbqpz43f2FgFJs]
+  port: $[ko/Ui477T6KNXS3NbX0E/A==]
 
 spring:
   redis:
     ################### redis 单机版 start ##########################
-    host: p(R36IBjDtI7e4/+LpezKKz8ZWW6QHL3ug)
-    port: 6379
-    password: p(l1bU7NB8TkBk9Cd7ICXB3qCfm/UYmkYZ)
+    host: $[yuXsmYYO4eOx5s7MAtjDxYlukTCLsziQ]
+    port: $[LmeMcOhAVwMn1cVMuS/9Gw==]
+    password: $[qj5rq3JUYj/op2ZxJ3rrMQ==]
     timeout: 6000
-    database: 8
+    database: 0
     lettuce:
       pool:
         # 连接池最大连接数（使用负值表示没有限制）,如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)
@@ -41,27 +41,27 @@ spring:
       permissions0:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: p(epBJ9716DrFJmiG3g4R5Cb/lkr/MxMtXD1S+hmWFvsJ6FQWUG9l9PASghFzWl2VN8GSQevGrrIAnrINO+46KWSfud04EpIcsepXEVtL6b2T2OW/BbJ0DS/vgI4GmExAaxwDbLaJ7MbhVmT57C6ajx+2KHD+IPsNPTlUz0LsbV5HD7j4jjTseeb5S5udAjfYPqP7qZEJFASzTFINJrcm/gPS73cKzCuOAqtl+PJ42rsn/+2spdBoxH1FteL3qkzXI2JSNMlf1OryU3ckXYW9qOA==)
-        username: p(chfrk1x7kOYITUahvGyokg==)
-        password: p(QUoxs/cb05BOyRaq4PHoqnTtHi52p/mf)
+        url: $[7CZZNr33D5OvPaxevnL58nJjf9NU8cvU10X9pf2OWxJba1hyeXcV1hgpBUYuqLIkzdsR9foEJYNWHi6NvUt5bPTg6AHf4KTN/gp/aHjluxdq2rGnuVjhk/KbrLj0AI5/XfYIuW0LzF24J0Twd8RBPl7zkVq315isdh4tQREEJLERjQuBvFEJemt/PcLW8+KtDlEXTc03L1lnFmlfQFcn0yYD12asDJgLQT3m6ryjHSK15dqbXHUIwryzIwlMl1/Db5ztTqMQwNxWWDUSidHhAA==]
+        username: root
+        password: root
       leaf0:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: p(dfZmXpMrBqbo03OBiJ7fsPx7xlxR1csAYX36FPxw+eazfS8z9xhn4thmpamLPmDGSBhq2LSTuycAi3w7yocpyNV12gDGzbwSZqkb4Ze46xtC4fVsc9u140Awh6iHJ0b9aO35w4uPcWSZ5ahTW/dnuxyxPLB9C7MH6wWaKDsaSgDl2XkM7+uA05Co184uglIR5zG4/RkjbX8FwWAqR9j0Y7MXRDDWqFwpQWLcPCNRnlgJr2oB2dODSvdh8MWoNn0zRFJxBLn8/W0=)
-        username: p(chfrk1x7kOYITUahvGyokg==)
-        password: p(QUoxs/cb05BOyRaq4PHoqnTtHi52p/mf)
+        url: $[YMiCsbpVTo8X9j1E4I8ffHR2v+gmFRzuO+TQiyMGglVHXuZW6bgeir+hD9Dgc2cBhYfRWk0xZ/sa9Ao0b2Jj2n8ovOxRZlw/Sgs/QWIVjursUVZRc9J3rs6mLBH79ypnGnp0M763ZiBSs69Dn1bgIQMnsRtqZe3F22W1aEq45nqFmZrvlBiyUWazfAilkpXwa/uNfSbVgWbrWWACfVCPJnIfeuQQl/X0/onJYfolgZi/Ie2dKg8wlRF9rbw1uknVPsr9BfGSnVU=]
+        username: $[0GSSWy/ks335Nz0wCUeNLQ==]
+        password: $[nkr/47m3PUDFGX8ou2MB7Q==]
       edi0:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: p(YavqYgA9PElknvgC3SRFOqPvFyM6Q89eopqm1sCSBWN4kVjQ1Z5JBfGidlZiR+fWDRbWdBGAPsRcNf/5R7b+tzPy16vPeWYiBIuVDzVbQTVChX+39v9goQZLfjg1d4aJp5FDH2DwWU/IWWfcnVfoI63uzst13AdgbT+v3/A81HX8Tm5sYBeJI+scSBWUw47qd/L07T8xkOpiGxCLu9pHe2fzxOhjTCFdNTEroh/jtY1DC/hZjCTubP5TnDazv8su7NRxLWxgdag=)
-        username: p(chfrk1x7kOYITUahvGyokg==)
-        password: p(QUoxs/cb05BOyRaq4PHoqnTtHi52p/mf)
+        url: $[vIeRi916FAgRkajjk9Hkt4R7EpOjyiQplW/GB9RN2xJ3SJeXUiRkJ4dDNk+x4ZPrBnuk9lIPSYnt9Izcz9LQQt2MWdGAC3OYd6mDPjUq+aQbKkSt+JApElosRHvB+iHKrSG+zejGkHJN69l1DaaS2ZAl/UHRALs0xg0TPnKJ+UScZSUf2eX7yxZuV6dvSVQw6dkqf/9haHWlSzgDoC0yTwRUKI5OvjjksEy2e7AJ0l89o66/w7izXzEwdv4h57FL]
+        username: $[0GSSWy/ks335Nz0wCUeNLQ==]
+        password: $[nkr/47m3PUDFGX8ou2MB7Q==]
       workflow0:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: p(93gS0bUJgp1rYme5CiKws/z6IyZWsc2xhsztl4UGuDwFNbKB+LcPVmI0AJFKkSTAYBFqkZdPTbFllbxeOBr+E0H/Mryw7JJAESy4lfTiW0dDBWGAsEYj/j+YCsG55AR13DejNbU0hrsavK+54j15UgLVxVQJycLD3uaKnrFYYoDTOr4NCCOyvebQ7ko2A6FArQWDBDBZtcatH/W3KwIdZ2VYerXuqGQji48MC4Q0I2qMOwOnfRnP1v2zhsN057dXEA/NXkLqgL8=)
-        username: p(chfrk1x7kOYITUahvGyokg==)
-        password: p(QUoxs/cb05BOyRaq4PHoqnTtHi52p/mf)
+        url: $[IFbLGjEuKSM9NUsnYSrjbU7dm9/81a77i+4Legvgt8wpsq72ydBu5YUCWl0Si4yFvIikVtuA+nE1ZrbHvxHfTFCMUaYVFqYMIg1fOjdB1DdTNvc7uA/UPk0rGGywNI9hRliANYnAGMQURLIwXHwerZFmbWC8Hvdw6vB1BplGL1Y/MxR6WccZh+AuwsTax15MOm5PoUUTDCMkc3ZhHbfyNNRcKHjSfYzVOoV7bb8u0+dO7/0w12zWHcbQOkV6TPJO6X0mHghDoEs=]
+        username: $[0GSSWy/ks335Nz0wCUeNLQ==]
+        password: $[nkr/47m3PUDFGX8ou2MB7Q==]
     props:
       sql:
         show: true
@@ -139,6 +139,7 @@ security:
       - /validateCode/sendCode
       - /validateCode/sendSmsCode
       - /validateCode/sendEmailCode
+      - /es/**
 
 mq:
   redis:
@@ -155,17 +156,18 @@ mq:
         name: group-chat-Node
       groupChatListenerNodePattern:
         name: group-chat-Node:*
-jasypt:
-  encryptor:
-    password: permission
 
 system:
   upload:
     path: /upload
   local:
     file:
-      uri: http://api-v1.lovexiaoming.top/showImage/
+      uri: http://localhost:8080/showImage/
   mode: visitor
+
+jasypt:
+  encryptor:
+    password: permission
 
 edi:
   retry:

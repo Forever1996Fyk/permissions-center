@@ -1,5 +1,6 @@
 package com.ah.cloud.permissions.biz.domain.user;
 
+import com.ah.cloud.permissions.biz.domain.token.AccessToken;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,7 @@ import java.util.Collection;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LocalUser implements UserDetails {
+public class LocalUser implements BaseUserDetails<AccessToken> {
     /**
      * 账号
      */
@@ -47,11 +48,6 @@ public class LocalUser implements UserDetails {
     private DeviceInfo deviceInfo;
 
     /**
-     * 当前用户的登录token
-     */
-    private String accessToken;
-
-    /**
      * 认证是否过期
      */
     private Boolean credentialsNonExpired;
@@ -75,6 +71,11 @@ public class LocalUser implements UserDetails {
      * 权限是否变更
      */
     private boolean authorityChanged;
+
+    /**
+     * 用户token
+     */
+    private AccessToken token;
 
     @JsonIgnore
     @Override

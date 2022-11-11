@@ -25,10 +25,10 @@ public interface SysUserExtMapper extends BaseMapper<SysUser> {
      * @param resultHandler
      */
     @Select("<script>" +
-            "select account, nick_name, phone, email, sex, dept_code, post_code, status" +
+            "select account, nick_name, phone, email, sex, dept_code, post_code, status " +
             "from sys_user " +
             "<where> " +
-            " 1 = 1 and delete = 0 " +
+            " 1 = 1 and deleted = 0 " +
             "<if test='account != null'> and account = #{account} </if>" +
             "<if test='nickName != null'> and nick_name like concat('%', #{nickName}, '%') </if>" +
             "<if test='phone != null'> and phone = #{phone} </if>" +

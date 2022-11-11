@@ -9,7 +9,6 @@
         <module>permissions-server</module>
         <module>permissions-biz</module>
         <module>permissions-task</module>
-        <module>permissions-netty</module>
         <module>permissions-workflow</module>
         <module>permissions-edi</module>
         <module>permissions-elasticsearch</module>

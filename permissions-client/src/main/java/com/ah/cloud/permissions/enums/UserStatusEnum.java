@@ -60,4 +60,17 @@ public enum UserStatusEnum {
         }
         return UNKNOWN;
     }
+
+    public static boolean isValid(Integer value) {
+        UserStatusEnum statusEnum = valueOf(value);
+        return Objects.equals(statusEnum, UNKNOWN);
+    }
+
+    /**
+     * 是否可用
+     * @return
+     */
+    public boolean isEnabled() {
+        return Objects.equals(this, NORMAL);
+    }
 }

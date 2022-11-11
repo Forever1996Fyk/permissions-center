@@ -6,6 +6,7 @@ import com.ah.cloud.permissions.biz.application.service.ResourceMetaDataService;
 import com.ah.cloud.permissions.biz.domain.resource.dto.*;
 import com.ah.cloud.permissions.biz.domain.resource.meta.vo.ResourceMetaDataVo;
 import com.ah.cloud.permissions.biz.domain.resource.vo.ResourceFileVo;
+import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.ResourceFile;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.ResourceMetaData;
@@ -14,15 +15,23 @@ import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.enums.PositionTypeEnum;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
+import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import com.ah.cloud.permissions.enums.common.FileErrorCodeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import sun.misc.BASE64Encoder;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Objects;
 
 /**
@@ -74,6 +83,32 @@ public abstract class AbstractResourceActionService implements ResourceActionSer
     }
 
     @Override
+    public void downloadFile(Long resId, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if (resId == null) {
+            log.error("{}[downloadFile] file download error resId is empty", getLogMark());
+            return;
+        }
+        ResourceFile resourceFile = resourceFileService.getOne(
+                new QueryWrapper<ResourceFile>().lambda()
+                        .eq(ResourceFile::getResId, resId)
+                        .eq(ResourceFile::getDeleted, DeletedEnum.NO.value)
+        );
+        if (Objects.isNull(resourceFile)) {
+            log.error("{}[downloadFile] file download error resourceFile is empty, resId is {}", getLogMark(), resId);
+            return;
+        }
+        response.setCharacterEncoding("utf-8");
+        // 设置强制下载不打开
+        response.setContentType("application/force-download");
+        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+        // filenameEncoding 方法兼容不同浏览器编码
+        response.addHeader("Content-Disposition", "attachment;fileName=" + filenameEncoding(resourceFile.getResourceName(), request));
+        DownloadFileDTO dto = resourceHelper.convertToDownloadDTO(resourceFile);
+        dto.setOutputStream(response.getOutputStream());
+        download(dto);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteFile(Long resId) {
         if (resId == null) {
@@ -114,7 +149,16 @@ public abstract class AbstractResourceActionService implements ResourceActionSer
 
     @Override
     public String generateUrl(GetUrlDTO dto) {
-        return null;
+        ResourceFile resourceFile = resourceFileService.getOne(
+                new QueryWrapper<ResourceFile>().lambda()
+                        .eq(ResourceFile::getResId, dto.getResId())
+                        .eq(ResourceFile::getDeleted, DeletedEnum.NO.value)
+        );
+        if (Objects.isNull(resourceFile)) {
+            log.error("{}[generateUrl] get resource url resourceFile is empty, resId is {}", getLogMark(), dto.getResId());
+            throw new BizException(FileErrorCodeEnum.FILE_RESOURCE_NOT_EXISTED, dto.getResId().toString());
+        }
+        return doGetUrl(resourceFile);
     }
 
     @Override
@@ -129,25 +173,6 @@ public abstract class AbstractResourceActionService implements ResourceActionSer
 
     private ResourceFile doUpload(UploadFileDTO dto) {
         PositionTypeEnum positionTypeEnum = getPositionTypeEnum();
-        /*
-        这里需要注意的是，通过文件流获取fileMd5和Sha1的值，会直接直接把文件流读完，
-        导致后面上传文件时，文件流为空的情况出现
-         */
-        String fileMd5 = FileUtils.getFileMD5(dto.getBytes());
-        String fileSha1 = FileUtils.getFileSHA1(dto.getBytes());
-//        ResourceMetaData existResourceMetaData = resourceMetaDataService.getOne(
-//                new QueryWrapper<ResourceMetaData>().lambda()
-//                        .eq(ResourceMetaData::getFileMd5, fileMd5)
-//                        .eq(ResourceMetaData::getFileSha1, fileSha1)
-//                        .eq(ResourceMetaData::getDeleted, DeletedEnum.NO.value)
-//        );
-//        if (!Objects.isNull(existResourceMetaData)) {
-//            log.info("{}[upload] file upload existed, uploadType is {},  params is {}", getLogMark(), positionTypeEnum, dto);
-//            return resourceFileService.getOne(
-//                    new QueryWrapper<ResourceFile>().lambda()
-//                            .eq(ResourceFile::getResId, existResourceMetaData.getResId())
-//            );
-//        }
         // 构建资源文件信息
         ResourceFile resourceFile = resourceHelper.convertToEntity(dto);
         // 上传文件
@@ -160,21 +185,28 @@ public abstract class AbstractResourceActionService implements ResourceActionSer
                     , Objects.isNull(resultDTO) ? "上传返回结果为空" : resultDTO.getMessage());
             throw new BizException(FileErrorCodeEnum.FILE_UPLOAD_ERROR, dto.getFileName());
         }
-        String userNameBySession = SecurityUtils.getUserNameBySession();
+        String creator = dto.getCreator();
+        String modifier = dto.getModifier();
+        if (StringUtils.isBlank(creator)) {
+            creator = SecurityUtils.getUserNameBySession();
+        }
+        if (StringUtils.isBlank(modifier)) {
+            modifier = SecurityUtils.getUserNameBySession();
+        }
         UploadResultDTO.ResultData data = resultDTO.getData();
         resourceFile.setResourceName(data.getResourceName());
         resourceFile.setResourceUrl(data.getResourceUrl());
         resourceFile.setResourcePath(data.getResourcePath());
         resourceFile.setPositionType(positionTypeEnum.getType());
-        resourceFile.setCreator(userNameBySession);
-        resourceFile.setModifier(userNameBySession);
+        resourceFile.setCreator(creator);
+        resourceFile.setModifier(modifier);
         resourceFileService.save(resourceFile);
 
         ResourceMetaData resourceMetaData = resourceHelper.convertToMetaEntity(dto, resourceFile);
-        resourceMetaData.setFileMd5(fileMd5);
-        resourceMetaData.setFileSha1(fileSha1);
-        resourceMetaData.setCreator(userNameBySession);
-        resourceMetaData.setModifier(userNameBySession);
+        resourceMetaData.setFileMd5(PermissionsConstants.STR_EMPTY);
+        resourceMetaData.setFileSha1(PermissionsConstants.STR_EMPTY);
+        resourceMetaData.setCreator(creator);
+        resourceMetaData.setModifier(modifier);
         resourceMetaDataService.save(resourceMetaData);
         return resourceFile;
     }
@@ -208,4 +240,35 @@ public abstract class AbstractResourceActionService implements ResourceActionSer
      * @return
      */
     protected abstract String getLogMark();
+
+    /**
+     * 获取url
+     * @param resourceFile
+     * @return
+     */
+    protected abstract String doGetUrl(ResourceFile resourceFile);
+
+    /**
+     *  设置不同浏览器编码
+     * @param filename 文件名称
+     * @param request 请求对象
+     */
+    public static String filenameEncoding(String filename, HttpServletRequest request) throws UnsupportedEncodingException {
+        // 获得请求头中的User-Agent
+        String agent = request.getHeader("User-Agent");
+        // 根据不同的客户端进行不同的编码
+
+        if (agent.contains("MSIE")) {
+            // IE浏览器
+            filename = URLEncoder.encode(filename, "utf-8");
+        } else if (agent.contains("Firefox")) {
+            // 火狐浏览器
+            BASE64Encoder base64Encoder = new BASE64Encoder();
+            filename = "=?utf-8?B?" + base64Encoder.encode(filename.getBytes("utf-8")) + "?=";
+        } else {
+            // 其它浏览器
+            filename = URLEncoder.encode(filename, "utf-8");
+        }
+        return filename;
+    }
 }

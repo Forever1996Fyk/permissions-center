@@ -16,7 +16,7 @@ spring:
 # slf4j日志配置
 logging:
   config: classpath:logback-spring.xml
-  path: ./logs/ypsx-logistics-platform/
+  path: ./logs/permissions-api/
   level:
     root: INFO
     org:

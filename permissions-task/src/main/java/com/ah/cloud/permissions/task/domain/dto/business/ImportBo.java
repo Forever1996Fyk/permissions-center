@@ -45,7 +45,7 @@ public class ImportBo<T extends ImportBaseDTO> {
     /**
      * 错误信息
      */
-    private Map<String, String> errorMsgMap = Maps.newHashMap();
+    private Map<String, String> errorMsgMap;
 
 
     /**

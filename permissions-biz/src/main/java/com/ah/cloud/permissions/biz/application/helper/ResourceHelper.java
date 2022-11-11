@@ -172,12 +172,13 @@ public class ResourceHelper {
         @Mappings({
                 @Mapping(target = "isPublicEnum", source = "isPublic"),
                 @Mapping(target = "resourceBizTypeEnum", source = "resourceBizType"),
-                @Mapping(target = "fileTypeEnum", source = "fileType"),
+                @Mapping(target = "fileTypeEnum", expression = "java(com.ah.cloud.permissions.enums.FileTypeEnum.getByType(resourceFile.getFileType()))"),
         })
         DownloadFileDTO convertToDownloadDTO(ResourceFile resourceFile);
 
         /**
          * 数据转换
+         *
          * @param resourceFile
          * @return
          */

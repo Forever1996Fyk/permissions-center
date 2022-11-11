@@ -203,4 +203,15 @@ public class SysUserController {
         sysUserManager.updatePersonalBaseUserInfo(form);
         return ResponseResult.ok();
     }
+
+    /**
+     * 变更用户状态
+     * @param form
+     * @return
+     */
+    @PostMapping("/changeSysUserStatus")
+    public ResponseResult<Void> changeSysUserStatus(@RequestBody @Valid ChangeSysUserStatusForm form) {
+        sysUserManager.changeSysUserStatus(form);
+        return ResponseResult.ok();
+    }
 }

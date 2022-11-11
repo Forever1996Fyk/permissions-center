@@ -17,6 +17,7 @@ import com.ah.cloud.permissions.task.infrastructure.handler.AbstractImportHandle
 import com.ah.cloud.permissions.task.infrastructure.listener.SysUserImportExcelListener;
 import com.ah.cloud.permissions.task.infrastructure.repository.bean.SysImportExportTask;
 import com.alibaba.excel.event.AnalysisEventListener;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
@@ -96,9 +97,10 @@ public class SysUserImportHandler extends AbstractImportHandler<SysUserImportDTO
         ImportBo<SysUserImportDTO> importBo = ImportBo.<SysUserImportDTO>builder()
                 .dataList(dataList)
                 .task(task)
+                .errorCount(0L)
                 .build();
         String template = "第%s行";
-        Map<String, String> errorMsgMap = importBo.getErrorMsgMap();
+        Map<String, String> errorMsgMap = Maps.newHashMap();
         for (int i = 0; i < dataList.size(); i++) {
             SysUserImportDTO sysUserImportDTO = dataList.get(i);
             String errorKey = String.format(template, i);
@@ -138,6 +140,7 @@ public class SysUserImportHandler extends AbstractImportHandler<SysUserImportDTO
                 importBo.addOne();
             }
         }
+        importBo.setErrorMsgMap(errorMsgMap);
         return importBo;
     }
 

@@ -2,7 +2,10 @@ package com.ah.cloud.permissions.biz.infrastructure.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
@@ -13,7 +16,8 @@ import java.util.Objects;
  * @create: 2022-05-03 09:38
  **/
 @Slf4j
-public class SpringUtils {
+@Component
+public class SpringUtils implements ApplicationContextAware {
     /**
      * 是否支持spring
      */
@@ -68,4 +72,8 @@ public class SpringUtils {
         return (T) context.getBean(beanName0);
     }
 
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        inject(applicationContext);
+    }
 }

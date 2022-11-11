@@ -1,5 +1,6 @@
 package com.ah.cloud.permissions.task.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.util.Date;
@@ -29,6 +30,11 @@ public class ImportTemplateVo {
     private String bizType;
 
     /**
+     * 业务类型名称
+     */
+    private String bizTypeName;
+
+    /**
      * 模板url
      */
     private String templateUrl;
@@ -46,12 +52,14 @@ public class ImportTemplateVo {
     /**
      * 创建时间
      */
-    private String createTime;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date createTime;
 
     /**
      * 修改时间
      */
-    private String modifyTime;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date modifyTime;
 
     /**
      * 更新人
@@ -62,4 +70,9 @@ public class ImportTemplateVo {
      * 状态
      */
     private Integer status;
+
+    /**
+     * 状态类型
+     */
+    private String statusName;
 }

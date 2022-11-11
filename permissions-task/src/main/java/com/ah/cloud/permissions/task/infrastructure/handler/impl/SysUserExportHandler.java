@@ -16,6 +16,7 @@ import com.ah.cloud.permissions.task.infrastructure.handler.AbstractExportHandle
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -43,8 +44,11 @@ public class SysUserExportHandler extends AbstractExportHandler<SysUserExportDTO
 
     @Override
     protected void loadDataAndWriteFile(String param, ExcelWriter excelWriter, WriteSheet writeSheet) {
-        SysUserExportParamDTO sysUserExportParamDTO = JsonUtils.stringToBean(param, SysUserExportParamDTO.class);
-        SysUserExportQuery sysUserExportQuery = sysUserImportExportHelper.convert(sysUserExportParamDTO);
+        SysUserExportQuery sysUserExportQuery = new SysUserExportQuery();
+        if (StringUtils.isNotBlank(param)) {
+            SysUserExportParamDTO sysUserExportParamDTO = JsonUtils.stringToBean(param, SysUserExportParamDTO.class);
+            sysUserExportQuery = sysUserImportExportHelper.convert(sysUserExportParamDTO);
+        }
         List<SysUser> result = Lists.newArrayList();
         sysUserManager.listSysUserForExport(sysUserExportQuery, resultContext -> {
             result.add(resultContext.getResultObject());

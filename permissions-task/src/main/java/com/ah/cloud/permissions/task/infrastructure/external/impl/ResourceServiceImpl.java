@@ -3,14 +3,16 @@ package com.ah.cloud.permissions.task.infrastructure.external.impl;
 import com.ah.cloud.permissions.biz.application.strategy.resource.ResourceActionService;
 import com.ah.cloud.permissions.biz.application.strategy.selector.ResourceActionServiceSelector;
 import com.ah.cloud.permissions.biz.domain.resource.dto.UploadFileDTO;
-import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
+import com.ah.cloud.permissions.biz.infrastructure.util.DateUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.FileUtils;
 import com.ah.cloud.permissions.enums.FileTypeEnum;
+import com.ah.cloud.permissions.enums.PositionTypeEnum;
 import com.ah.cloud.permissions.enums.ResourceBizTypeEnum;
 import com.ah.cloud.permissions.enums.YesOrNoEnum;
 import com.ah.cloud.permissions.enums.task.ImportExportErrorCodeEnum;
 import com.ah.cloud.permissions.task.infrastructure.exception.ImportExportException;
 import com.ah.cloud.permissions.task.infrastructure.external.ResourceService;
+import com.ah.cloud.permissions.task.infrastructure.repository.bean.SysImportExportTask;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,16 +33,18 @@ public class ResourceServiceImpl implements ResourceService {
     private ResourceActionServiceSelector selector;
 
     @Override
-    public Long uploadFile(String fileName, String filePath) {
-        ResourceActionService actionService = selector.select();
+    public Long uploadFile(String fileName, String filePath, SysImportExportTask task) {
+        ResourceActionService actionService = selector.select(PositionTypeEnum.MINIO_OSS);
         try (InputStream inputStream = FileUtils.getInputStream(fileName, filePath)) {
             UploadFileDTO uploadFileDTO = UploadFileDTO.builder()
                     .fileName(fileName)
-                    .expirationTime(null)
+                    .expirationTime(DateUtils.plusDayLocalDateToInstant(7))
                     .fileTypeEnum(FileTypeEnum.EXCEL)
                     .isPublic(YesOrNoEnum.YES)
                     .resourceBizTypeEnum(ResourceBizTypeEnum.EXPORTING)
                     .inputStream(inputStream)
+                    .creator(task.getCreator())
+                    .modifier(task.getModifier())
                     .build();
             return actionService.uploadFile(uploadFileDTO);
 

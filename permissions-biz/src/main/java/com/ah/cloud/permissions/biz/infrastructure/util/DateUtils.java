@@ -1,13 +1,14 @@
 package com.ah.cloud.permissions.biz.infrastructure.util;
 
-import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
-import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
@@ -254,5 +255,15 @@ public class DateUtils {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime minutesBefore = now.minusMinutes(minutes);
         return localDateTime2Str(minutesBefore, pattern0);
+    }
+
+    /**
+     * 基于当前时间 添加固定天数, 并返回Instant对象
+     *
+     * @param days
+     * @return Instant
+     */
+    public static Instant plusDayLocalDateToInstant(long days) {
+        return LocalDate.now().plusDays(days).atStartOfDay().toInstant(ZoneOffset.UTC);
     }
 }

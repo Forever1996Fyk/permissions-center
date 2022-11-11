@@ -297,7 +297,8 @@ public class UserAuthorityHelper {
          * @return
          */
         @Mappings({
-                @Mapping(target = "userStatusEnum", source = "status")
+                @Mapping(target = "userStatusEnum", source = "status"),
+                @Mapping(target = "userName", source = "name")
         })
         UserAuthorityDTO convert(SysUser sysUser);
     }

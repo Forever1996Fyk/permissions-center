@@ -6,10 +6,6 @@ permission:
         androidAppMasterSecret:
         iosAppKey:
         iosAppMasterSecret:
-    netty:
-      port: 9090
-    decrypt:
-      decrypt-secret-key: permission
 
 elasticsearch:
   hostname: localhost
@@ -164,10 +160,6 @@ system:
     file:
       uri: http://localhost:8080/showImage
   mode: developer
-
-jasypt:
-  encryptor:
-    password: permission
 
 edi:
   retry:

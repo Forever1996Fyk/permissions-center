@@ -166,7 +166,6 @@ public class ResourceFileHelper {
                     .fileTypeEnum(FileUtils.getFileType(FileSuffixTypeEnum.getByType(FileUtils.getFileSuffix(multipartFile.getOriginalFilename()))))
                     .resourceBizTypeEnum(ResourceBizTypeEnum.getByType(form.getBizType()))
                     .inputStream(new ByteArrayInputStream(bytes))
-                    .bytes(bytes)
                     .build();
             if (!Objects.equals(form.getExpireTime(), PermissionsConstants.NEGATIVE_ONE_LONG)) {
                 Instant instant = Instant.now().plus(form.getExpireTime(), TimeTypeEnum.convertToChronoUnit(form.getTimeUnit()));

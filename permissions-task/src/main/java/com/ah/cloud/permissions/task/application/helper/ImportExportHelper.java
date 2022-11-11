@@ -19,6 +19,8 @@ import com.ah.cloud.permissions.task.infrastructure.repository.bean.SysImportExp
 import com.ah.cloud.permissions.task.infrastructure.repository.bean.SysImportTemplateInfo;
 import com.github.pagehelper.PageInfo;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -87,9 +89,10 @@ public class ImportExportHelper {
      */
     public PageResult<ImportExportTaskVo> convertToPageResult(PageInfo<SysImportExportTask> pageInfo) {
         PageResult<ImportExportTaskVo> pageResult = new PageResult<>();
-        pageResult.setPageSize(pageResult.getPageSize());
-        pageResult.setPageNum(pageResult.getPageNum());
-        pageResult.setTotal(pageResult.getTotal());
+        pageResult.setPageSize(pageInfo.getPageSize());
+        pageResult.setPageNum(pageInfo.getPageNum());
+        pageResult.setPages(pageInfo.getPages());
+        pageResult.setTotal(pageInfo.getTotal());
         pageResult.setRows(Convert.INSTANCE.convertToVoList(pageInfo.getList()));
         return pageResult;
     }
@@ -157,8 +160,10 @@ public class ImportExportHelper {
     public PageResult<ImportTemplateVo> convertToTemplatePageResult(PageInfo<SysImportTemplateInfo> pageInfo) {
         PageResult<ImportTemplateVo> pageResult = new PageResult<>();
         pageResult.setRows(Convert.INSTANCE.convertToTemplateVoList(pageInfo.getList()));
-        pageResult.setPageNum(pageResult.getPageNum());
-        pageResult.setPageSize(pageResult.getPageSize());
+        pageResult.setPageNum(pageInfo.getPageNum());
+        pageResult.setPageSize(pageInfo.getPageSize());
+        pageResult.setPages(pageInfo.getPages());
+        pageResult.setTotal(pageInfo.getTotal());
         return pageResult;
     }
 
@@ -171,6 +176,9 @@ public class ImportExportHelper {
          * @param task
          * @return
          */
+        @Mappings({
+                @Mapping(target = "statusName", expression = "java(com.ah.cloud.permissions.task.domain.enums.ImportExportTaskStatusEnum.getByStatus(task.getStatus()).getDesc())")
+        })
         ImportExportTaskVo convertToVo(SysImportExportTask task);
 
         /**
@@ -185,6 +193,10 @@ public class ImportExportHelper {
          * @param sysImportTemplateInfo
          * @return
          */
+        @Mappings({
+                @Mapping(target = "bizTypeName", expression = "java(com.ah.cloud.permissions.task.domain.enums.ImportExportBizTypeEnum.getByCode(sysImportTemplateInfo.getBizType()).getDesc())"),
+                @Mapping(target = "statusName", expression = "java(com.ah.cloud.permissions.task.domain.enums.ImportTemplateStatusEnum.getByStatus(sysImportTemplateInfo.getStatus()).getDesc())")
+        })
         ImportTemplateVo convertToTemplateVo(SysImportTemplateInfo sysImportTemplateInfo);
 
         /**

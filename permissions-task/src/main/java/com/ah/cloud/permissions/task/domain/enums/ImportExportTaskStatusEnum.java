@@ -1,5 +1,8 @@
 package com.ah.cloud.permissions.task.domain.enums;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * @program: permissions-center
  * @description:
@@ -48,6 +51,13 @@ public enum ImportExportTaskStatusEnum {
     ImportExportTaskStatusEnum(Integer status, String desc) {
         this.status = status;
         this.desc = desc;
+    }
+
+    public static ImportExportTaskStatusEnum getByStatus(Integer status) {
+        return Arrays.stream(values())
+                .filter(importExportTaskStatusEnum -> Objects.equals(importExportTaskStatusEnum.getStatus(), status))
+                .findFirst()
+                .orElse(UNKNOWN);
     }
 
     public Integer getStatus() {

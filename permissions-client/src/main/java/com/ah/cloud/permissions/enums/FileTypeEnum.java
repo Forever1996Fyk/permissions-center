@@ -1,5 +1,11 @@
 package com.ah.cloud.permissions.enums;
 
+import org.omg.CORBA.UNKNOWN;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * @program: permissions-center
  * @description: 文件类型
@@ -57,6 +63,13 @@ public enum FileTypeEnum {
     FileTypeEnum(int type, String desc) {
         this.type = type;
         this.desc = desc;
+    }
+
+    public static FileTypeEnum getByType(Integer type) {
+        return Arrays.stream(values())
+                .filter(fileTypeEnum -> Objects.equals(fileTypeEnum.getType(), type))
+                .findFirst()
+                .orElse(OTHER);
     }
 
     public int getType() {

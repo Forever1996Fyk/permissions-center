@@ -4,7 +4,9 @@ import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants
 import com.ah.cloud.permissions.enums.FileSuffixTypeEnum;
 import com.ah.cloud.permissions.enums.FileTypeEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import sun.security.krb5.internal.crypto.Des;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -101,21 +103,13 @@ public class FileUtils {
     /**
      * 根据输入流 获取文件SHA1值
      *
-     * @param fis
+     * @param inputStream
      * @return
      */
-    public static String getFileSHA1(byte[] bytes) {
-        byte[] buffer = new byte[bytes.length];
-        // 这里必须new 一个新的文件流，否则会导致原来的文件流数据被读完了
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+    public static String getFileSHA1(InputStream inputStream) {
         try {
-            MessageDigest sha1 = MessageDigest.getInstance("SHA1");
-            int len;
-            while ((len = byteArrayInputStream.read(buffer)) != -1) {
-                sha1.update(buffer, 0, len);
-            }
-            return new BigInteger(1, sha1.digest()).toString(16);
-        } catch (IOException | NoSuchAlgorithmException e) {
+            return DigestUtils.sha1Hex(inputStream);
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
@@ -124,21 +118,13 @@ public class FileUtils {
     /**
      * 根据输入流 获取文件MD5值
      *
-     * @param bytes
+     * @param inputStream
      * @return
      */
-    public static String getFileMD5(byte[] bytes) {
-        byte[] buffer = new byte[bytes.length];
-        // 这里必须new 一个新的文件流，否则会导致原来的文件流数据被读完了
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+    public static String getFileMD5(InputStream inputStream) {
         try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            int len;
-            while ((len = byteArrayInputStream.read(buffer)) != -1) {
-                md5.update(buffer, 0, len);
-            }
-            return new BigInteger(1, md5.digest()).toString(16);
-        } catch (IOException | NoSuchAlgorithmException e) {
+            return DigestUtils.md5Hex(inputStream);
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }

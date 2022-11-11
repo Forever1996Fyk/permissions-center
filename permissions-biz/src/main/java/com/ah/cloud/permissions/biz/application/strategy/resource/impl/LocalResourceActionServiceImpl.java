@@ -7,6 +7,7 @@ import com.ah.cloud.permissions.biz.domain.resource.dto.UploadFileDTO;
 import com.ah.cloud.permissions.biz.domain.resource.dto.UploadResultDTO;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
+import com.ah.cloud.permissions.biz.infrastructure.repository.bean.ResourceFile;
 import com.ah.cloud.permissions.biz.infrastructure.util.AppUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.DateUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.FileUtils;
@@ -109,6 +110,11 @@ public class LocalResourceActionServiceImpl extends AbstractResourceActionServic
     @Override
     protected String getLogMark() {
         return LOG_MARK;
+    }
+
+    @Override
+    protected String doGetUrl(ResourceFile resourceFile) {
+        return resourceFile.getResourceUrl();
     }
 
     @Override

@@ -51,8 +51,18 @@ public class ResourceFileController {
      * @param resId
      */
     @PostMapping("/download/{resId}")
-    public void download(@PathVariable("resId") Long resId, HttpServletResponse response) {
-        resourceFileManager.download(response, resId);
+    public void download(@PathVariable("resId") Long resId, HttpServletRequest request, HttpServletResponse response) {
+        resourceFileManager.download(request, response, resId);
+    }
+
+    /**
+     * 获取文件下载地址
+     * @param resId
+     * @return
+     */
+    @GetMapping("/getDownloadUrl/{resId}")
+    public ResponseResult<String> getDownloadUrl(@PathVariable("resId") Long resId) {
+        return ResponseResult.ok(resourceFileManager.getDownloadUrl(resId));
     }
 
     /**

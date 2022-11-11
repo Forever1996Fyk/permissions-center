@@ -1,5 +1,6 @@
 package com.ah.cloud.permissions.biz.infrastructure.minio;
 
+import cn.hutool.core.io.FastByteArrayOutputStream;
 import com.ah.cloud.permissions.biz.domain.minio.MinioResult;
 import com.ah.cloud.permissions.biz.infrastructure.config.MinioConfiguration;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
@@ -89,15 +90,22 @@ public abstract class AbstractMinioService implements MinioService {
 
     @Override
     public void download(String bucketName, String fileName, OutputStream outputStream) {
-        InputStream in;
-        try {
-            in = minioClient.getObject(
-                    GetObjectArgs.builder()
-                            .bucket(bucketName)
-                            .object(fileName)
-                            .build()
-            );
-            IOUtils.copy(in, outputStream);
+        GetObjectArgs getObjectArgs = GetObjectArgs.builder()
+                .bucket(bucketName)
+                .object(fileName)
+                .build();
+        try (GetObjectResponse response = minioClient.getObject(getObjectArgs)) {
+            byte[] buf = new byte[1024];
+            int len;
+            try (FastByteArrayOutputStream os = new FastByteArrayOutputStream()){
+                while ((len = response.read(buf)) != -1) {
+                    os.write(buf, 0, len);
+                }
+                os.flush();
+                byte[] bytes = os.toByteArray();
+                outputStream.write(bytes);
+                outputStream.flush();
+            }
         } catch (Exception e) {
             log.error("{}[download] download resource from minio failed, bucketName is {}, reason is {}", getLogMark(), bucketName, Throwables.getStackTraceAsString(e));
             throw new BizException(FileErrorCodeEnum.BUCKET_CREATE_FAILED);

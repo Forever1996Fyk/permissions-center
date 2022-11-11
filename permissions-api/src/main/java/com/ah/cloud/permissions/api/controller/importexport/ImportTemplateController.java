@@ -3,6 +3,7 @@ package com.ah.cloud.permissions.api.controller.importexport;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.domain.common.ResponseResult;
 import com.ah.cloud.permissions.task.application.manager.ImportTemplateManager;
+import com.ah.cloud.permissions.task.domain.form.ImportTemplateChangeStatusForm;
 import com.ah.cloud.permissions.task.domain.form.ImportTemplateForm;
 import com.ah.cloud.permissions.task.domain.form.ImportTemplateUpdateForm;
 import com.ah.cloud.permissions.task.domain.query.ImportTemplateQuery;
@@ -83,8 +84,19 @@ public class ImportTemplateController {
      * @param bizType
      * @return
      */
-    @GetMapping("/findDownloadTemplate/{bizType}")
+    @GetMapping("/findImportTemplateDownInfo/{bizType}")
     public ResponseResult<ImportTemplateDownloadVo> findDownloadTemplate(@PathVariable(value = "bizType") String bizType) {
         return ResponseResult.ok(importTemplateManager.findImportTemplateDownloadInfoByBizType(bizType));
+    }
+
+    /**
+     * 变更导入模版状态
+     * @param form
+     * @return
+     */
+    @PostMapping("/changeImportTemplateStatus")
+    public ResponseResult<Void> changeImportTemplateStatus(@RequestBody @Valid ImportTemplateChangeStatusForm form) {
+        importTemplateManager.changeImportTemplateStatus(form);
+        return ResponseResult.ok();
     }
 }

@@ -56,4 +56,9 @@ public class UserAuthorityDTO {
      * 菜单集合
      */
     private Set<Long> menuIdSet;
+
+    /**
+     * 用户名
+     */
+    private String userName;
 }

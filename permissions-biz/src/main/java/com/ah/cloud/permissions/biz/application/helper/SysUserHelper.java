@@ -9,6 +9,7 @@ import com.ah.cloud.permissions.biz.domain.user.form.SysUserUpdateForm;
 import com.ah.cloud.permissions.biz.domain.user.vo.BaseUserInfoVo;
 import com.ah.cloud.permissions.biz.domain.user.vo.GetUserInfoVo;
 import com.ah.cloud.permissions.biz.domain.user.vo.SysUserVo;
+import com.ah.cloud.permissions.biz.infrastructure.config.CommonConfiguration;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUser;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUserApi;
@@ -16,8 +17,10 @@ import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUserMenu;
 import com.ah.cloud.permissions.biz.infrastructure.repository.bean.SysUserRole;
 import com.ah.cloud.permissions.biz.infrastructure.util.AppUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.CollectionUtils;
+import com.ah.cloud.permissions.biz.infrastructure.util.PasswordUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
+import com.ah.cloud.permissions.enums.SexEnum;
 import com.ah.cloud.permissions.enums.UserStatusEnum;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
@@ -27,12 +30,12 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -44,7 +47,7 @@ import java.util.Set;
 @Component
 public class SysUserHelper {
     @Resource
-    private PasswordEncoder passwordEncoder;
+    private CommonConfiguration commonConfiguration;
 
     /**
      * 构建系统用户实体
@@ -58,11 +61,25 @@ public class SysUserHelper {
         sysUser.setUserId(this.generateUserId());
         sysUser.setPassword(this.encodePassword(PermissionsConstants.DEFAULT_PASSWORD));
         sysUser.setNickName(StringUtils.isEmpty(sysUser.getNickName()) ? sysUser.getNickName() : generateNickName());
+        sysUser.setAvatar(PermissionsConstants.DEFAULT_AVATAR);
         sysUser.setStatus(UserStatusEnum.NORMAL.getStatus());
         sysUser.setName(form.getName());
-        sysUser.setCreator(SecurityUtils.getUserNameBySession());
-        sysUser.setModifier(SecurityUtils.getUserNameBySession());
+
+        sysUser.setAvatar(getDefaultAvatar(sysUser));
+
+        String userNameBySession = SecurityUtils.getUserNameBySession();
+        sysUser.setCreator(userNameBySession);
+        sysUser.setModifier(userNameBySession);
         return sysUser;
+    }
+
+    /**
+     * 获取默认用户头像
+     * @param sysUser
+     * @return
+     */
+    private String getDefaultAvatar(SysUser sysUser) {
+        return Objects.equals(sysUser.getSex(), SexEnum.MALE.getType()) ? commonConfiguration.getMaleAvatarUrl() : commonConfiguration.getFemaleAvatarUrl();
     }
 
     /**
@@ -120,7 +137,7 @@ public class SysUserHelper {
      * @return
      */
     public String encodePassword(String oldPassword) {
-        return passwordEncoder.encode(oldPassword);
+        return PasswordUtils.encrypt(oldPassword);
     }
 
     /**

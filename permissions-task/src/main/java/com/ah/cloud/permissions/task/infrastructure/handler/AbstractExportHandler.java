@@ -55,7 +55,7 @@ public abstract class AbstractExportHandler<T extends ExportBaseDTO> implements 
             stopWatch.stop();
             // 文件上传
             stopWatch.start(getLogMark().concat("文件上传"));
-            Long resId = resourceService.uploadFile(ossFullFileName, filePath);
+            Long resId = resourceService.uploadFile(ossFullFileName, filePath, task);
             stopWatch.stop();
             log.info("{}[executeExport] export service, taskNo is {}, bizType is {}, resId is {}", getLogMark(), task.getTaskNo(), bizType.getDesc(), resId);
             // 清除本地文件

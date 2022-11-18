@@ -5,6 +5,7 @@ import com.ah.cloud.permissions.biz.application.service.ResourceFileService;
 import com.ah.cloud.permissions.biz.application.service.ResourceMetaDataService;
 import com.ah.cloud.permissions.biz.application.strategy.resource.ResourceActionService;
 import com.ah.cloud.permissions.biz.application.strategy.selector.ResourceActionServiceSelector;
+import com.ah.cloud.permissions.biz.domain.resource.dto.GetUrlDTO;
 import com.ah.cloud.permissions.biz.domain.resource.dto.UploadFileDTO;
 import com.ah.cloud.permissions.biz.domain.resource.form.ResourceFileForm;
 import com.ah.cloud.permissions.biz.domain.resource.query.ResourceFileQuery;
@@ -81,11 +82,10 @@ public class ResourceFileManager {
      * @param response
      * @param resId
      */
-    public void download(HttpServletResponse response, Long resId) {
-        ResourceActionService resourceActionService = selector.select();
-        response.setContentType("application/octet-stream; charset=UTF-8");
+    public void download(HttpServletRequest request, HttpServletResponse response, Long resId) {
+        ResourceActionService resourceActionService = selector.select(PositionTypeEnum.MINIO_OSS);
         try {
-            resourceActionService.downloadFile(resId, response.getOutputStream());
+            resourceActionService.downloadFile(resId, request, response);
         } catch (IOException e) {
             log.error("ResourceManager[getResourceFile] get resource file error, resId is {}, reason is {}", resId, Throwables.getStackTraceAsString(e));
             throw new BizException(FileErrorCodeEnum.FILE_RESOURCE_DOWNLOAD_ERROR, String.valueOf(resId));
@@ -147,5 +147,14 @@ public class ResourceFileManager {
                         )
                 );
         return resourceFileHelper.convertToPageResult(pageInfo);
+    }
+
+    public String getDownloadUrl(Long resId) {
+        ResourceActionService actionService = selector.select(PositionTypeEnum.MINIO_OSS);
+        return actionService.generateUrl(
+                GetUrlDTO.builder()
+                        .resId(resId)
+                        .build()
+        );
     }
 }

@@ -23,6 +23,9 @@ import com.github.pagehelper.page.PageMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
@@ -53,11 +56,17 @@ public class ImportExportTaskManager {
      *
      * @param form
      */
+    @Transactional(rollbackFor = Exception.class)
     public void createExportTask(DataExportForm form) {
         ImportExportTaskAddDTO addDTO = importExportHelper.buildTask(form);
         exportTaskClient.checkExportParam(addDTO);
         Long taskId = this.addTask(addDTO);
-        ThreadPoolManager.exportTaskThreadPool.execute(() -> exportTaskClient.exportTask(taskId));
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                ThreadPoolManager.exportTaskThreadPool.execute(() -> exportTaskClient.exportTask(taskId));
+            }
+        });
     }
 
     /**
@@ -80,6 +89,7 @@ public class ImportExportTaskManager {
                 .doSelectPageInfo(
                         () -> sysImportExportTaskService.list(
                                 new QueryWrapper<SysImportExportTask>().lambda()
+                                        .orderByDesc(SysImportExportTask::getCreateTime)
                                         .eq(StringUtils.isNotBlank(query.getBizType()), SysImportExportTask::getBizType, query.getBizType())
                                         .eq(query.getTaskStatus() != null, SysImportExportTask::getStatus, query.getTaskStatus())
                                         .eq(query.getTaskType() != null, SysImportExportTask::getTaskType, query.getTaskType())

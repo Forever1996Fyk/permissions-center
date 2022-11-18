@@ -3,6 +3,7 @@ package com.ah.cloud.permissions.biz.infrastructure.validator;
 
 import com.ah.cloud.permissions.biz.infrastructure.annotation.PhoneNumberValid;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
+import com.ah.cloud.permissions.biz.infrastructure.util.PatternUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.ConstraintValidator;
@@ -21,7 +22,6 @@ public class PhoneNumberValidator implements ConstraintValidator<PhoneNumberVali
         if (StringUtils.isEmpty(s)) {
             return false;
         }
-        Pattern p = Pattern.compile(PermissionsConstants.PHONE_REGEX);
-        return p.matcher(s).matches();
+        return PatternUtils.isMobile(s);
     }
 }

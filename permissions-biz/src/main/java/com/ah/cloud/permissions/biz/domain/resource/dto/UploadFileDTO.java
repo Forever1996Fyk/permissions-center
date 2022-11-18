@@ -53,7 +53,12 @@ public class UploadFileDTO {
     private InputStream inputStream;
 
     /**
-     * 文件数据
+     * 创建人
      */
-    private byte[] bytes;
+    private String creator;
+
+    /**
+     * 修改人
+     */
+    private String modifier;
 }

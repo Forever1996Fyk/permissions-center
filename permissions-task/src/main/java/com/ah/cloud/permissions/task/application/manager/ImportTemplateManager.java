@@ -1,5 +1,6 @@
 package com.ah.cloud.permissions.task.application.manager;
 
+import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.util.SecurityUtils;
 import com.ah.cloud.permissions.domain.common.PageResult;
 import com.ah.cloud.permissions.enums.common.DeletedEnum;
@@ -8,6 +9,7 @@ import com.ah.cloud.permissions.enums.task.ImportExportErrorCodeEnum;
 import com.ah.cloud.permissions.task.application.helper.ImportExportHelper;
 import com.ah.cloud.permissions.task.application.service.SysImportTemplateInfoService;
 import com.ah.cloud.permissions.task.domain.enums.ImportTemplateStatusEnum;
+import com.ah.cloud.permissions.task.domain.form.ImportTemplateChangeStatusForm;
 import com.ah.cloud.permissions.task.domain.form.ImportTemplateForm;
 import com.ah.cloud.permissions.task.domain.form.ImportTemplateUpdateForm;
 import com.ah.cloud.permissions.task.domain.query.ImportTemplateQuery;
@@ -16,6 +18,7 @@ import com.ah.cloud.permissions.task.domain.vo.ImportTemplateVo;
 import com.ah.cloud.permissions.task.infrastructure.exception.ImportExportException;
 import com.ah.cloud.permissions.task.infrastructure.repository.bean.SysImportTemplateInfo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +47,14 @@ public class ImportTemplateManager {
      * @param form
      */
     public void createImportTemplate(ImportTemplateForm form) {
+        SysImportTemplateInfo existedImportTemplateInfo = sysImportTemplateInfoService.getOne(
+                new QueryWrapper<SysImportTemplateInfo>().lambda()
+                        .eq(SysImportTemplateInfo::getBizType, form.getBizType())
+                        .eq(SysImportTemplateInfo::getDeleted, DeletedEnum.NO.value)
+        );
+        if (Objects.nonNull(existedImportTemplateInfo)) {
+            throw new BizException(ImportExportErrorCodeEnum.IMPORT_TEMPLATE_EXITED, form.getBizType());
+        }
         SysImportTemplateInfo sysImportTemplateInfo = importExportHelper.buildImportTemplate(form);
         sysImportTemplateInfoService.save(sysImportTemplateInfo);
     }
@@ -99,6 +110,7 @@ public class ImportTemplateManager {
                                         .eq(StringUtils.isNotBlank(query.getBizType()), SysImportTemplateInfo::getBizType, query.getBizType())
                                         .like(StringUtils.isNotBlank(query.getTemplateName()), SysImportTemplateInfo::getTemplateName, query.getTemplateName())
                                         .eq(query.getStatus() != null, SysImportTemplateInfo::getStatus, query.getStatus())
+                                        .eq(SysImportTemplateInfo::getDeleted, DeletedEnum.NO.value)
                         )
                 );
 
@@ -124,5 +136,29 @@ public class ImportTemplateManager {
                 .templateUrl(sysImportTemplateInfo.getTemplateUrl())
                 .templateName(sysImportTemplateInfo.getTemplateName())
                 .build();
+    }
+
+    /**
+     * 变更模版状态
+     * @param form
+     */
+    public void changeImportTemplateStatus(ImportTemplateChangeStatusForm form) {
+        SysImportTemplateInfo sysImportTemplateInfo = sysImportTemplateInfoService.getById(form.getId());
+        if (Objects.isNull(sysImportTemplateInfo)) {
+            throw new ImportExportException(ImportExportErrorCodeEnum.IMPORT_TEMPLATE_NOT_EXITED);
+        }
+        SysImportTemplateInfo updateSysImportTemplateInfo = new SysImportTemplateInfo();
+        updateSysImportTemplateInfo.setStatus(form.getStatus());
+        updateSysImportTemplateInfo.setVersion(sysImportTemplateInfo.getVersion());
+        boolean updateResult = sysImportTemplateInfoService.update(
+                updateSysImportTemplateInfo,
+                new UpdateWrapper<SysImportTemplateInfo>().lambda()
+                        .eq(SysImportTemplateInfo::getId, sysImportTemplateInfo.getId())
+                        .eq(SysImportTemplateInfo::getVersion, sysImportTemplateInfo.getVersion())
+        );
+        if (!updateResult) {
+            throw new BizException(ErrorCodeEnum.VERSION_ERROR);
+        }
+
     }
 }

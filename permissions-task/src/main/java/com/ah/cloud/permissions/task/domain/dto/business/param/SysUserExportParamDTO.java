@@ -1,5 +1,7 @@
 package com.ah.cloud.permissions.task.domain.dto.business.param;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -9,6 +11,7 @@ import lombok.Data;
  * @create: 2022-07-15 14:05
  **/
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SysUserExportParamDTO {
 
     /**

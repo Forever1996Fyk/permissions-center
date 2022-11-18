@@ -70,7 +70,7 @@ public class SysApiManager {
             resourceLoader.updateResourceMap(
                     AuthorityApiDTO.builder()
                             .apiCode(form.getApiCode())
-                            .apiStatusEnum(ApiStatusEnum.valueOf(form.getApiType()))
+                            .apiStatusEnum(ApiStatusEnum.NORMAL)
                             .apiTypeEnum(SysApiTypeEnum.getByType(form.getApiType()))
                             .auth(Objects.equals(YesOrNoEnum.YES.getType(), form.getAuth()))
                             .open(Objects.equals(YesOrNoEnum.YES.getType(), form.getOpen()))
@@ -107,7 +107,7 @@ public class SysApiManager {
         resourceLoader.updateResourceMap(
                 AuthorityApiDTO.builder()
                         .apiCode(form.getApiCode())
-                        .apiStatusEnum(ApiStatusEnum.valueOf(form.getApiType()))
+                        .apiStatusEnum(ApiStatusEnum.NORMAL)
                         .apiTypeEnum(SysApiTypeEnum.getByType(form.getApiType()))
                         .auth(Objects.equals(YesOrNoEnum.YES.getType(), form.getAuth()))
                         .open(Objects.equals(YesOrNoEnum.YES.getType(), form.getOpen()))

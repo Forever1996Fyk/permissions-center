@@ -23,6 +23,7 @@ public class LocalUserHelper {
     public LocalUser buildLocalUser(UserAuthorityDTO userAuthorityDTO) {
         BaseUserInfo baseUserInfo = BaseUserInfo.builder()
                 .userId(userAuthorityDTO.getUserId())
+                .name(userAuthorityDTO.getUserName())
                 .build();
         AuthorityInfo authorityInfo = AuthorityInfo.builder()
                 .authorities(this.buildDefaultAuthorities(userAuthorityDTO.getAuthorities()))
@@ -34,7 +35,7 @@ public class LocalUserHelper {
                 .password(userAuthorityDTO.getPassword())
                 .userInfo(baseUserInfo)
                 .authorityInfo(authorityInfo)
-                .enabled(Boolean.TRUE)
+                .enabled(userAuthorityDTO.getUserStatusEnum().isEnabled())
                 .credentialsNonExpired(Boolean.TRUE)
                 .accountNonExpired(Boolean.TRUE)
                 .accountNonLocked(Boolean.TRUE)

@@ -595,4 +595,33 @@ public class SysUserManager {
             throw new BizException(ErrorCodeEnum.USER_INFO_UPDATE_FAILED);
         }
     }
+
+    /**
+     * 变更用户状态
+     * @param form
+     */
+    public void changeSysUserStatus(ChangeSysUserStatusForm form) {
+        SysUser existSysUser = sysUserExtService.getOne(
+                new QueryWrapper<SysUser>().lambda()
+                        .eq(SysUser::getId, form.getId())
+                        .eq(SysUser::getDeleted, DeletedEnum.NO.value)
+        );
+        if (Objects.isNull(existSysUser)) {
+            throw new BizException(ErrorCodeEnum.USER_NOT_EXIST);
+        }
+        SysUser sysUser = new SysUser();
+        sysUser.setStatus(form.getStatus());
+        sysUser.setVersion(existSysUser.getVersion());
+        boolean updateResult = sysUserExtService.update(
+                sysUser,
+                new UpdateWrapper<SysUser>().lambda()
+                        .eq(SysUser::getId, form.getId())
+                        .eq(SysUser::getVersion, existSysUser.getVersion())
+        );
+        if (!updateResult) {
+            throw new BizException(ErrorCodeEnum.VERSION_ERROR);
+        }
+        // 异步处理用户权限更新
+        ThreadPoolManager.updateUserThreadPool.execute(() -> accessManager.updateUserCache(existSysUser.getUserId()));
+    }
 }

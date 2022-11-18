@@ -79,7 +79,7 @@ public class ImportTaskClient {
      */
     public void updateImportTaskStatusWithOpLock(SysImportExportTask importTask, ImportExportTaskStatusEnum fromStatusEnum, ImportExportTaskStatusEnum toStatusEnum) {
         SysImportExportTask update = new SysImportExportTask();
-        update.setVersion(importTask.getVersion() + 1);
+        update.setVersion(importTask.getVersion());
         if (ImportExportTaskStatusEnum.WAIT.equals(fromStatusEnum) && ImportExportTaskStatusEnum.PROCESSING.equals(toStatusEnum)) {
             update.setBeginTime(new Date());
         }

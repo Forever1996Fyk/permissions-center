@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class EmailSmsValidateCodeProvider extends AbstractValidateCodeProvider {
 
     @Override
-    public void doSend(String code, String sender) {
+    public void doSend(String code, SendMode sendMode) {
         // 发送短信验证码 todo
     }
 

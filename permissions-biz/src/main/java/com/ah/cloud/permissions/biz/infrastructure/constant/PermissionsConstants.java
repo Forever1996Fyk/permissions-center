@@ -101,6 +101,12 @@ public class PermissionsConstants {
      */
     public static final Integer ZERO_INT = 0;
 
+
+    /**
+     * Integer 1000
+     */
+    public static final Integer ONE_THOUSAND_INT = 1000;
+
     /**
      * String  0
      */

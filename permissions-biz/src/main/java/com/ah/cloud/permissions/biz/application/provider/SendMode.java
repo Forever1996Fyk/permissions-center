@@ -13,19 +13,19 @@ public interface SendMode {
 
     /**
      * 发送方
-     * @return
+     * @return String
      */
     String getSender();
 
     /**
      * 校验目标是否合法
-     * @return
+     * @return boolean
      */
     boolean isLegal();
 
     /**
      * 生成验证码长度
-     * @return
+     * @return Integer
      */
     default Integer generateCodeLength() {
         return PermissionsConstants.DEFAULT_GENERATE_CODE_LENGTH;
@@ -33,13 +33,14 @@ public interface SendMode {
 
     /**
      * 存储方式
-     * @return
+     * @return RepositoryModeEnum
      */
     RepositoryModeEnum getRepositoryModeEnum();
 
     /**
      * 前缀类型
+     *
+     * @return String
      */
     String getCacheKey();
-
 }

@@ -38,6 +38,7 @@ public enum ImportExportErrorCodeEnum implements ErrorCode {
      * 模板
      */
     IMPORT_TEMPLATE_NOT_EXITED(8_10_4_001, "导入模板不存在"),
+    IMPORT_TEMPLATE_EXITED(8_10_4_002, "[%s]导入模板已存在"),
     ;
 
     private final int code;
@@ -51,11 +52,11 @@ public enum ImportExportErrorCodeEnum implements ErrorCode {
 
     @Override
     public int getCode() {
-        return 0;
+        return code;
     }
 
     @Override
     public String getMsg() {
-        return null;
+        return msg;
     }
 }

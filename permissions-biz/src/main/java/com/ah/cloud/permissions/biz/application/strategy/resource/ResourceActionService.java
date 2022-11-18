@@ -8,6 +8,9 @@ import com.ah.cloud.permissions.biz.domain.resource.meta.vo.ResourceMetaDataVo;
 import com.ah.cloud.permissions.biz.domain.resource.vo.ResourceFileVo;
 import com.ah.cloud.permissions.enums.PositionTypeEnum;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.OutputStream;
 
 /**
@@ -53,6 +56,15 @@ public interface ResourceActionService {
      * @return
      */
     void downloadFile(Long resId, OutputStream outputStream);
+
+    /**
+     * 下载文件
+     * @param resId
+     * @param request
+     * @param response
+     * @return
+     */
+    void downloadFile(Long resId, HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     /**
      * 删除文件

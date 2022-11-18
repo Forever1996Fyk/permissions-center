@@ -8,6 +8,7 @@ import com.ah.cloud.permissions.biz.domain.resource.dto.UploadFileDTO;
 import com.ah.cloud.permissions.biz.domain.resource.dto.UploadResultDTO;
 import com.ah.cloud.permissions.biz.infrastructure.constant.PermissionsConstants;
 import com.ah.cloud.permissions.biz.infrastructure.minio.MinioService;
+import com.ah.cloud.permissions.biz.infrastructure.repository.bean.ResourceFile;
 import com.ah.cloud.permissions.biz.infrastructure.util.AppUtils;
 import com.ah.cloud.permissions.biz.infrastructure.util.FileUtils;
 import com.ah.cloud.permissions.enums.PositionTypeEnum;
@@ -62,6 +63,11 @@ public class MinioResourceActionServiceImpl extends AbstractResourceActionServic
     @Override
     protected String getLogMark() {
         return LOG_MARK;
+    }
+
+    @Override
+    protected String doGetUrl(ResourceFile resourceFile) {
+        return resourceFile.getResourceUrl();
     }
 
     @Override

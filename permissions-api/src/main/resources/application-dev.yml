@@ -6,6 +6,9 @@ permission:
         androidAppMasterSecret:
         iosAppKey:
         iosAppMasterSecret:
+  common:
+    maleAvatarUrl: http://localhost:9000/default/%E9%BB%98%E8%AE%A4%E7%94%B7%E7%94%9F%E5%A4%B4%E5%83%8F.webp
+    femaleAvatarUrl: http://localhost:9000/default/%E9%BB%98%E8%AE%A4%E5%A5%B3%E7%94%9F%E5%A4%B4%E5%83%8F.webp
 
 elasticsearch:
   hostname: localhost

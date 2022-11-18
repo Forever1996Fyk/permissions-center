@@ -3,12 +3,14 @@ package com.ah.cloud.permissions.biz.application.provider;
 import cn.hutool.core.util.RandomUtil;
 import com.ah.cloud.permissions.biz.application.strategy.cache.CacheHandleStrategy;
 import com.ah.cloud.permissions.biz.application.strategy.facroty.CacheHandleStrategyFactory;
+import com.ah.cloud.permissions.biz.application.strategy.sms.SmsException;
 import com.ah.cloud.permissions.biz.domain.code.SendResult;
 import com.ah.cloud.permissions.biz.domain.code.ValidateResult;
 import com.ah.cloud.permissions.biz.infrastructure.exception.BizException;
 import com.ah.cloud.permissions.biz.infrastructure.function.VoidFunction;
 import com.ah.cloud.permissions.biz.infrastructure.util.JsonUtils;
 import com.ah.cloud.permissions.enums.common.ErrorCodeEnum;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +43,7 @@ public abstract class AbstractValidateCodeProvider implements ValidateCodeProvid
             /*
             发送验证码操作
              */
-            doSend(code, sendMode.getSender());
+            doSend(code, sendMode);
 
             /*
             保存验证码
@@ -52,6 +54,11 @@ public abstract class AbstractValidateCodeProvider implements ValidateCodeProvid
             }
         } catch (BizException e) {
             log.error("AbstractValidateCodeProvider[send] 验证码发送失败 BizException:{}, param:{}",
+                    Throwables.getStackTraceAsString(e),
+                    JsonUtils.toJsonString(sendMode));
+            throw e;
+        } catch (SmsException e) {
+            log.error("AbstractValidateCodeProvider[send] 验证码发送失败 SmsException:{}, param:{}",
                     Throwables.getStackTraceAsString(e),
                     JsonUtils.toJsonString(sendMode));
             throw e;
@@ -168,9 +175,9 @@ public abstract class AbstractValidateCodeProvider implements ValidateCodeProvid
     /**
      * 执行验证码发送
      * @param code 验证码
-     * @param sender 发送方
+     * @param sendMode 发送方
      * @return
      */
-    public abstract void doSend(String code, String sender);
+    public abstract void doSend(String code, SendMode sendMode);
 
 }

@@ -27,6 +27,9 @@ public class ValidateCodeAssembler {
     public LoginSmsCodeSendMode convert(LoginSmsCodeForm form) {
         return LoginSmsCodeSendMode.builder()
                 .sender(form.getPhone())
+                .effectiveTime(form.getCurrentTime())
+                .random(form.getRandom())
+                .sign(form.getSign())
                 .build();
     }
 

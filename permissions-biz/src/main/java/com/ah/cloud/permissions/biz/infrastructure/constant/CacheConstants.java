@@ -47,4 +47,10 @@ public class CacheConstants {
      * 群组成员 前缀
      */
     public static final String GROUP_MEMBER_KE_PREFIX = "group:member:";
+
+    /**
+     * 验证码发送签名 前缀
+     */
+    public static final String SMS_CODE_SIGN_PREFIX = "sms:code:sign:";
+
 }

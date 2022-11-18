@@ -63,7 +63,7 @@ public enum UserStatusEnum {
 
     public static boolean isValid(Integer value) {
         UserStatusEnum statusEnum = valueOf(value);
-        return Objects.equals(statusEnum, UNKNOWN);
+        return !Objects.equals(statusEnum, UNKNOWN);
     }
 
     /**

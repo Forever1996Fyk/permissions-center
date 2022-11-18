@@ -27,6 +27,21 @@ public class LoginSmsCodeSendMode implements SendMode {
      */
     private String sender;
 
+    /**
+     * 随机数
+     */
+    private String random;
+
+    /**
+     * 签名
+     */
+    private String sign;
+
+    /**
+     * 有效时间(秒)
+     */
+    private Long effectiveTime;
+
     @Override
     public boolean isLegal() {
         return ReUtil.isMatch(PermissionsConstants.PHONE_REGEX, this.sender);

@@ -81,7 +81,12 @@
         <minio.version>8.3.0</minio.version>
 
         <!-- 覆盖SpringBoot中okhttp3的旧版本声明，解决MinIO 8.3.x的依赖冲突 -->
-        <okhttp3.version>4.8.1 </okhttp3.version>
+        <okhttp3.version>4.8.1</okhttp3.version>
+
+
+        <!-- 阿里云版本 -->
+        <aliyun.tea.open.version>0.2.5</aliyun.tea.open.version>
+        <aliyun.sms.version>2.0.22</aliyun.sms.version>
     </properties>
 
     <dependencyManagement>
@@ -363,6 +368,16 @@
                 <groupId>io.minio</groupId>
                 <artifactId>minio</artifactId>
                 <version>${minio.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>tea-openapi</artifactId>
+                <version>${aliyun.tea.open.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>dysmsapi20170525</artifactId>
+                <version>${aliyun.sms.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
